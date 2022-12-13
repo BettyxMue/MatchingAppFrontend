@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from "../../pages/HomeScreen";
 import ProfileScreen from "../../pages/ProfileScreen";
 import SettingsScreen from "../../pages/SettingsScreen";
@@ -8,12 +9,13 @@ import MessagesScreen from "../../pages/MessagesScreen"
 import DetailsScreen from "../../pages/DetailsScreen"
 import LogInScreen from "../../pages/LogInScreen"
 import SignUpScreen from "../../pages/SignUpScreen"
+import StartScreen from "../../pages/StartScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function StackNavigator() {
 
-    useState[users, setUser] = false;
+    const [user, setUser] = useState(false);
 
     return (
         <Stack.Navigator>
@@ -29,6 +31,7 @@ export default function StackNavigator() {
                 </>
             ) : (
                 <>
+                    <Stack.Screen name="Start" component={StartScreen} />
                     <Stack.Screen name="LogIn" component={LogInScreen} />
                     <Stack.Screen name="SignUp" component={SignUpScreen} />
                     <Stack.Screen name="Details" component={DetailsScreen} />
