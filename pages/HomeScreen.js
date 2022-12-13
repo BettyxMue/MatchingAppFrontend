@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigation } from "@react-navigation";
+import { useNavigation } from "@react-navigation/core";
 
 export default function HomeScreen () {
 
