@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Button} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from "./src/pages/HomeScreen";
@@ -21,7 +21,7 @@ export default function App() {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Navigator screenOptions={{headerShown: true}}>
                 {user ? (
                     <>
                         <Stack.Screen name="Home" component={HomeScreen}/>
@@ -34,9 +34,16 @@ export default function App() {
                     </>
                 ) : (
                     <>
-                        <Stack.Screen name="Start" component={StartScreen}/>
+                        <Stack.Screen name="Start" component={StartScreen} options={{
+                          headerShown: false
+                        }}/>
                         <Stack.Screen name="LogIn" component={LogInScreen}/>
-                        <Stack.Screen name="SignUp" component={SignUpScreen}/>
+                        <Stack.Screen name="Registierung" component={SignUpScreen} options={({navigation,route}) => ({
+                          headerRight: () => {
+                            <Button title="Back" />
+                          },
+                          headerTransparent: true
+                        })}/>
                         <Stack.Screen name="Details" component={DetailsScreen}/>
                     </>
                 )}
