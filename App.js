@@ -17,11 +17,11 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-    const [user, setUser] = useState(true);
+    const [user, setUser] = useState(false);
 
     return (
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator screenOptions={{headerShown: false}}>
                 {user ? (
                     <>
                         <Stack.Screen name="Home" component={HomeScreen}/>
