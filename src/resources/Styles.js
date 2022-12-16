@@ -45,22 +45,26 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     registerInputField: {
-        justifyContent: "center",
-        height: "100%"
+        height: "100%",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap"
     },
     registerBackground: {
-        height: "50%",
-        width: "70%",
+        height: "55%",
+        width: "75%",
         padding: "10%",
         borderRadius: 40,
         alignContent: "center",
         backgroundColor: 'white',
         marginRight: "15%",
-        marginLeft: "15%",
+        marginLeft: "15%"        
     },
     registerTitle:{
         fontWeight: "bold",
-        alignSelf: "center"
+        alignSelf: "center",
+        textAlign: "center",
+        fontSize: 16
     },
     registerInputTextInput: {
         height: 40,
@@ -79,7 +83,8 @@ const styles = StyleSheet.create({
         width: "100%",
         borderRadius: 10,
         backgroundColor: "#78ed6f",
-        padding:5
+        padding:5,
+        marginTop: "15%"
     },
     continueButtonText: {
         fontWeight: "bold",
