@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
@@ -51,7 +52,8 @@ const styles = StyleSheet.create({
         flexWrap: "wrap"
     },
     registerBackground: {
-        height: "55%",
+        marginTop:  "45%",
+        marginBottom: "25%",
         width: "75%",
         padding: "10%",
         borderRadius: 40,
@@ -79,12 +81,24 @@ const styles = StyleSheet.create({
         alignItems: "center",
         alignSelf: "center",
         justifyContent: "center",
-        height: "10%",
+        //height: "15%",
         width: "100%",
         borderRadius: 10,
         backgroundColor: "#78ed6f",
         padding:5,
-        marginTop: "15%"
+        marginTop: "5%"
+    },
+    continueButtonDeactivated: {
+        alignContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
+        justifyContent: "center",
+        //height: "15%",
+        width: "100%",
+        borderRadius: 10,
+        backgroundColor: "#87888a",
+        padding:5,
+        marginTop: "5%"
     },
     continueButtonText: {
         fontWeight: "bold",

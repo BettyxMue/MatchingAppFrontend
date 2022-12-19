@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {StyleSheet, Text, View, Button} from 'react-native';
+import {StyleSheet, Button, Keyboard} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { RootSiblingParent } from 'react-native-root-siblings';
@@ -13,14 +13,14 @@ import DetailsScreen from "./src/pages/DetailsScreen";
 import StartScreen from "./src/pages/StartScreen";
 import LogInScreen from "./src/pages/LogInScreen";
 import SignUpScreen from "./src/pages/SignUpScreen";
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
     const [user, setUser] = useState(false);
-
+    
     return (
+        
         <RootSiblingParent>
             <NavigationContainer>
                 <Stack.Navigator screenOptions={{headerShown: true}}>

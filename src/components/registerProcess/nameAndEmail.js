@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from "react";
-import { View,Text, TextInput, Touchable, TouchableOpacity } from "react-native";
+import { View,Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import {styles} from '../../resources/Styles'
 
 const NameAndEmailForm = ({
@@ -17,8 +17,10 @@ const NameAndEmailForm = ({
     street,
     houseNumber, 
     onContinueButton}) => {
+    
+   
     return (
-        <View style={styles.registerBackground}>
+        <ScrollView style={styles.registerBackground} /*contentContainerStyle={{ flexGrow: 1 }}*/> 
             <Text style={styles.registerTitle}>Wir benötigen einige Infos!</Text>
             <View style={styles.registerInputField}>
                 <View style={{width: "100%", marginTop: "10%"}}>
@@ -80,7 +82,7 @@ const NameAndEmailForm = ({
                     <Text style={styles.continueButtonText}>Weiter</Text>   
                 </TouchableOpacity>
             </View>
-        </View>
+        </ScrollView>
     )
     
 }

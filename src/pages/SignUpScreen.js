@@ -1,14 +1,16 @@
 // @ts-nocheck
-import { Text, View } from 'react-native'
+import { Text, View, KeyboardAvoidingView } from 'react-native'
 import React, { Component } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {styles} from '../resources/Styles'
 import NameAndEmailForm from '../components/registerProcess/nameAndEmail'
-import { ActivateAccount, SignUp } from '../connectors/ProfileServiceConnector';
+import PasswordInput from '../components/registerProcess/password'
+import { ActivateAccount, SignUp, UpdateUser } from '../connectors/ProfileServiceConnector';
 import Toast from 'react-native-root-toast';
 import { ConfirmCode } from '../components/registerProcess/confirmCode';
 import { storeUser, getUser } from '../resources/InternalStorage';
+import { createHash } from '../resources/Hasher';
 
 const SignUpScreen = ({navigation}) => {
 
@@ -20,38 +22,13 @@ const SignUpScreen = ({navigation}) => {
   const [plz, onChangePLZ] = React.useState("")
   const [street, onChangeStreet] = React.useState("")
   const [houseNumber, onChangeHouseNumber] = React.useState("")
+  const [password, onChangePassword] = React.useState("")
+  const [passwordRepeat, onPasswordRepeatChange] = React.useState("")
 
-  const [shouldShowName, setShouldShowName] = React.useState(true)
+  const [shouldShowName, setShouldShowName] = React.useState(false)
   const [shouldShowCode, setShouldShowCode] = React.useState(false)
+  const [shouldShowPassword, setShouldShowPassword] = React.useState(true)
 
-  var registerUser = {
-    id : 0,
-    firstName: "",
-    name: "",
-    gender: 0,
-    username: "",
-    email: "",
-    street: "",
-    houseNumber: "",
-    telephoneNumber: ""
-  };
-
-  var registrationState = {
-    showNameAndEmailForm: true,
-    showConfirmCodeForm: false
-  }
-
-  function updateUser(newUser){
-    registerUser.id = newUser.id;
-    registerUser.firstName = newUser.firstName;
-    registerUser.name = newUser.name;
-    registerUser.gender = newUser.gender;
-    registerUser.username = newUser.username;
-    registerUser.email = newUser.email;
-    registerUser.street = newUser.street;
-    registerUser.houseNumber = newUser.houseNumber;
-    registerUser.telephoneNumber = newUser.telephoneNumber;
-  }
 
   async function showErrorMessage(message){
     let toast = Toast.show(message, {
@@ -83,17 +60,36 @@ const SignUpScreen = ({navigation}) => {
         if (queryResult !== true){
           showErrorMessage(queryResult)
         }
+        setShouldShowCode(false);
+        setShouldShowPassword(true);
       });
     })
+  }
+
+  async function onContinueButtonPassword(){
+    createHash(password).then(hash => {
+      console.log(hash);
+      onChangePassword(null);
+      onPasswordRepeatChange(null);
+      getUser().then(user => {
+      user.password = hash;
+      UpdateUser(user).then(queryResult => {
+        if (queryResult !== true){
+          showErrorMessage(queryResult)
+        }
+      })
+
+      })
+    });
+
   }
 
   
 
   return(
-    <View style={{
-      height: '100%',
-      width: '100%',
-      alignContent: "center"
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{
+      alignContent: "center",
+      flex: 1
     }}>
       <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container} >
         {shouldShowName ? <NameAndEmailForm 
@@ -117,11 +113,19 @@ const SignUpScreen = ({navigation}) => {
           onChangeCode={onCodeChange} 
           code={code}
           /> 
-        : null }        
+        : null }  
+        {shouldShowPassword ? <PasswordInput 
+          onPasswordChange={onChangePassword}
+          onPasswordRepeatChange={onPasswordRepeatChange}
+          password={password}
+          passwordRepeat={passwordRepeat}
+          onPasswordContinue={onContinueButtonPassword}
+          /> 
+        : null }      
       </LinearGradient>
       
 
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 

@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from "react";
-import { View,Text, TextInput, Touchable, TouchableOpacity } from "react-native";
+import { View,Text, TextInput, Touchable, TouchableOpacity, ScrollView } from "react-native";
 import {styles} from '../../resources/Styles'
 
 const ConfirmCode = ({onContinueButtonConfirm, code, onChangeCode}) => {
@@ -16,10 +16,11 @@ const ConfirmCode = ({onContinueButtonConfirm, code, onChangeCode}) => {
                         onChangeText={onChangeCode}
                     />
                 </View>
-                
-                <TouchableOpacity style={styles.continueButton} onPress={onContinueButtonConfirm}>
-                    <Text style={styles.continueButtonText}>Weiter</Text>   
-                </TouchableOpacity>
+                <View style={{width: "100%"}}>
+                    <TouchableOpacity style={styles.continueButton} onPress={onContinueButtonConfirm}>
+                        <Text style={styles.continueButtonText}>Weiter</Text>   
+                    </TouchableOpacity>
+                </View> 
             </View>
 
         </View>

@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 import {styles} from '../resources/Styles'
 
 const StartScreen = ({navigation}) => {
-
     return (
       <View style={{
         height: '100%',
