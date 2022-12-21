@@ -19,4 +19,21 @@ const getUser = async () => {
     }
 }
 
-export {storeUser, getUser}
+const storeToken = async (token) => {
+    try {
+        await AsyncStorage.setItem('@jwt', token)
+    }catch (e){
+        console.log(e)
+    }
+}
+
+const getToken = async () => {
+    try{
+        const token = await AsyncStorage.getItem('@jwt')
+        return token
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export {storeUser, storeToken, getUser, getToken}

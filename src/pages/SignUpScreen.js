@@ -25,9 +25,9 @@ const SignUpScreen = ({navigation}) => {
   const [password, onChangePassword] = React.useState("")
   const [passwordRepeat, onPasswordRepeatChange] = React.useState("")
 
-  const [shouldShowName, setShouldShowName] = React.useState(false)
+  const [shouldShowName, setShouldShowName] = React.useState(true)
   const [shouldShowCode, setShouldShowCode] = React.useState(false)
-  const [shouldShowPassword, setShouldShowPassword] = React.useState(true)
+  const [shouldShowPassword, setShouldShowPassword] = React.useState(false)
 
 
   async function showErrorMessage(message){

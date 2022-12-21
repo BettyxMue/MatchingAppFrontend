@@ -1,4 +1,7 @@
 // @ts-nocheck
+
+import { getToken, storeToken } from "../resources/InternalStorage"
+
 async function SignUp(username, email, city, plz, street, houseNumber){
     if (username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
         return
@@ -30,7 +33,6 @@ async function SignUp(username, email, city, plz, street, houseNumber){
     if (response.status != 200){
         return resultData.error;
     }
-    console.log(resultData);
     return resultData;
 }
 
@@ -54,6 +56,12 @@ async function ActivateAccount(userid, code){
     if (response.status != 200){
         return resultData.error;
     }
+    token = resultData.token
+    if (token != null) {
+        storeToken(token)
+    }else{
+        console.log("No token received!")
+    }
     return true;
 }
 
@@ -61,23 +69,29 @@ async function UpdateUser(user){
     if (user == null) {
         return
     }
+    getToken().then(token => {
+        sendActivationQuery(user, token).then(result => {
+            return result
+        })
+    })
+}
+
+async function sendActivationQuery(user, token){
     query = "http://192.168.178.20:8080/profile/" + user.id;
-    const response = await fetch(query, {
-        method: 'PUT',
-        headers: {
-            'Content-type': 'application/json',
-            'Authorization': 'Bearer ' + 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzE0NjcxODQsInN1YiI6MSwidXNlciI6MX0.VZkq30ZYJ2OM9ka4xGuv1o9SwHExpTn5ws4W42AjZVpuSakRWs6fV1h9_fahuBUAzAS-85CJnREi7kVvP5WTiG8eipfjfN_BkqZQCLb55-786H468SHdtmkn-F3sYa6j0aLOmpaEPyJLiGM_GzerAi7Iu4rFzFqF54PuHKNXl-v_wU5KvtQZY-KeB-G7fy2rPIimSJveIXKieElBkQrO2wKu6CP_CkF-l1-r4vSgU1qahfwsoXYMw9F66CTXM1cNFnUjWgKyCHTfprM8SyOtJX9iKALzzQk5SbOie6NepxHpLGxTpsvgcFzr-e_q41kOPALyhlhYyNhMphqczRbETg'
-        },
-        body: JSON.stringify(user)
-    });
-    const resultData = await response.json();
+        const response = await fetch(query, {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(user)
+        });
+        const resultData = await response.json();
 
-    if (response.status != 200){
-        console.log(resultData.error)
-        return resultData.error;
-    }
-    return true;
-
+        if (response.status != 200){
+            return resultData.error;
+        }
+        return true;
 }
 
 export {SignUp,ActivateAccount,UpdateUser}
