@@ -95,3 +95,24 @@ async function sendActivationQuery(user, token){
 }
 
 export {SignUp,ActivateAccount,UpdateUser}
+
+async function GetProfileById (userId, token) {
+    if (userId == "") {
+        return
+    }
+    var query = "http://localhost:8080/profile/" + userId;
+    const response = await fetch(query, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+    });
+    const resultData = await response.json();
+    if (response.status != 200){
+        return resultData.error;
+    }
+    return resultData;
+
+}
+export {GetProfileById}

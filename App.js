@@ -13,11 +13,12 @@ import DetailsScreen from "./src/pages/DetailsScreen";
 import StartScreen from "./src/pages/StartScreen";
 import LogInScreen from "./src/pages/LogInScreen";
 import SignUpScreen from "./src/pages/SignUpScreen";
+import MatchScreen from "./src/pages/MatchScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-    const [user, setUser] = useState(false);
+    const [user, setUser] = useState(true);
     
     return (
         
@@ -27,6 +28,7 @@ export default function App() {
                     {user ? (
                         <>
                             <Stack.Screen name="Home" component={HomeScreen}/>
+                            <Stack.Screen name="Match" component={MatchScreen}/>
                             <Stack.Screen name="Settings" component={SettingsScreen}/>
                             <Stack.Screen name="Profile" component={ProfileScreen}/>
                             <Stack.Screen name="Filter" component={FilterScreen}/>
