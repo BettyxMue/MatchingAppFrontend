@@ -22,33 +22,30 @@ export default function App() {
     return (
         
         <RootSiblingParent>
-            <NavigationContainer>
+            <NavigationContainer StartScreen={(!user) ? 'Home' : 'Start'}>
                 <Stack.Navigator screenOptions={{headerShown: true}}>
-                    {user ? (
-                        <>
-                            <Stack.Screen name="Home" component={HomeScreen}/>
-                            <Stack.Screen name="Settings" component={SettingsScreen}/>
-                            <Stack.Screen name="Profile" component={ProfileScreen}/>
-                            <Stack.Screen name="Filter" component={FilterScreen}/>
-                            <Stack.Screen name="Chat" component={ChatScreen}/>
-                            <Stack.Screen name="Messages" component={MessagesScreen}/>
-                            <Stack.Screen name="Details" component={DetailsScreen}/>
-                        </>
-                    ) : (
-                        <>
-                            <Stack.Screen name="Start" component={StartScreen} options={{
-                              headerShown: false
-                            }}/>
-                            <Stack.Screen name="LogIn" component={LogInScreen}/>
-                            <Stack.Screen name="Registierung" component={SignUpScreen} options={({navigation,route}) => ({
-                              headerRight: () => {
-                                <Button title="Back" />
-                              },
-                              headerTransparent: true
-                            })}/>
-                            <Stack.Screen name="Details" component={DetailsScreen}/>
-                        </>
-                    )}
+                <Stack.Screen name="Start" component={StartScreen} options={{
+                  headerShown: false
+                }}/>
+                <Stack.Screen name="LogIn" component={LogInScreen} options={({navigation,route}) => ({
+                  headerRight: () => {
+                    <Button title="Back" />
+                  },
+                  headerTransparent: true
+                })}/>
+                <Stack.Screen name="Registierung" component={SignUpScreen} options={({navigation,route}) => ({
+                  headerRight: () => {
+                    <Button title="Back" />
+                  },
+                  headerTransparent: true
+                })}/>
+                <Stack.Screen name="Details" component={DetailsScreen}/>
+                <Stack.Screen name="Home" component={HomeScreen}/>
+                <Stack.Screen name="Settings" component={SettingsScreen}/>
+                <Stack.Screen name="Profile" component={ProfileScreen}/>
+                <Stack.Screen name="Filter" component={FilterScreen}/>
+                <Stack.Screen name="Chat" component={ChatScreen}/>
+                <Stack.Screen name="Messages" component={MessagesScreen}/>
                 </Stack.Navigator>
             </NavigationContainer>
         </RootSiblingParent>
