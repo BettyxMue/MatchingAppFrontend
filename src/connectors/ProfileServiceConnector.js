@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { getToken, storeToken } from "../resources/InternalStorage"
+import { getToken, storeToken, storeUser } from "../resources/InternalStorage"
 
 async function SignUp(username, email, city, plz, street, houseNumber){
     if (username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
@@ -94,9 +94,14 @@ async function loginUser(loginObject){
         return resultData.error;
     }
     token = resultData.token;
+    user = resultData.user
     if (token == null){
         return "No token provided!"
     }
+    if (user == null){
+        console.log("No user provided!")
+    }
+    storeUser(user);
     storeToken(token).then(() => {
         return true;
     });
