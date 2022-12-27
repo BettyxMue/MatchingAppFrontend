@@ -23,7 +23,7 @@ export default function App() {
         
         <RootSiblingParent>
             <NavigationContainer StartScreen={(!user) ? 'Home' : 'Start'}>
-                <Stack.Navigator screenOptions={{headerShown: true}}>
+                <Stack.Navigator screenOptions={{headerShown: true, headerBackButtonMenuEnabled: false}}>
                 <Stack.Screen name="Start" component={StartScreen} options={{
                   headerShown: false
                 }}/>
@@ -37,7 +37,8 @@ export default function App() {
                   headerRight: () => {
                     <Button title="Back" />
                   },
-                  headerTransparent: true
+                  headerTransparent: true,
+                  headerShown: true
                 })}/>
                 <Stack.Screen name="Details" component={DetailsScreen}/>
                 <Stack.Screen name="Home" component={HomeScreen}/>

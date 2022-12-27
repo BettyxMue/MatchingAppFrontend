@@ -7,6 +7,8 @@ import { createHash } from '../resources/Hasher';
 import { loginUser } from '../connectors/ProfileServiceConnector';
 import Toast from 'react-native-root-toast';
 
+import { GetAllChatsForUser, OpenWSConnection } from '../connectors/ChatServiceConnector';
+
 const LogInScreen =  ({navigation}) => {
   const [email, onChangeEmail] = React.useState("")
   const [password, onChangePassword] = React.useState("")
@@ -39,7 +41,7 @@ const LogInScreen =  ({navigation}) => {
           return;
         }
         showErrorMessage("Logged in!");
-        navigation.navigate('Home')
+        navigation.navigate('Chat')
       })
     })
   }

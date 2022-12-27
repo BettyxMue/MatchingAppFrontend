@@ -108,6 +108,29 @@ async function loginUser(loginObject){
     return true;   
 }
 
+async function getUserFromId(userid){
+    if (userid == null){
+        return "No Id given!"
+    }
+    const query = "http://192.168.2.120:8080/profile/" + userid
+    token = await getToken()
+    request = await fetch(query, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    })
+    this.response = await this.request.json();
+
+    if(this.request.status != 200){
+        console.log("Error when querying user")
+        return this.request.statusText
+    }
+
+    return this.response
+}
+
 
 // Helper
 
@@ -131,4 +154,4 @@ async function sendActivationQuery(user, token){
 
 
 
-export {SignUp,ActivateAccount,UpdateUser,loginUser}
+export {SignUp,ActivateAccount,UpdateUser,loginUser,getUserFromId}

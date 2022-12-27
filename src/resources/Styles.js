@@ -104,6 +104,43 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "white"
 
+    },
+    chatPicture: {
+        borderRadius: "100%",
+        width: 50,
+        height: 50
+    },
+    chatOverviewElement: {
+        width: "90%",
+        backgroundColor: "white",
+        marginTop: "3%",
+        marginBottom: "1%",
+        backgroundColor: "white",
+        borderBottomColor: "#212121",
+        borderBottomWidth: 0.5,
+        display: "flex", 
+        flexDirection: "row", 
+        flexWrap: "wrap",
+        borderRadius: "10%",
+        padding: "3%"
+    },
+    chatOverview: {
+        height: "100%",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginLeft: "5%",
+        marginRight: "5%"
+    },
+    chatOverviewName: {
+        fontSize: 16,
+        fontWeight: "bold"
+    },
+    chatMessagesTitle: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#4287f5",
+        marginTop: "4%"
     }
 }); 
 
