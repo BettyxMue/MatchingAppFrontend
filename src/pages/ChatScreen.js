@@ -18,6 +18,12 @@ const ChatScreen = ({navigation}) => {
     })
   }
 
+  function navigateToChat(data){
+    navigation.navigate('ChatDetail',{
+      chatArray: data
+    })
+  }
+
   const [chats, setChatsChange] = React.useState(getChats)
   const [isLoading, setLoading] = React.useState(true)
   

@@ -1,10 +1,11 @@
 // @ts-nocheck
 import { getUserFromId } from "../../connectors/ProfileServiceConnector";
 import React, { useEffect } from "react"
-import { View, Text } from "react-native"
+import { View, Text, TouchableOpacity } from "react-native"
 import { getUser } from "../../resources/InternalStorage";
 import ChatStart from "./chatStart";
 import { styles } from "../../resources/Styles";
+import { useNavigation } from "@react-navigation/native";
 
 async function getChatsArray(chatData, chatArray, setChatArray){
     let chatArrayCache = chatArray
@@ -39,8 +40,6 @@ async function getChatsArray(chatData, chatArray, setChatArray){
         }
     });
     setChatArray(chatArrayCache);
-    console.log("Neues Chats Array:")
-    console.log(chatArray);
 }
 
 async function setUsersToChats(chatArray, user, setLoading){
@@ -64,7 +63,14 @@ async function setUsersToChats(chatArray, user, setLoading){
     })
 }
 
+function onChatClick(data, navigation){
+    navigation.navigate('ChatDetail', {
+        chatArray: data,
+    });
+}
+
 const ChatsWrapper = (chats) => {
+    const navigation = useNavigation();
     const [chatArray, setChatArray] = React.useState([])
     const [isLoading, setLoading] = React.useState(true)
     useEffect(() => {
@@ -86,7 +92,9 @@ const ChatsWrapper = (chats) => {
             <Text style={styles.chatMessagesTitle}>Nachrichten</Text>
             {chatArray.map((data => {
                 return(
-                    <ChatStart key={data.chatID} chat={data}/>
+                    <TouchableOpacity style={{width: "100%"}} key={data.chatID} onPress={() => onChatClick(data, navigation)}>
+                        <ChatStart chat={data}/>
+                    </TouchableOpacity>
                 )
             }))}       
         </View>

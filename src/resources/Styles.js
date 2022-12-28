@@ -141,6 +141,70 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "#4287f5",
         marginTop: "4%"
+    },
+    ChatTopBar: {
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        backgroundColor: "white",
+        height: "15%",
+        width: "100%",
+        alignContent: "center",
+        justifyContent: "center"
+    },
+    chatTopBarSection: {
+        alignContent: "center",
+        justifyContent: "center"
+    },
+    ChatTopBarBackChar: {
+        color: "black",
+        fontSize: 40,
+        fontWeight: "bold",
+        color: "#4287f5" 
+    },
+    chatTopBarPicture: {
+        borderRadius: "100%",
+        width: 30,
+        height: 30,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    ChatTopBarText: {
+        marginTop: "2%",
+        fontWeight: "bold"
+    },
+    ChatTopBarBillChar: {
+        fontSize: 40,
+        fontWeight: "bold",
+        color: "#4287f5",
+        textAlign: "center"
+    },
+    ChatWriterField: {
+        height: "15%", 
+        backgroundColor:"white",
+        alignContent: "center",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        backgroundColor: "white"
+    },
+    ChatWriterInputField: {
+        backgroundColor: "#e6e6e6",
+        width: "75%",
+        marginLeft: "5%",
+        marginTop: "5%",
+        minHeight: "25%",
+        padding: "2%",
+        borderRadius: "15%"
+    },
+    ChatWriterSend: {
+        marginTop: "5%",
+        marginLeft: "2%",
+        justifyContent: "center",
+        alignContent: "center"
+    },
+    ChatWriterSendText: {
+        fontSize: 40,
+        fontWeight: "bold"
     }
 }); 
 

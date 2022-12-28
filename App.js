@@ -13,6 +13,7 @@ import DetailsScreen from "./src/pages/DetailsScreen";
 import StartScreen from "./src/pages/StartScreen";
 import LogInScreen from "./src/pages/LogInScreen";
 import SignUpScreen from "./src/pages/SignUpScreen";
+import ChatDetail from "./src/pages/ChatDetail";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -47,6 +48,9 @@ export default function App() {
                 <Stack.Screen name="Filter" component={FilterScreen}/>
                 <Stack.Screen name="Chat" component={ChatScreen}/>
                 <Stack.Screen name="Messages" component={MessagesScreen}/>
+                <Stack.Screen name="ChatDetail" component={ChatDetail} options={({navitation, route}) => ({
+                  headerShown: false
+                })} />
                 </Stack.Navigator>
             </NavigationContainer>
         </RootSiblingParent>
