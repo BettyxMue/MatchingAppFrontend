@@ -1,26 +1,24 @@
 // @ts-nocheck
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import ChatBubble from "./ChatBubble";
 
-const ChatMessages = (chatArray) => {
-    
-    const padding = 0
+const ChatMessages = (props) => {
 
+    const chatArray = props.chatArray
+    
     function sortChatMessages(chatArray){
-        chatArray.chatArray.messages.sort(function(a,b) {
+        chatArray.messages.sort(function(a,b) {
             return new Date(a.createdAt) - new Date(b.createdAt);
         });
     };
 
-    
+    useEffect(() => {
+        console.log("Received new Data!");
+
+    }, [props])
 
     sortChatMessages(chatArray)
-    let calcPadding = function() {
-        return {
-            paddingBottom: chatArray.chatArray.messages.length * 35
-        }
-    }
 
     const scrollViewRef = useRef()
 
@@ -30,9 +28,9 @@ const ChatMessages = (chatArray) => {
             ref={scrollViewRef}
             onContentSizeChange={() => scrollViewRef.current.scrollToEnd({animated: true})}
         >
-            {chatArray.chatArray.messages.map((data => {
+            {chatArray.messages.map((data => {
                 return (
-                    <ChatBubble key={data.createdAt} data={data.message} userId={chatArray.chatArray.chatPartner.id} writtenBy={data.writtenBy}/>
+                    <ChatBubble key={data.createdAt} data={data.message} userId={chatArray.chatPartner.id} writtenBy={data.writtenBy}/>
                 )
             }))}
         </ScrollView>

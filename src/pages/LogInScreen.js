@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { createHash } from '../resources/Hasher';
 import { loginUser } from '../connectors/ProfileServiceConnector';
 import Toast from 'react-native-root-toast';
+import { GetChats } from '../resources/ChatStore';
 
 import { GetAllChatsForUser, OpenWSConnection } from '../connectors/ChatServiceConnector';
 
@@ -41,7 +42,9 @@ const LogInScreen =  ({navigation}) => {
           return;
         }
         showErrorMessage("Logged in!");
-        navigation.navigate('Chat')
+        GetChats().then(() => {
+          navigation.navigate('Chat')
+        })
       })
     })
   }

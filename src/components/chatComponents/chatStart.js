@@ -1,9 +1,12 @@
 // @ts-nocheck
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import { Image, Text, View } from "react-native"
 import { styles } from '../../resources/Styles'
 
 const ChatStart = (chat) => {
+    useEffect(() => {
+
+    }, [chat])
     return (
         <View style={styles.chatOverviewElement}>
             <View style={{width: "20%"}}>
@@ -14,7 +17,7 @@ const ChatStart = (chat) => {
                     <Text style={styles.chatOverviewName}>{chat.chat.chatPartner.username}</Text>
                 </View>
                 <View>
-                    <Text>{chat.chat.messages[0].message}</Text>
+                    <Text>{chat.chat.messages[(chat.chat.messages.length) -1].message}</Text>
                 </View>
             </View>
         </View>

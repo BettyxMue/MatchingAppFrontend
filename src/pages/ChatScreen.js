@@ -10,13 +10,13 @@ import Topbar from '../components/Layout/Topbar';
 
 const ChatScreen = ({navigation}) => {
 
-  async function getChats(){
+  /*async function getChats(){
     GetAllChatsForUser().then(chatsServer => {
       console.log("Received new Data in Chat Screen!")
       setChatsChange(chatsServer)
       setLoading(false)
     })
-  }
+  }*/
 
   function navigateToChat(data){
     navigation.navigate('ChatDetail',{
@@ -24,12 +24,12 @@ const ChatScreen = ({navigation}) => {
     })
   }
 
-  const [chats, setChatsChange] = React.useState(getChats)
+  //const [chats, setChatsChange] = React.useState(getChats)
   const [isLoading, setLoading] = React.useState(true)
   
-  if(isLoading) {
+  /*if(isLoading) {
     return <Text>Loading...</Text>
-  }
+  }*/
     
   return (
     <KeyboardAvoidingView style={{
@@ -38,7 +38,7 @@ const ChatScreen = ({navigation}) => {
       backgroundColor: "white"}}>
       <ScrollView>
         <Text>Hier entstehen chats</Text>
-        <ChatsWrapper chats={chats}/>
+        <ChatsWrapper/>
       </ScrollView>
     </KeyboardAvoidingView>
       
