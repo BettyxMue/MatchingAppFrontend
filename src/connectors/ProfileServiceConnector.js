@@ -2,6 +2,8 @@
 
 import { getToken, storeToken } from "../resources/InternalStorage"
 
+let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI0NDY3OTMsInN1YiI6MiwidXNlciI6Mn0.UpP_Bi_henUsVXRVl4hhDnGgNGAoZQCg4eCbytXQ1qoYAaSuIaSy9tgpOGk6llgWJbYTbBfaGLwfmfNVpHs-VV6pO2jeNLBA2gRUIhn_aQgjTN2sBArmUS-edosvYUnp5AprcCQxabNBV_IfGkuaW_nQQhlkwq0DHJsIhOcXMZ4"
+
 async function SignUp(username, email, city, plz, street, houseNumber){
     if (username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
         return
@@ -10,7 +12,7 @@ async function SignUp(username, email, city, plz, street, houseNumber){
     if (isNaN(plzNumber)){
         return "PLZ is not valid!"
     }
-    var query = "http://192.168.178.63:8080/signUp"
+    var query = "http://192.168.0.149:8080/signUp"
     var user = {
         "username": username,
         "email": email,
@@ -43,7 +45,7 @@ async function ActivateAccount(userid, code){
     var codeDTO = {
         "Code": code
     }
-    query = "http://192.168.178.63:8080/activate/" + userid;
+    let query = "http://192.168.0.149:8080/activate/" + userid;
     const response = await fetch(query, {
         method: 'PUT',
         headers: {
@@ -77,7 +79,7 @@ async function UpdateUser(user){
 }
 
 async function sendActivationQuery(user, token){
-    query = "http://192.168.178.63:8080/profile/" + user.id;
+    let query = "http://192.168.0.149:8080/profile/" + user.id;
         const response = await fetch(query, {
             method: 'PUT',
             headers: {
@@ -100,12 +102,12 @@ async function GetProfileById (userId, token) {
     if (userId == "") {
         return
     }
-    let query = "http://192.168.178.63:8080/profile/" + userId;
+    let query = "http://192.168.0.149:8080/profile/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
             'Content-type': 'application/json',
-            'Authorization': 'Bearer ' + "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzE4MzU1NDUsInN1YiI6MiwidXNlciI6Mn0.sTVRUgPZl04VMSbcGvjRSacucCiVOQ4iYU_Nx4a_IE3jy6JtrXXCOOMjeLaxAWbNho5DFLxjKDFf05JVgTB9Mo8lkeGeogDHfumcz3yBnRv0cOXfTjuATGULF8vyM8sjTkkD3O9hYiK568UBJEFE8geY2q_k-3ONTZLv2ysZt2Y"
+            'Authorization': 'Bearer ' + token
         },
     });
     const resultData = await response.json();
@@ -116,3 +118,67 @@ async function GetProfileById (userId, token) {
 
 }
 export {GetProfileById}
+
+async function UpdateUserProfile(userId, gender, price, phoneNumber, firstName, name, username, email, city, plz, street, houseNumber, token){
+    if (price == "" || gender == "" || phoneNumber == "" || firstName == "" || name == "" || username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
+        return
+    }
+    let priceNumber = parseInt(price)
+    if (isNaN(priceNumber)){
+        return "Price is not valid!"
+    }
+    let plzNumber = parseInt(plz)
+    if (isNaN(plzNumber)){
+        return "PLZ is not valid!"
+    }
+    let phoneNr = parseInt(phoneNumber)
+    if (isNaN(phoneNr)){
+        return "Phone Number is not valid!"
+    }
+
+    /*let genderNr
+    switch (gender){
+        case "Weiblich":
+            genderNr = 2
+            break
+        case "Männlich":
+            genderNr = 1
+            break
+        case "Divers":
+            genderNr = 3
+            break
+    }*/
+
+    let query = "http://192.168.0.149:8080/profile/" + userId
+    let user = {
+        "firstName": firstName,
+        "name": name,
+        "gender": gender,
+        "username": username,
+        "email": email,
+        "street": street,
+        "houseNumber": houseNumber,
+        "telephoneNumber": phoneNumber,
+        //"password": pw,
+        "price": priceNumber,
+        "city": {
+            "plz": plzNumber,
+            "place": city
+        }
+    }
+    const response = await fetch(query, {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(user)
+    });
+    const resultData = await response.json();
+
+    if (response.status != 200){
+        return resultData.error;
+    }
+    return resultData;
+}
+export default UpdateUserProfile;
