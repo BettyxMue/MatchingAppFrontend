@@ -205,6 +205,11 @@ const styles = StyleSheet.create({
     ChatWriterSendText: {
         fontSize: 40,
         fontWeight: "bold"
+    },
+    ChatWriterTimeStyle: {
+        fontSize: 8,
+        textAlign: "right",
+        fontStyle: "italic"
     }
 }); 
 

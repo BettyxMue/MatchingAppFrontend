@@ -4,6 +4,22 @@ import React, { useState, useContext } from "react";
 const ChatContext = React.createContext({});
 const ChatDispatcherContext = React.createContext(undefined)
 
+const WebSocketContext = React.createContext({})
+const WebSocketDispatcher = React.createContext({})
+
+const WebSocketProvider = ({children}) => {
+    const [websocket, setWebsocket] = useState({})
+
+    return(
+        <WebSocketContext.Provider value={websocket}>
+            <WebSocketDispatcher.Provider value={setWebsocket}>
+                {children}
+            </WebSocketDispatcher.Provider>
+
+        </WebSocketContext.Provider>
+    )
+}
+
 const ChatProvider = ({ children }) => {
     const [chat, setChat] = useState({
         "messages": []
@@ -33,4 +49,4 @@ const useChat = () => {
     }*/
 }
 
-export {ChatProvider, ChatDispatcherContext, ChatContext, useChat}
+export {ChatProvider, ChatDispatcherContext, ChatContext, useChat, WebSocketProvider, WebSocketContext, WebSocketDispatcher}

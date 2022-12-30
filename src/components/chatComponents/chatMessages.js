@@ -30,7 +30,7 @@ const ChatMessages = (props) => {
         >
             {chatArray.messages.map((data => {
                 return (
-                    <ChatBubble key={data.createdAt} data={data.message} userId={chatArray.chatPartner.id} writtenBy={data.writtenBy}/>
+                    <ChatBubble key={data.createdAt} data={data.message} createdAt={data.createdAt} userId={chatArray.chatPartner.id} writtenBy={data.writtenBy}/>
                 )
             }))}
         </ScrollView>

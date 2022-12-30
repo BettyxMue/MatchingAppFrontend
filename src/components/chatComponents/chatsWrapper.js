@@ -7,13 +7,17 @@ import ChatStart from "./chatStart";
 import { styles } from "../../resources/Styles";
 import { useNavigation } from "@react-navigation/native";
 import GlobalChatArray from "../../resources/globals";
-import { ChatContext, ChatDispatcherContext, useChat } from "../../resources/page-context";
+import { ChatContext, ChatDispatcherContext, useChat, WebSocketContext } from "../../resources/page-context";
+import { schedulePushNotification } from "../../resources/Notificator";
 
 
 const ChatsWrapper = (chats) => {
 
     const chat = useContext(ChatContext);
     const setChat = useContext(ChatDispatcherContext)
+    const websocket = useContext(WebSocketContext)
+
+    console.log(websocket)
 
     const firstUpdate = useRef(true)
     const navigation = useNavigation();
@@ -107,6 +111,12 @@ const ChatsWrapper = (chats) => {
             chatArrayCache[position].messages.push(newMessage)
         }
         setLoading(true)
+        if(From == user.id){
+            let newMessageString = JSON.stringify(newMessage)
+            websocket.send(newMessageString)
+        }else{
+            schedulePushNotification(newMessage.message, chatArrayCache[position].chatPartner.username)
+        }
         const testCopy = [...chatArrayCache]
         console.log(testCopy)
         setChat(testCopy[position])

@@ -1,18 +1,16 @@
 // @ts-nocheck
 import { getToken, getUser } from "../resources/InternalStorage"
+import '../resources/globals'
 
 // @ts-nocheck
 function OpenWSConnection(){
     let websocket = new WebSocket("ws://192.168.2.120:8081/sendMessage")
     websocket.onopen = () => {
-        let message = {
-            "writtenBy": 1,
-            "sendTo": 2,
-            "message": "I am connected from the app!"
+        let openMessage = {
+            "writtenBy": 1
         }
-        let messageString = JSON.stringify(message)
+        let messageString = JSON.stringify(openMessage)
         websocket.send(messageString)
-        console.log(websocket)
         return websocket
     }
     websocket.onerror = (e) => {
@@ -27,13 +25,15 @@ function OpenWSConnection(){
         if (e != null) {
             try {
                 let message = JSON.parse(e.data)
-                console.log(message.message)
+                global.appendMessageToChat(message.chatID, message.message, message.sendTo, message.writtenBy)
+                console.log(message)
             } catch (err){
                 console.log(err)
             }
         }
         
     }
+    return websocket
 }
 
 async function GetAllChatsForUser(){
