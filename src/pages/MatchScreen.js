@@ -1,74 +1,75 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, ImageBackground, Text, TouchableOpacity, View} from 'react-native';
-import {useRoute} from "@react-navigation/core";
 import {useNavigation} from "@react-navigation/native";
+import {GetProfileById} from "../connectors/ProfileServiceConnector";
+import {getToken} from "../resources/InternalStorage";
+import {Entypo} from "@expo/vector-icons";
+import {styles} from "../resources/Styles";
 
-const MatchScreen = () => {
-
-    //const userId = {};    get userId from JWT?
+const MatchScreen = (params) => {
 
     const navigation = useNavigation();
-    const { params } = useRoute();
-    const { userData, userSwiped } = params;
+    //const { userId, userSwipedId } = params;
+    const userId = 2;
+    const userSwipedId = 3;
 
-    /*const [matches, setMatches] = useState("");
-    const [matched, setMatched] = useState("");
-    const [search, setSearch] = useState("");
+    const [userData, setUserData] = React.useState("")
+    const [userSwipedData, setSwipedData] = React.useState("")
 
-    let data = Searching(searchId, userId);
-    setMatches(data);
-
-    function getMatchedData(matchedId){
-        let result = GetProfileById(matchedId);
-        setMatched(result);
-        useEffect(() => {
-            const fetchData = async () => {
-                const result = await axios(
-                    'http://<localIp>:8080/profile/:' + userId,
-                );
-                setMatched(result.data);
-            };
-
-            fetchData();
-        }, []);
-    }*/
+    useEffect(() => {
+        GetProfileById(userId, getToken()).then(r => {
+            setUserData(r)
+            console.log(r)
+        })
+        GetProfileById(userSwipedData, getToken()).then(r => {
+            setSwipedData(r)
+        })
+    })
 
     return (
-        <ImageBackground
-            resizeMode="cover"
-            //source={require("../images/Farbverlauf.png")}
-        >
-            <View>
+        <SafeAreaView style={{
+            height: '100%',
+            width: '100%',
+            alignContent: "center"
+        }}>
+            <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
                 <View>
-                    <Image
-                        //source={require("Match Icon")}
-                    />
+                    <View style="height-full paddingTop-20">
+                        <View style="justify-center px-10 paddingTop-20">
+                            <Entypo name="heart" size={50} color="red"/>
+                        </View>
+                        <Text style="text-black text-center marginTop-5 text-lg">
+                            Du und {userSwipedData.firstName} finden einander toll!
+                        </Text>
+                        <View style="flex-row justify-evenly marginTop-5">
+                            <Image
+                                style="height-32 width-32 rounded-full"
+                                //source={{ uri: userData.pictures[0] }}
+                            />
+                            <Image
+                                style="height: 32 width: 32 rounded: full"
+                                //source={{ uri: userSwipedData.pictures[0] }}
+                            />
+                        </View>
+                        <TouchableOpacity
+                            style={{background: "white", margin: 5, pixel: 10, paddingTop: 8, paddingBottom: 8, rounded: full, marginTop: 20}}
+                        >
+                            <Text
+                                onPress={() => {
+                                    navigation.goBack();
+                                    navigation.navigate("Chat", {
+                                        userSwipedId
+                                    });
+                                }}
+                                style="text-center"
+                            >
+                                Schicke doch gleich eine Nachricht!
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <Text>
-                    Du und {userSwiped.username} finden einander toll!
-                </Text>
-                <View>
-                    <Image
-                        source={{ uri: userData.picture }}
-                    />
-                    <Image
-                        source={{ uri: userSwiped.picture }}
-                    />
-                </View>
-                <TouchableOpacity>
-                    <Text
-                        onPress={() => {
-                            navigation.goBack();
-                            navigation.navigate("Chat", {
-                                userSwiped
-                            });
-                        }}
-                    >
-                        Schicke doch gleich eine Nachricht!
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        </ImageBackground>
+            </LinearGradient>
+        </SafeAreaView>
     )
 }
 export default MatchScreen
