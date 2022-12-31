@@ -17,7 +17,12 @@ const ChatWrite = (props) => {
             return
         }
         setMessage("")
-        global.appendMessageToChat(chatArray.chatID, message, chatArray.chatPartner.id, currentUser.id)
+        if(chatArray.messages.length > 0){
+            global.appendMessageToChat(chatArray.chatID, message, chatArray.chatPartner.id, currentUser.id, chatArray)
+        }else{
+            global.appendMessageToChat(chatArray.chatID, message, chatArray.chatPartner.id, currentUser.id, chatArray)
+        }
+        
     }
 
     return (

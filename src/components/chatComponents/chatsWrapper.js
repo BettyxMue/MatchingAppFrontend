@@ -7,8 +7,9 @@ import ChatStart from "./chatStart";
 import { styles } from "../../resources/Styles";
 import { useNavigation } from "@react-navigation/native";
 import GlobalChatArray from "../../resources/globals";
-import { ChatContext, ChatDispatcherContext, useChat, WebSocketContext } from "../../resources/page-context";
+import { ChatContext, ChatDispatcherContext, ChatRoomContext, ChatRoomDispatcher, useChat, WebSocketContext } from "../../resources/page-context";
 import { schedulePushNotification } from "../../resources/Notificator";
+import { GetAllChatRoomsForUser } from "../../connectors/ChatServiceConnector";
 
 
 const ChatsWrapper = (chats) => {
@@ -16,6 +17,8 @@ const ChatsWrapper = (chats) => {
     const chat = useContext(ChatContext);
     const setChat = useContext(ChatDispatcherContext)
     const websocket = useContext(WebSocketContext)
+    const setChatRooms = useContext(ChatRoomDispatcher)
+    const chatRooms = useContext(ChatRoomContext)
 
     console.log(websocket)
 
@@ -24,16 +27,28 @@ const ChatsWrapper = (chats) => {
     const [chatIndex, setChatIndex] = React.useState(-1)
     const [isLoading, setLoading] = React.useState(true)
     const [userCache, setUserCache] = React.useState({})
-    const [chatArrayCache, setChatArrayCache] = React.useState([]);
+    const [chatArrayCache, setChatArrayCache] = React.useState([])
+
 
     function onChatClick(data,userCache2, navigation){
         let position = chatArray.findIndex(c => c.chatID === data.chatID)
-        setChatIndex(position) 
-        setChat(chatArray[position]);
-        navigation.navigate('ChatDetail', {
-            chat: chatArray[position],
-            user: userCache2,
-        });
+        if (position != -1){
+            setChatIndex(position) 
+            setChat(chatArray[position]);
+            navigation.navigate('ChatDetail', {
+                chat: chatArray[position],
+                user: userCache2,
+            });
+        }else{
+            position = chatRooms.findIndex(c => c.chatID === data.chatID)
+            setChatIndex(-1)
+            setChat(chatRooms[position])
+            navigation.navigate('ChatDetail', {
+                chat: chatRooms[position],
+                user: userCache2,
+            })
+        }
+        
     }
 
     const [chatArray, setChatArray] = React.useState([]);
@@ -90,11 +105,10 @@ const ChatsWrapper = (chats) => {
                 chatArray[counter].chatPartner = value
                 counter++;
             })
-            setLoading(false)
         })
     }
     
-    function appendChatMessageToChat(chatID, message, sendTo, From){
+    function appendChatMessageToChat(chatID, message, sendTo, From, chat){
         let chatArrayCache = chatArray
         let newMessage = {
             "writtenBy": From,
@@ -105,11 +119,13 @@ const ChatsWrapper = (chats) => {
         }
         let position = chatArrayCache.findIndex(c => c.chatID === chatID)
         if (position == -1){
-            console.log("Chat nicht vorhanden, baue ein...")
-        }else{
-            console.log(newMessage)
-            chatArrayCache[position].messages.push(newMessage)
+            if(chat == null){
+                return
+            }
+            chatArrayCache.push(chat)
+            position = chatArrayCache.findIndex(c => c.chatID === chat.chatID)
         }
+        chatArrayCache[position].messages.push(newMessage)
         setLoading(true)
         if(From == user.id){
             let newMessageString = JSON.stringify(newMessage)
@@ -122,6 +138,19 @@ const ChatsWrapper = (chats) => {
         setChat(testCopy[position])
         setChatArray(testCopy)
         setLoading(false)
+    }
+
+    function getChatRoomById(chatId){
+        let chatRoomsCache2 = chatRooms
+        let position = chatRoomsCache2.findIndex(c => c.chatID == chatId)
+        if (position == -1){
+            console.log("Chat room not found?!")
+            return
+        }
+        let chatRoomsCache = [...chatRoomsCache2]
+        chatRoomsCache.splice(position, 1)
+        //setChatRooms(chatRoomsCache)
+        return chatRooms[position]
     }
     
     async function GetChats(){
@@ -137,16 +166,50 @@ const ChatsWrapper = (chats) => {
     function GetChatArray(){
         return chatArray
     }
+
+
+    async function sortChatRooms(rooms){
+        let roomArray = []
+        rooms.forEach(room => {
+            let position = chatArray.findIndex(c => c.chatID === room.chatId)
+            if (position == -1){
+                room.chatID = room.chatId
+                delete room.chatId
+                roomArray.push(room)
+            }
+        })
+        console.log(roomArray)
+        return roomArray
+    }
+
+    async function setUserNamesToEmptyChats(rooms){
+        let promises = []
+        rooms.forEach(room => {
+            if (room.userID1 != user.id){
+                const promise = getUserFromId(room.userID1)
+                promises.push(promise)       
+            }else{
+                const promise = getUserFromId(room.userID2)
+                promises.push(promise)
+            }
+        })
+        Promise.all(promises).then((values) => {
+            let counter = 0; 
+            values.forEach(value => {
+                rooms[counter].chatPartner = value
+                rooms[counter].messages = []
+                counter++;
+            })
+            setChatRooms(rooms)
+            console.log(rooms)
+            console.log(chatRooms)
+            setLoading(false)
+        })
+    }
     
     // END CHAT FUNCTIONALITY
     
     useEffect(() => {
-        if(firstUpdate.current){
-            firstUpdate.current = false
-        }else{
-            
-        }
-
         let chatArrayRawCache = GetRawChatData()
         console.log("Component did update (maybe?)")
         setChatArrayCache(GetChatArray())
@@ -154,14 +217,20 @@ const ChatsWrapper = (chats) => {
             getUser().then(user => {
                 setUserCache(user)
                 GetChatsArray(chatArrayRawCache);
-                SetUsersToChats(user, setLoading);
+                SetUsersToChats(user, setLoading).then(() => {
+                    GetAllChatRoomsForUser().then(rooms => {
+                        sortChatRooms(rooms).then((rooms) => {
+                            setUserNamesToEmptyChats(rooms)
+                        })
+                    })
+                })
                 global.appendMessageToChat = appendChatMessageToChat
                 
             })
         }else{
             setLoading(false);
         }
-    }, [chat.messages.length]);
+    }, [chat.messages.length, chatRooms]);
 
     while(isLoading) {
         return <Text>Loading...</Text>
@@ -169,6 +238,14 @@ const ChatsWrapper = (chats) => {
 
     return (
         <View style={styles.chatOverview}>
+            <Text style={styles.chatMessagesTitle}>Matches</Text>
+            {chatRooms.map((data => {
+                return(
+                    <TouchableOpacity style={{width: "100%"}} key={data.chatID} onPress={() => onChatClick(data,userCache, navigation)}>
+                        <ChatStart chat={data}/>
+                    </TouchableOpacity>
+                )
+            }))}
             <Text style={styles.chatMessagesTitle}>Nachrichten</Text>
             {chatArray.map((data => {
                 return(

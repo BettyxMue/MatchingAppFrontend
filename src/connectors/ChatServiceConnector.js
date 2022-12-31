@@ -1,6 +1,8 @@
 // @ts-nocheck
 import { getToken, getUser } from "../resources/InternalStorage"
 import '../resources/globals'
+import { useContext } from "react"
+import { ChatRoomContext } from "../resources/page-context"
 
 // @ts-nocheck
 function OpenWSConnection(){
@@ -34,6 +36,36 @@ function OpenWSConnection(){
         
     }
     return websocket
+}
+
+async function GetAllChatRoomsForUser(){
+    let user = await getUser()
+    if (user == null){
+        console.log("No user found!")
+        return
+    }
+    let token = await getToken();
+
+    if(token == null){
+        console.log("No token found!")
+        return
+    }
+    let query = "http://192.168.2.120:8081/Rooms"
+    const response = await fetch(query, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': token,
+            'user': user.id
+        }
+    })
+    const responseData = await response.json()
+
+    if (response.status != 200){
+        console.log("Error: " + response.statusText)
+        return response.statusText
+    }
+    return responseData
 }
 
 async function GetAllChatsForUser(){
@@ -92,4 +124,4 @@ async function getChatsWithToken(user,token){
 }
 
 
-export {OpenWSConnection, GetAllChatsForUser}
+export {OpenWSConnection, GetAllChatsForUser, GetAllChatRoomsForUser}

@@ -7,6 +7,15 @@ const ChatStart = (chat) => {
     useEffect(() => {
 
     }, [chat])
+
+    function getLastMessage(messages){
+        if(messages.length > 0){
+            return messages[messages.length -1].message
+        }else{
+            return ""
+        }
+    }
+
     return (
         <View style={styles.chatOverviewElement}>
             <View style={{width: "20%"}}>
@@ -17,7 +26,7 @@ const ChatStart = (chat) => {
                     <Text style={styles.chatOverviewName}>{chat.chat.chatPartner.username}</Text>
                 </View>
                 <View>
-                    <Text>{chat.chat.messages[(chat.chat.messages.length) -1].message}</Text>
+                    <Text>{getLastMessage(chat.chat.messages)}</Text>
                 </View>
             </View>
         </View>

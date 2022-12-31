@@ -7,6 +7,20 @@ const ChatDispatcherContext = React.createContext(undefined)
 const WebSocketContext = React.createContext({})
 const WebSocketDispatcher = React.createContext({})
 
+const ChatRoomContext = React.createContext([])
+const ChatRoomDispatcher = React.createContext([])
+
+const ChatRoomProvicer = ({children}) => {
+    const [chatRooms, setChatRooms] = useState([])
+    return (
+        <ChatRoomContext.Provider value={chatRooms}>
+            <ChatRoomDispatcher.Provider value={setChatRooms}>
+                {children}
+            </ChatRoomDispatcher.Provider>
+        </ChatRoomContext.Provider>
+    )
+}
+
 const WebSocketProvider = ({children}) => {
     const [websocket, setWebsocket] = useState({})
 
@@ -49,4 +63,4 @@ const useChat = () => {
     }*/
 }
 
-export {ChatProvider, ChatDispatcherContext, ChatContext, useChat, WebSocketProvider, WebSocketContext, WebSocketDispatcher}
+export {ChatProvider, ChatDispatcherContext, ChatContext, useChat, WebSocketProvider, WebSocketContext, WebSocketDispatcher, ChatRoomContext, ChatRoomDispatcher, ChatRoomProvicer}
