@@ -4,10 +4,22 @@ import {getUser, storeUser} from "../resources/InternalStorage";
 import {styles} from "../resources/Styles";
 import {LinearGradient} from "expo-linear-gradient";
 import {Entypo} from "@expo/vector-icons";
-import ProfileItem from "../components/ProfileItem";
-import UpdateUserProfile, {GetProfileById, SignUp, UpdateUser} from "../connectors/ProfileServiceConnector";
+import ProfileItem from "../components/profileComponents/ProfileItem";
+import {UpdateUserProfile, GetProfileById, SignUp, UpdateUser} from "../connectors/ProfileServiceConnector";
+import Toast from "react-native-root-toast";
 
-const ProfileScreen = (navigation) => {
+const ProfileScreen = ({navigation}) => {
+
+    async function showMessage(message) {
+        let toast = Toast.show(message, {
+            duration: Toast.durations.LONG,
+            backgroundColor: "grey",
+            textColor: "white",
+        });
+        setTimeout(function hideToast() {
+            Toast.hide(toast)
+        }, 5000);
+    }
 
     //const [userId, setUserId] = React.useState("")
     const [toggleEdit, setToggleEdit] = React.useState(true)
@@ -28,7 +40,7 @@ const ProfileScreen = (navigation) => {
 
     let genderString;
 
-    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI0NDY3OTMsInN1YiI6MiwidXNlciI6Mn0.UpP_Bi_henUsVXRVl4hhDnGgNGAoZQCg4eCbytXQ1qoYAaSuIaSy9tgpOGk6llgWJbYTbBfaGLwfmfNVpHs-VV6pO2jeNLBA2gRUIhn_aQgjTN2sBArmUS-edosvYUnp5AprcCQxabNBV_IfGkuaW_nQQhlkwq0DHJsIhOcXMZ4^"
+    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI0OTczNDYsInN1YiI6MiwidXNlciI6Mn0.X1FuU3eXymiq-sWwIvCr4g__EGo5ghHemnUg5B_-VRuIFxWo_hw1qUZCV9T74pSqWF_ChMCZvwDU9a6X1SsBu-RNHq8FwcYos2VHoa6ZLaXp9ZJQK8ekMxfSNKme5uvjm1IuIYCDwfO7JWBdnNSwDVY5X7-5w9cuq1TXqSdw8cQ"
 
     useEffect(() => {
         /*getUser().then(r => {
@@ -48,6 +60,9 @@ const ProfileScreen = (navigation) => {
                         break
                     case 3:
                         genderString = "Divers"
+                        break
+                    default:
+                        genderString = "Keine Angabe"
                         break
                 }
                 onChangeUserName(r.username)
@@ -81,6 +96,7 @@ const ProfileScreen = (navigation) => {
 
         UpdateUserProfile(userId, genderNr, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, token).then(r => {
             console.log(r)
+            showMessage("User erfolgreich geupdated!")
         });
         setToggleEdit(true)
     }
@@ -116,10 +132,25 @@ const ProfileScreen = (navigation) => {
                                     <TouchableOpacity style={styles.editProfileButton} onPress={() => setToggleEdit(false)}>
                                         <Text style={styles.continueButtonText}>Profil bearbeiten</Text>
                                     </TouchableOpacity>
+                                    <TouchableOpacity style={styles.editProfileButton} onPress={() => navigation.navigate("Skills")}>
+                                        <Text style={styles.continueButtonText}>Skills bearbeiten</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.editProfileButton} onPress={() => navigation.navigate("Filter")}>
+                                        <Text style={styles.continueButtonText}>Filter bearbeiten</Text>
+                                    </TouchableOpacity>
                                 </View>
-                                <View>
-                                    <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-                                        <Entypo name="user" size={30} color="blue"/>
+                                <View style={{
+                                    backgroundColor: "white",
+                                    flexDirection: "row",
+                                    flexWrap: "wrap",
+                                    padding: 5,
+
+                                }}>
+                                    <TouchableOpacity style={{
+                                        alignItems: "flex-end"
+                                    }}
+                                                      onPress={() => navigation.navigate("Profile")}>
+                                        <Entypo name="user" size={30} color="black"/>
                                         {/*<Image
                                         source={{userData.pictures[0]}}
                                         />*/}
@@ -165,7 +196,7 @@ const ProfileScreen = (navigation) => {
                                 />
                                 <View>
                                     <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-                                        <Entypo name="user" size={30} color="blue"/>
+                                        <Entypo name="user" size={30} color="white"/>
                                         {/*<Image
                                         source={{uri: userData.pictures[0]}}
                                         />*/}

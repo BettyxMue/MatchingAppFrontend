@@ -99,6 +99,32 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 10,
     },
+    registerInputTextInput4: {
+        height: 40,
+        padding: 10,
+        backgroundColor: "#edebeb",
+        marginTop: 10,
+        marginBottom: 10,
+        alignContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
+        justifyContent: "center",
+        width: "100%",
+        borderRadius: 10,
+    },
+    registerInputTextInput5: {
+        height: 40,
+        padding: 10,
+        backgroundColor: "#edebeb",
+        marginTop: 10,
+        marginBottom: 10,
+        alignContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
+        justifyContent: "center",
+        width: "100%",
+        borderRadius: 10,
+    },
     continueButton: {
         alignContent: "center",
         alignItems: "center",
@@ -133,11 +159,8 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingBottom: 20,
         margin: 20,
+        marginBottom: 5,
         borderRadius: 8,
-        shadowOpacity: 0.05,
-        shadowRadius: 10,
-        shadowColor: "#000000",
-        shadowOffset: { height: 25, width: 25 }
     },
     descriptionProfileItem: {
         color: "#000000",
@@ -153,7 +176,18 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold"
     },
+    titleFilterItem: {
+        color: "#000000",
+        fontSize: 15,
+        fontWeight: "bold"
+    },
     profileDescription: {
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 25,
+        marginRight: 125
+    },
+    filterDescription: {
         marginTop: 10,
         marginBottom: 10,
         marginLeft: 25,
@@ -167,7 +201,8 @@ const styles = StyleSheet.create({
         width: "90%",
         borderRadius: 10,
         backgroundColor: 'blue',
-        padding: 10
+        padding: 10,
+        marginTop: 10
     },
     saveProfileButton: {
         alignContent: "center",
@@ -189,6 +224,24 @@ const styles = StyleSheet.create({
         shadowRadius: 1.41,
 
         elevation: 2,
+    },
+    container2: {
+        flex: 1,
+        backgroundColor: "gray",
+        paddingTop: 100
+    },
+    header: {
+        backgroundColor: "#F5FCFF",
+        padding: 10
+    },
+    headerText: {
+        textAlign: "center",
+        fontSize: 16,
+        fontWeight: "500"
+    },
+    content: {
+        padding: 20,
+        backgroundColor: "#fff"
     }
 }); 
 

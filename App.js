@@ -14,6 +14,7 @@ import StartScreen from "./src/pages/StartScreen";
 import LogInScreen from "./src/pages/LogInScreen";
 import SignUpScreen from "./src/pages/SignUpScreen";
 import MatchScreen from "./src/pages/MatchScreen";
+import SkillsScreen from "./src/pages/SkillsScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
                             <Stack.Screen name="Settings" component={SettingsScreen} />
                             <Stack.Screen name="Profile" component={ProfileScreen} />
                             <Stack.Screen name="Filter" component={FilterScreen} />
+                            <Stack.Screen name="Skills" component={SkillsScreen} />
                             <Stack.Screen name="Chat" component={ChatScreen} />
                             <Stack.Screen name="Messages" component={MessagesScreen} />
                             <Stack.Screen name="Details" component={DetailsScreen} />

@@ -1,6 +1,6 @@
 import React from "react";
 import {Image, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {styles} from "../resources/Styles";
+import {styles} from "../../resources/Styles";
 import SelectDropdown from 'react-native-select-dropdown'
 
 const ProfileItem = ({

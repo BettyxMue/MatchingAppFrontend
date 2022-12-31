@@ -2,7 +2,7 @@
 
 import { getToken, storeToken } from "../resources/InternalStorage"
 
-let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI0NDY3OTMsInN1YiI6MiwidXNlciI6Mn0.UpP_Bi_henUsVXRVl4hhDnGgNGAoZQCg4eCbytXQ1qoYAaSuIaSy9tgpOGk6llgWJbYTbBfaGLwfmfNVpHs-VV6pO2jeNLBA2gRUIhn_aQgjTN2sBArmUS-edosvYUnp5AprcCQxabNBV_IfGkuaW_nQQhlkwq0DHJsIhOcXMZ4"
+let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI0OTczNDYsInN1YiI6MiwidXNlciI6Mn0.X1FuU3eXymiq-sWwIvCr4g__EGo5ghHemnUg5B_-VRuIFxWo_hw1qUZCV9T74pSqWF_ChMCZvwDU9a6X1SsBu-RNHq8FwcYos2VHoa6ZLaXp9ZJQK8ekMxfSNKme5uvjm1IuIYCDwfO7JWBdnNSwDVY5X7-5w9cuq1TXqSdw8cQ"
 
 async function SignUp(username, email, city, plz, street, houseNumber){
     if (username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
@@ -12,7 +12,7 @@ async function SignUp(username, email, city, plz, street, houseNumber){
     if (isNaN(plzNumber)){
         return "PLZ is not valid!"
     }
-    var query = "http://192.168.0.149:8080/signUp"
+    var query = "http://192.168.0.154:8080/signUp"
     var user = {
         "username": username,
         "email": email,
@@ -45,7 +45,7 @@ async function ActivateAccount(userid, code){
     var codeDTO = {
         "Code": code
     }
-    let query = "http://192.168.0.149:8080/activate/" + userid;
+    let query = "http://192.168.0.154:8080/activate/" + userid;
     const response = await fetch(query, {
         method: 'PUT',
         headers: {
@@ -79,7 +79,7 @@ async function UpdateUser(user){
 }
 
 async function sendActivationQuery(user, token){
-    let query = "http://192.168.0.149:8080/profile/" + user.id;
+    let query = "http://192.168.0.154:8080/profile/" + user.id;
         const response = await fetch(query, {
             method: 'PUT',
             headers: {
@@ -102,7 +102,7 @@ async function GetProfileById (userId, token) {
     if (userId == "") {
         return
     }
-    let query = "http://192.168.0.149:8080/profile/" + userId;
+    let query = "http://192.168.0.154:8080/profile/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -149,7 +149,7 @@ async function UpdateUserProfile(userId, gender, price, phoneNumber, firstName, 
             break
     }*/
 
-    let query = "http://192.168.0.149:8080/profile/" + userId
+    let query = "http://192.168.0.154:8080/profile/" + userId
     let user = {
         "firstName": firstName,
         "name": name,
@@ -181,4 +181,47 @@ async function UpdateUserProfile(userId, gender, price, phoneNumber, firstName, 
     }
     return resultData;
 }
-export default UpdateUserProfile;
+export {UpdateUserProfile};
+
+async function AddSkill(skillName, level){
+    if (skillName == "" || level == "") {
+        return
+    }
+
+    let query = "http://192.168.0.154:8080/skill/"
+    let skill = {
+        "name": skillName,
+        "level": level
+    }
+    const response = await fetch(query, {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(skill)
+    });
+    const resultData = await response.json();
+
+    if (response.status != 200){
+        return resultData.error;
+    }
+    return resultData;
+}
+export {AddSkill}
+
+async function GetAllSkills(){
+    let query = "http://192.168.0.154:8080/skill/"
+    const response = await fetch(query, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    });
+    const resultData = await response.json();
+
+    if (response.status != 200){
+        return resultData.error;
+    }
+    return resultData;
+}
+export {GetAllSkills}
