@@ -14,6 +14,7 @@ import StartScreen from "./src/pages/StartScreen";
 import LogInScreen from "./src/pages/LogInScreen";
 import SignUpScreen from "./src/pages/SignUpScreen";
 import ChatDetail from "./src/pages/ChatDetail";
+import CreateBill from "./src/pages/CreateBill"
 import { ChatProvider, ChatRoomProvicer, WebSocketProvider } from "./src/resources/page-context";
 import {registerForPushNotifcations} from './src/resources/Notificator'
 import { storeNotificationToken } from "./src/resources/InternalStorage";
@@ -52,32 +53,35 @@ export default function App() {
             <RootSiblingParent>
               <NavigationContainer StartScreen={(!user) ? 'Home' : 'Start'}>
                   <Stack.Navigator screenOptions={{headerShown: true, headerBackButtonMenuEnabled: false}}>
-                  <Stack.Screen name="Start" component={StartScreen} options={{
-                    headerShown: false
-                  }}/>
-                  <Stack.Screen name="LogIn" component={LogInScreen} options={({navigation,route}) => ({
-                    headerRight: () => {
-                      <Button title="Back" />
-                    },
-                    headerTransparent: true
-                  })}/>
-                  <Stack.Screen name="Registierung" component={SignUpScreen} options={({navigation,route}) => ({
-                    headerRight: () => {
-                      <Button title="Back" />
-                    },
-                    headerTransparent: true,
-                    headerShown: true
-                  })}/>
-                  <Stack.Screen name="Details" component={DetailsScreen}/>
-                  <Stack.Screen name="Home" component={HomeScreen}/>
-                  <Stack.Screen name="Settings" component={SettingsScreen}/>
-                  <Stack.Screen name="Profile" component={ProfileScreen}/>
-                  <Stack.Screen name="Filter" component={FilterScreen}/>
-                  <Stack.Screen name="Chat" component={ChatScreen}/>
-                  <Stack.Screen name="Messages" component={MessagesScreen}/>
-                  <Stack.Screen name="ChatDetail" component={ChatDetail} options={({navitation, route}) => ({
-                    headerShown: false
-                  })} />
+                    <Stack.Screen name="Start" component={StartScreen} options={{
+                      headerShown: false
+                    }}/>
+                    <Stack.Screen name="LogIn" component={LogInScreen} options={({navigation,route}) => ({
+                      headerRight: () => {
+                        <Button title="Back" />
+                      },
+                      headerTransparent: true
+                    })}/>
+                    <Stack.Screen name="Registierung" component={SignUpScreen} options={({navigation,route}) => ({
+                      headerRight: () => {
+                        <Button title="Back" />
+                      },
+                      headerTransparent: true,
+                      headerShown: true
+                    })}/>
+                    <Stack.Screen name="Details" component={DetailsScreen}/>
+                    <Stack.Screen name="Home" component={HomeScreen}/>
+                    <Stack.Screen name="Settings" component={SettingsScreen}/>
+                    <Stack.Screen name="Profile" component={ProfileScreen}/>
+                    <Stack.Screen name="Filter" component={FilterScreen}/>
+                    <Stack.Screen name="Chat" component={ChatScreen}/>
+                    <Stack.Screen name="Messages" component={MessagesScreen}/>
+                    <Stack.Screen name="ChatDetail" component={ChatDetail} options={({navitation, route}) => ({
+                      headerShown: false
+                    })} />
+                    <Stack.Screen name="CreateBill" component={CreateBill} options={({navitation, route}) => ({
+                      headerShown: false
+                    })} />
                   </Stack.Navigator>
               </NavigationContainer>
             </RootSiblingParent>

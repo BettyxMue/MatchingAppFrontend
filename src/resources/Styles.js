@@ -210,7 +210,46 @@ const styles = StyleSheet.create({
         fontSize: 8,
         textAlign: "right",
         fontStyle: "italic"
-    }
+    },
+    billingTitle: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#4287f5",
+        marginTop: "4%",
+        textAlign: "auto"
+    },
+    billingTextTitle:{
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#4287f5",
+        textAlign: "center"
+    },
+    billingInputSection:{
+        marginTop: "5%",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap"
+    },
+    billingInputSectionUnder1: {
+        justifyContent: "center",
+        width: "60%"
+    },
+    billingInputSectionUnder2: {
+        marginLeft: "5%",
+        width: "35%"
+
+    },
+    billingText: {
+        fontWeight: "bold"
+    },
+    billindInputField: {
+        height: 40,
+        padding: 10,
+        backgroundColor: "#edebeb",
+        marginTop: 10,
+        marginBottom: 10,
+        borderRadius: 10
+    },
 }); 
 
 export {styles}

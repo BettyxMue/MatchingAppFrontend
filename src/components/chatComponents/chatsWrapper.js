@@ -26,6 +26,7 @@ const ChatsWrapper = (chats) => {
     const navigation = useNavigation();
     const [chatIndex, setChatIndex] = React.useState(-1)
     const [isLoading, setLoading] = React.useState(true)
+    const [isRoomLoading, setRoomLoading] = React.useState(true)
     const [userCache, setUserCache] = React.useState({})
     const [chatArrayCache, setChatArrayCache] = React.useState([])
 
@@ -105,6 +106,7 @@ const ChatsWrapper = (chats) => {
                 chatArray[counter].chatPartner = value
                 counter++;
             })
+            setLoading(false)
         })
     }
     
@@ -203,7 +205,7 @@ const ChatsWrapper = (chats) => {
             setChatRooms(rooms)
             console.log(rooms)
             console.log(chatRooms)
-            setLoading(false)
+            setRoomLoading(false)
         })
     }
     
@@ -232,7 +234,7 @@ const ChatsWrapper = (chats) => {
         }
     }, [chat.messages.length, chatRooms]);
 
-    while(isLoading) {
+    while(isLoading || isRoomLoading) {
         return <Text>Loading...</Text>
     }
 
