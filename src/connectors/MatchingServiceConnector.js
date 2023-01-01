@@ -4,7 +4,7 @@ async function Like(userId1, userId2){
     if (userId1 == "" || userId2 == "") {
         return
     }
-    var query = "http:// 192.168.0.154:8084/like"
+    var query = "http://192.168.0.159:8084/like"
     var like = {
         "likerid": userId1,
         "likedid": userId2
@@ -28,7 +28,7 @@ async function Dislike(userId1, userId2){
     if (userId1 == "" || userId2 == "") {
         return
     }
-    var query = "http://192.168.0.154:8084/dislike"
+    var query = "http://192.168.0.159:8084/dislike"
     var dislike = {
         "dislikerid": userId1,
         "dislikedid": userId2
@@ -57,7 +57,7 @@ async function Searching(searchId, userId){
     if (searchId == "" || userId == "") {
         return
     }
-    let query = "http:// 192.168.0.154:8084/searching/" + searchId + "/" + userId;
+    let query = "http://192.168.0.159:8084/searching/" + searchId + "/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -94,7 +94,7 @@ async function CreateSearch(name, skill, level, gender, radius, userId){
         return "User ID is not valid!"
     }
 
-    let query = "http://192.168.0.154:8084/search"
+    let query = "http://192.168.0.159:8084/search"
     let search = {
         "name": name,
         "skill": skillNr,
@@ -122,7 +122,7 @@ async function DeleteSearch(searchId){
     if (searchId == "") {
         return
     }
-    var query = "http://192.168.0.154:8084/search/" + searchId;
+    var query = "http://192.168.0.159:8084/search/" + searchId;
 
     const response = await fetch(query, {
         method: 'DELETE',
@@ -142,7 +142,7 @@ async function DeleteMatch(matchId){
     if (matchId == "") {
         return
     }
-    var query = "http://192.168.0.154:8084/match/" + matchId;
+    var query = "http://192.168.0.159:8084/match/" + matchId;
 
     const response = await fetch(query, {
         method: 'DELETE',
@@ -162,7 +162,7 @@ async function GetSearchesByUser (userId) {
     if (userId == "") {
         return
     }
-    let query = "http://192.168.0.154:8084/search/user/" + userId;
+    let query = "http://192.168.0.159:8084/search/user/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -199,7 +199,7 @@ async function UpdateSearch(searchId, name, skill, level, gender, radius, userId
         return "User ID is not valid!"
     }
 
-    let query = "http://192.168.0.154:8084/search/" + searchId
+    let query = "http://192.168.0.159:8084/search/" + searchId
     let search = {
         "name": name,
         "skill": skillNr,

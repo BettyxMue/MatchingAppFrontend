@@ -1,11 +1,11 @@
-import {SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-native'
+import {KeyboardAvoidingView, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import React, {Component, useEffect} from 'react'
 import {CreateSearch, DeleteSearch, GetSearchesByUser, UpdateSearch} from "../connectors/MatchingServiceConnector";
 import Toast from "react-native-root-toast";
 import {Collapse, CollapseHeader, CollapseBody} from "accordion-collapse-react-native";
 import {Entypo} from "@expo/vector-icons";
 import {styles} from "../resources/Styles";
-import {GetAllSkills} from "../connectors/ProfileServiceConnector";
+import {GetAllSkills, UpdateUserProfile} from "../connectors/ProfileServiceConnector";
 import SelectDropdown from "react-native-select-dropdown";
 
 const FilterScreen = ({navigation}) => {
@@ -25,8 +25,9 @@ const FilterScreen = ({navigation}) => {
     const userId = 2
     let filters = [];
     const [userFilters, setUserFilters] = React.useState([])
+    const [possibleSkills, setPossibleSkills] = React.useState([])
 
-    let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI0OTczNDYsInN1YiI6MiwidXNlciI6Mn0.X1FuU3eXymiq-sWwIvCr4g__EGo5ghHemnUg5B_-VRuIFxWo_hw1qUZCV9T74pSqWF_ChMCZvwDU9a6X1SsBu-RNHq8FwcYos2VHoa6ZLaXp9ZJQK8ekMxfSNKme5uvjm1IuIYCDwfO7JWBdnNSwDVY5X7-5w9cuq1TXqSdw8cQ"
+    let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI2MDMxMzcsInN1YiI6MiwidXNlciI6Mn0.fQ7DX2j6u5qSu3bfsR8zQaNUytL_bk2z4IGkmZeIQ2mEH3wLYEb6LPSyPc3oXpzeQghliJgzKuvG1Cs-LIR3rkBsz36-z7lnzBGHShPiNR-O-PFfBGTtSCvXLCUCCXy5ZjjP_njMe1WFJ5oeRGJKieEn8btLkeSKkqp6DeUWUaw"
 
     const [toggle, setToggle] = React.useState(false)
     const [addToggle, setAddToggle] = React.useState(false)
@@ -38,9 +39,12 @@ const FilterScreen = ({navigation}) => {
     const [newGender, onChangeGender] = React.useState("")
 
     const genders = ["Weiblich", "Männlich", "Divers", "Keine Präferenz"]
+    const possibleLevels = ["Anfänger", "Fortgeschritten", "Experte"]
+    let skills = []
 
     useEffect(() => {
         GetUserFilters()
+        GetPossibleSkills()
     }, [])
 
     async function GetUserFilters() {
@@ -51,12 +55,24 @@ const FilterScreen = ({navigation}) => {
                     name: filter.name,
                     level: filter.level,
                     gender: filter.gender,
-                    radius: filter.radius,
+                    radius: (filter.radius).toString(),
                     skill: filter.skill,
                     created_by: filter.created_by
                 }
             })
             setUserFilters(filters)
+        })
+    }
+
+    async function GetPossibleSkills(){
+        GetAllSkills().then(r => {
+            r.map((skill, index) => {
+                skills[index] = {
+                    id: skills.id,
+                    name: skills.name
+                }
+            })
+            setPossibleSkills(skills)
         })
     }
 
@@ -79,7 +95,15 @@ const FilterScreen = ({navigation}) => {
 
         let skillId;
 
-        GetAllSkills().then(r => {
+        possibleSkills.map(skills => {
+            if (skills.name == name){
+                skillId = skills.id
+            } else {
+                showErrorMessage("Skill not found!")
+            }
+        })
+
+        /*GetAllSkills().then(r => {
             r.map(skill => {
                 if (skill.name == name && skill.level == level) {
                     skillId = skill.id
@@ -87,7 +111,7 @@ const FilterScreen = ({navigation}) => {
                     showErrorMessage("Please create skill first!")
                 }
             })
-        })
+        })*/
 
         CreateSearch(name, skillId, level, genderNr, radius, userId).then(r => {
             console.log(r)
@@ -123,6 +147,13 @@ const FilterScreen = ({navigation}) => {
                 return;
             }
         })
+
+        UpdateUserProfile().then(r => {
+            if (r.status !== '200') {
+                showErrorMessage(r);
+                return;
+            }
+        })
         setToggle(false)
         setAddToggle(false)
     }
@@ -150,7 +181,10 @@ const FilterScreen = ({navigation}) => {
             width: '100%',
             alignContent: "center"
         }}>
-            <View>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{
+                alignContent: "center",
+                flex: 1
+            }}>
                 {userFilters.map(filter => (
                     <Collapse style={{borderBottomWidth: 1, borderTopWidth: 1}}>
                         <CollapseHeader style={{
@@ -161,11 +195,15 @@ const FilterScreen = ({navigation}) => {
                         }}>
                             {toggle ?
                                 <View>
-                                    <TextInput
-                                        onChangeText={onChangeName}
-                                        value={filter.name}
-                                        style={styles.registerInputTextInput4}
-                                        textContentType="nickname"
+                                    <SelectDropdown
+                                        data={possibleSkills}
+                                        onSelect={(selectedItem, index) => {
+                                            onChangeName(selectedItem)
+                                        }}
+                                        buttonTextAfterSelection={(selectedItem, index) => {
+                                            return selectedItem
+                                        }}
+                                        defaultButtonText={filter.name}
                                     />
                                 </View>
                                 :
@@ -185,11 +223,15 @@ const FilterScreen = ({navigation}) => {
                                     width: "90%"
                                 }}>
                                     <Text style={styles.titleFilterItem}>Level:</Text>
-                                    <TextInput
-                                        onChangeText={onChangeLevel}
-                                        value={filter.level}
-                                        style={styles.registerInputTextInput5}
-                                        textContentType="none"
+                                    <SelectDropdown
+                                        data={possibleLevels}
+                                        onSelect={(selectedItem, index) => {
+                                            onChangeLevel(selectedItem)
+                                        }}
+                                        buttonTextAfterSelection={(selectedItem, index) => {
+                                            return selectedItem
+                                        }}
+                                        defaultButtonText={filter.level}
                                     />
                                     <Text style={styles.titleFilterItem}>Geschlecht:</Text>
                                     <SelectDropdown
@@ -233,18 +275,26 @@ const FilterScreen = ({navigation}) => {
                 {addToggle ?
                     <View>
                         <Text style={styles.titleFilterItem}>Bezeichnung:</Text>
-                        <TextInput
-                            onChangeText={onChangeName}
-                            value={newName}
-                            style={styles.registerInputTextInput5}
-                            textContentType="nickname"
+                        <SelectDropdown
+                            data={possibleSkills}
+                            onSelect={(selectedItem, index) => {
+                                onChangeName(selectedItem)
+                            }}
+                            buttonTextAfterSelection={(selectedItem, index) => {
+                                return selectedItem
+                            }}
+                            defaultButtonText={newName}
                         />
                         <Text style={styles.titleFilterItem}>Gesuchtes Level:</Text>
-                        <TextInput
-                            onChangeText={onChangeLevel}
-                            value={newLevel}
-                            style={styles.registerInputTextInput5}
-                            textContentType="none"
+                        <SelectDropdown
+                            data={possibleLevels}
+                            onSelect={(selectedItem, index) => {
+                                onChangeLevel(selectedItem)
+                            }}
+                            buttonTextAfterSelection={(selectedItem, index) => {
+                                return selectedItem
+                            }}
+                            defaultButtonText={newLevel}
                         />
                         <Text style={styles.titleFilterItem}>Gesuchtes Geschlecht:</Text>
                         <SelectDropdown
@@ -281,7 +331,7 @@ const FilterScreen = ({navigation}) => {
                         </TouchableOpacity>
                     </View>
                 }
-            </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }

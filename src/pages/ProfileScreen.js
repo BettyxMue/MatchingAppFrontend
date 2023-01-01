@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import {KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import React, {Component, useEffect} from 'react'
 import {getUser, storeUser} from "../resources/InternalStorage";
 import {styles} from "../resources/Styles";
@@ -40,7 +40,7 @@ const ProfileScreen = ({navigation}) => {
 
     let genderString;
 
-    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI0OTczNDYsInN1YiI6MiwidXNlciI6Mn0.X1FuU3eXymiq-sWwIvCr4g__EGo5ghHemnUg5B_-VRuIFxWo_hw1qUZCV9T74pSqWF_ChMCZvwDU9a6X1SsBu-RNHq8FwcYos2VHoa6ZLaXp9ZJQK8ekMxfSNKme5uvjm1IuIYCDwfO7JWBdnNSwDVY5X7-5w9cuq1TXqSdw8cQ"
+    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI2MDMxMzcsInN1YiI6MiwidXNlciI6Mn0.fQ7DX2j6u5qSu3bfsR8zQaNUytL_bk2z4IGkmZeIQ2mEH3wLYEb6LPSyPc3oXpzeQghliJgzKuvG1Cs-LIR3rkBsz36-z7lnzBGHShPiNR-O-PFfBGTtSCvXLCUCCXy5ZjjP_njMe1WFJ5oeRGJKieEn8btLkeSKkqp6DeUWUaw"
 
     useEffect(() => {
         /*getUser().then(r => {
@@ -69,13 +69,13 @@ const ProfileScreen = ({navigation}) => {
                 onChangeFirstName(r.firstName)
                 onChangeName(r.name)
                 onChangeCity(r.city.place)
-                onChangePLZ(r.city.plz)
+                onChangePLZ((r.city.plz).toString())
                 onChangeGender(genderString)
                 onChangeEmail(r.email)
                 onChangeHouseNumber(r.houseNumber)
                 onChangePhoneNumber(r.telephoneNumber)
                 onChangeStreet(r.street)
-                onChangePrice(r.price)
+                onChangePrice((r.price).toString())
             }
         )
     }
@@ -107,8 +107,11 @@ const ProfileScreen = ({navigation}) => {
             width: '100%',
             alignContent: "center"
         }}>
-            <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
-                <View>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{
+                alignContent: "center",
+                flex: 1
+            }}>
+                <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
                     {toggleEdit ?
                         <View>
                             <ScrollView>
@@ -122,20 +125,23 @@ const ProfileScreen = ({navigation}) => {
                                     email={email}
                                     street={street}
                                     houseNumber={houseNumber}
-                                    plz={plz}
+                                    plz={plz.toString()}
                                     phoneNumber={phoneNumber}
                                     //profilePicture={userId.profilePicture[0]}
                                     price={price}
                                 />
 
                                 <View>
-                                    <TouchableOpacity style={styles.editProfileButton} onPress={() => setToggleEdit(false)}>
+                                    <TouchableOpacity style={styles.editProfileButton}
+                                                      onPress={() => setToggleEdit(false)}>
                                         <Text style={styles.continueButtonText}>Profil bearbeiten</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.editProfileButton} onPress={() => navigation.navigate("Skills")}>
+                                    <TouchableOpacity style={styles.editProfileButton}
+                                                      onPress={() => navigation.navigate("Skills")}>
                                         <Text style={styles.continueButtonText}>Skills bearbeiten</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.editProfileButton} onPress={() => navigation.navigate("Filter")}>
+                                    <TouchableOpacity style={styles.editProfileButton}
+                                                      onPress={() => navigation.navigate("Filter")}>
                                         <Text style={styles.continueButtonText}>Filter bearbeiten</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -211,8 +217,8 @@ const ProfileScreen = ({navigation}) => {
                             </ScrollView>
                         </View>
                     }
-                </View>
-            </LinearGradient>
+                </LinearGradient>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }
