@@ -6,10 +6,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { createHash } from '../resources/Hasher';
 import { loginUser } from '../connectors/ProfileServiceConnector';
 import Toast from 'react-native-root-toast';
+import { GetChats } from '../resources/ChatStore';
+
+import { GetAllChatsForUser, OpenWSConnection } from '../connectors/ChatServiceConnector';
+import { WebSocketDispatcher } from '../resources/page-context';
 
 const LogInScreen =  ({navigation}) => {
   const [email, onChangeEmail] = React.useState("")
   const [password, onChangePassword] = React.useState("")
+  const websocket = React.useContext(WebSocketDispatcher)
 
   const titleStyle = {
     marginTop: "20%"
@@ -38,8 +43,12 @@ const LogInScreen =  ({navigation}) => {
           showErrorMessage(result);
           return;
         }
+        let webSocket = OpenWSConnection();
+        websocket(webSocket);
         showErrorMessage("Logged in!");
-        navigation.navigate('Home')
+        GetChats().then(() => {
+          navigation.navigate('Chat')
+        })
       })
     })
   }
