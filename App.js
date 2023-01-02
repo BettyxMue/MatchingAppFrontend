@@ -15,6 +15,8 @@ import LogInScreen from "./src/pages/LogInScreen";
 import SignUpScreen from "./src/pages/SignUpScreen";
 import ChatDetail from "./src/pages/ChatDetail";
 import CreateBill from "./src/pages/CreateBill"
+import InvoicesScreen from './src/pages/InvoicesScreen'
+import InvoiceDetail from './src/pages/InvoiceDetail'
 import { ChatProvider, ChatRoomProvicer, WebSocketProvider } from "./src/resources/page-context";
 import {registerForPushNotifcations} from './src/resources/Notificator'
 import { storeNotificationToken } from "./src/resources/InternalStorage";
@@ -80,6 +82,12 @@ export default function App() {
                       headerShown: false
                     })} />
                     <Stack.Screen name="CreateBill" component={CreateBill} options={({navitation, route}) => ({
+                      headerShown: false
+                    })} />
+                    <Stack.Screen name="Invoices" component={InvoicesScreen} options={({navitation, route}) => ({
+                      headerShown: true
+                    })} />
+                    <Stack.Screen name="Invoice" component={InvoiceDetail} options={({navitation, route}) => ({
                       headerShown: false
                     })} />
                   </Stack.Navigator>

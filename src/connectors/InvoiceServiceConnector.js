@@ -43,4 +43,32 @@ async function createInvoice(serviceName,date,hours,billedUser){
     return true;
 }
 
-export {createInvoice}
+async function getAllInvoicesByUser(){
+    let user = await getUser()
+    let token = await getToken()
+    if (user == null || token == null){
+        return
+    }
+    let userid
+    try{
+        userid = parseInt(user.id)
+    }catch(e){
+        console.log(e)
+        return
+    }
+    query = "http://192.168.2.120:8085/invoice/user/" + userid
+    const request = await fetch(query, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    })
+    const response = await request.json()
+
+    if (request.status != 200){
+        return resultData.error;
+    }
+    return response
+}
+export {createInvoice, getAllInvoicesByUser}
