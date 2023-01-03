@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Image, ImageBackground, Text, TouchableOpacity, View} from 'react-native';
+import {Image, ImageBackground, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from "@react-navigation/native";
 import {GetProfileById} from "../connectors/ProfileServiceConnector";
 import {getToken} from "../resources/InternalStorage";
 import {Entypo} from "@expo/vector-icons";
 import {styles} from "../resources/Styles";
+import {LinearGradient} from "expo-linear-gradient";
 
 const MatchScreen = (params) => {
 
@@ -16,12 +17,14 @@ const MatchScreen = (params) => {
     const [userData, setUserData] = React.useState("")
     const [userSwipedData, setSwipedData] = React.useState("")
 
+    let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI3NjIxMzUsInN1YiI6MiwidXNlciI6Mn0.TOoeocqIDd9yIz5mCu8JL81xQaPobuOP3jTB1Ek5tLvMHCS5nnv86WJOl_g-4Eu-1KzdB0wXyl4d8sGYG7akXFxbDlArB1BWk9w9f52XnaBjTKWF_gZvmzatqi83f3nJu803naIu1W-dzKTHIwo8LDKzNK62nSjRv9aNLH-F1P4"
+
     useEffect(() => {
-        GetProfileById(userId, getToken()).then(r => {
+        GetProfileById(userId, token).then(r => {
             setUserData(r)
             console.log(r)
         })
-        GetProfileById(userSwipedData, getToken()).then(r => {
+        GetProfileById(userSwipedData, token).then(r => {
             setSwipedData(r)
         })
     })

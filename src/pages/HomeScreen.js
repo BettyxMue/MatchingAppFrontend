@@ -9,12 +9,9 @@ import {
 import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {AntDesign, Entypo, Ionicons} from "@expo/vector-icons";
 import Swiper from "react-native-deck-swiper";
-import {getToken, getUser} from "../resources/InternalStorage";
-import {GetProfileById} from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
 import {Dislike, GetSearchesByUser, Like, Searching} from "../connectors/MatchingServiceConnector";
 import {SelectList} from "react-native-dropdown-select-list/index";
-import {useTailwind} from "tailwind-rn/dist";
 import {styles} from "../resources/Styles";
 import {LinearGradient} from "expo-linear-gradient";
 
@@ -28,7 +25,9 @@ const HomeScreen = ({navigation}) => {
     const [filterCreated, setFilterCreated] = React.useState(false);
     const [filtersData, setFiltersData] = React.useState([]);
     let filterOptionData = [];
-    let tempArray = []
+
+    const [peopleVorhanden, setPeopleVorhanden] = React.useState(false)
+    const [filterChosen, setFilterChosen] = React.useState(false)
 
     async function showErrorMessage(message) {
         let toast = Toast.show(message, {
@@ -42,19 +41,61 @@ const HomeScreen = ({navigation}) => {
     }
 
     useEffect(() => {
-        GetUserData();
         GetFilterOptionData();
     }, []);
 
-    async function GetUserData() {
-        GetProfileById(userId, getToken()).then(r => {
+    /*async function GetUserData() {
+        GetProfileById(userId, token).then(r => {
             if (typeof r !== 'object') {
                 showErrorMessage(r);
                 return;
             }
-            setUserData(r)
+            let user = {
+                "firstName": "Babett",
+                "name": "Müller",
+                "gender": 2,
+                "username": "bettyxmue",
+                "email": "mueller_babett@web.de",
+                "street": "Wörthfelder Weg",
+                "houseNumber": "19",
+                "telephoneNumber": "01705579260",
+                "price": 0,
+                "profilePicture": null,
+                "confirmed": false,
+                "active": false,
+                "password": "123456",
+                "searchedSkills": [
+                    {
+                        "id": 2,
+                        "created_at": "2022-12-22T22:11:11.577Z",
+                        "updated_at": "2022-12-22T22:11:11.577Z",
+                        "name": "Mathe",
+                        "level": "Anfänger",
+                        "usersSearching": null,
+                        "usersAchieved": null
+                    }
+                ],
+                "achievedSkills": [
+                    {
+                        "id": 1,
+                        "created_at": "2022-12-22T22:11:11.572Z",
+                        "updated_at": "2022-12-22T22:11:11.572Z",
+                        "name": "Formula 1",
+                        "level": "Experte",
+                        "usersSearching": null,
+                        "usersAchieved": null
+                    }
+                ],
+                CityIdentifier: r.CityIdentifier,
+                city: {
+                    plz: r.city.plz,
+                    place: r.city.place
+                }
+            }
+            setUserData(user)
         });
-    }
+        console.log(userData)
+    }*/
 
     async function GetFilterOptionData() {
         GetSearchesByUser(userId).then(r => {
@@ -67,28 +108,56 @@ const HomeScreen = ({navigation}) => {
         setFilterCreated(true);
     }
 
-    async function StartSearch(val) {
+    async function StartSearch() {
         filtersData.forEach(i => {
-            if (i == val) {
-                setSearchId(filtersData.indexOf(i).toString())
+            console.log(i)
+            if (i === selectedFilter) {
+                setSearchId((filtersData.indexOf(i)).toString())
             }
         })
 
+        console.log(searchId)
+        if (searchId === undefined){
+            showErrorMessage("Bitte wähle den Filter erneut aus!")
+        }
+
         Searching(searchId, userId).then(r => {
-            let ctr = 0
-            r.forEach(i => {
-                tempArray[ctr] = {
-                    id: i.id,
-                    name: i.name,
-                    firstName: i.firstName,
-                    city: i.city,
-                    gender: i.gender,
-                    picture: i.pictures[0]
+            let tempArray = []
+            console.log(r)
+            r.forEach((possibleUser, index) => {
+                console.log(possibleUser)
+                tempArray[index] = {
+                    id: possibleUser.id,
+                    name: possibleUser.name,
+                    firstName: possibleUser.firstName,
+                    //city: possibleUser.city.place,
+                    gender: switchGender(possibleUser.gender),
+                    //picture: i.pictures[0]
                 }
-                ctr++
             })
+            console.log(tempArray)
             setProfiles(tempArray)
+            if (r !== "No users found!") {
+                setPeopleVorhanden(true)
+            }
         })
+    }
+
+    function switchGender(gender) {
+        switch (gender) {
+            case 0:
+                return "Keine Angabe"
+                break
+            case 1:
+                return "Männlich"
+                break
+            case 2:
+                return "Weiblich"
+                break
+            case 3:
+                return "Divers"
+                break
+        }
     }
 
     const swipeRef = useRef(null);
@@ -97,6 +166,7 @@ const HomeScreen = ({navigation}) => {
         if (!profiles[cardIndex]) return;
         const userSwipedId = profiles[cardIndex].id;
         Dislike(userId, userSwipedId).then(r => {
+            console.log(r)
             if (r.status !== '200') {
                 showErrorMessage(r);
                 return;
@@ -107,8 +177,8 @@ const HomeScreen = ({navigation}) => {
     const swipeRight = async (cardIndex) => {
         if (!profiles[cardIndex]) return;
         const userSwipedId = profiles[cardIndex].id;
-        console.log(userSwipedId)
         Like(userId, userSwipedId).then(r => {
+            console.log(r)
             if (r.status === '201') {
                 navigation.navigate("Match", {
                     userId,
@@ -124,173 +194,220 @@ const HomeScreen = ({navigation}) => {
             width: '100%',
             alignContent: "center"
         }}>
-            <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
-                <View>
-                    {filterCreated ? (
+            <LinearGradient colors={['#3860ff', '#389bff']}>
+                <View
+                    style={{
+                        width: "100%",
+                        height: "100%"
+                    }}>
+                    {(filterCreated && filterChosen) ? (
                         <>
                             <View>
                                 <SelectList
-                                    setSelected={(val) => StartSearch(val)}
+                                    setSelected={(val) => {
+                                        setSelectedFilter(val)
+                                        setFilterChosen(true)
+                                        StartSearch()
+                                    }}
                                     data={filtersData}
                                     save="value"
+                                    boxStyles={{
+                                        backgroundColor: "#edebeb"
+                                    }}
+                                    dropdownStyles={{
+                                        backgroundColor: "#edebeb"
+                                    }}
                                 />
                             </View>
-                            <View style="flex-1 mt-6">
-                                <Swiper
-                                    containerStyle={{backgroundColor: "#3860ff"}}
-                                    cards={profiles}
-                                    stackSize={5}
-                                    cardIndex={0}
-                                    animateCardOpacity
-                                    verticalSwipe={false}
-                                    ref={swipeRef}
-                                    onSwipedLeft={(cardIndex) => {
-                                        swipeLeft(cardIndex);
-                                    }}
-                                    onSwipedRight={(cardIndex) => {
-                                        swipeRight(cardIndex);
-                                    }}
-                                    backgroundColor={"#4FD0E9"}
-                                    overlayLabels={{
-                                        left: {
-                                            title: "DISLIKE",
-                                            style: {
-                                                label: {
-                                                    textAlign: "right",
-                                                    color: "red",
+                            {peopleVorhanden ?
+                                <View>
+                                    <Swiper
+                                        containerStyle={{
+                                            backgroundColor: "transparent"
+                                        }}
+                                        cards={profiles}
+                                        stackSize={5}
+                                        cardIndex={0}
+                                        animateCardOpacity
+                                        verticalSwipe={false}
+                                        ref={swipeRef}
+                                        onSwipedLeft={(cardIndex) => {
+                                            swipeLeft(cardIndex);
+                                        }}
+                                        onSwipedRight={(cardIndex) => {
+                                            swipeRight(cardIndex);
+                                        }}
+                                        backgroundColor={"#ffffff"}
+                                        overlayLabels={{
+                                            left: {
+                                                title: "DISLIKE",
+                                                style: {
+                                                    label: {
+                                                        textAlign: "right",
+                                                        color: "red",
+                                                    },
                                                 },
                                             },
-                                        },
-                                        right: {
-                                            title: "LIKE",
-                                            style: {
-                                                label: {
-                                                    color: "green",
+                                            right: {
+                                                title: "LIKE",
+                                                style: {
+                                                    label: {
+                                                        color: "green",
+                                                    },
                                                 },
                                             },
-                                        },
-                                    }}
-                                    renderCard={(card) =>
-                                        card ? (
+                                        }}
+                                        renderCard={(card) =>
+                                            card ? (
                                             <View
                                                 key={card.id}
-                                                style="bg-white h-3/4 rounded-xl relative"
+                                                style={{
+                                                    backgroundColor: "#ffffff",
+                                                    borderRadius: 20,
+                                                    marginTop: -30,
+                                                    height: "60%",
+                                                    width: "100%",
+                                                    shadowColor: "#000",
+                                                    shadowOffset: {
+                                                        width: 0,
+                                                        height: 1
+                                                    },
+                                                    shadowOpacity: 0.2,
+                                                    shadowRadius: 1.41,
+                                                    elevation: 2
+                                                }}
                                             >
                                                 <Image
-                                                    style="absolute top-0 h-full w-full rounded-xl"
-                                                    //source={{uri: card.picture}}
+                                                    style={{
+                                                        resizeMode: "cover",
+                                                        height: "75%",
+                                                        width: "95%",
+                                                        borderRadius: 20,
+                                                        margin: 10
+                                                    }}
+                                                    source={require("./../../assets/defaultPicture.jpg")}
                                                 />
-                                                <View
-                                                    style={[
-                                                        "bg-white w-full absolute bottom-0 flex-col px-6 py-2 rounded-b-lg",
-                                                        styles.cardShadow,
-                                                    ]}
-                                                >
-                                                    <View style="flex-row justify-between">
-                                                        <Text style="text-2xl font-bold">
+                                                <View>
+                                                    <View style={{
+                                                        marginLeft: 15
+                                                    }}>
+                                                        <Text style={{
+                                                            fontSize: 30,
+                                                            fontWeight: "bold"
+                                                        }}>
                                                             {card.firstName} {card.name}
                                                         </Text>
-                                                    </View>
-
-                                                    <View
-                                                        style={[
-                                                            "mt-2 flex-row justify-between",
-                                                            {flexShrink: 1},
-                                                        ]}
-                                                    >
-                                                        <Text
-                                                            style={[
-                                                                "text-right pl-5",
-                                                                {flex: 1, flexWrap: "wrap"},
-                                                            ]}
-                                                        >
-                                                            {card.gender + ", " + card.city}
+                                                        <Text style={{
+                                                            fontSize: 20,
+                                                            paddingTop: 8
+                                                        }}>
+                                                            {card.gender} {/*+ ", " + {card.city}*/}
                                                         </Text>
                                                     </View>
                                                 </View>
                                             </View>
-                                        ) : (
-                                            <View
-                                                style={[
-                                                    "relative bg-white h-3/4 rounded-xl justify-center items-center",
-                                                    styles.cardShadow,
-                                                ]}
-                                            >
-                                                <Text style="font-bold pb-5">Du hast alle passenden Profile
-                                                    durchgeschaut...</Text>
-                                                <Image
-                                                    style="h-20 w-full"
-                                                    height={100}
-                                                    width={100}
-                                                    source={{uri: "https://links.papareact.com/6gb"}}
-                                                />
-                                            </View>
-                                        )
-                                    }
-                                />
-                            </View>
-                            <View style="flex flex-row justify-evenly">
-                                <TouchableOpacity
-                                    sytle="items-center justify-center rounded-full w-16 h-16 bg-red-200"
-                                    onPress={() => swipeRef.current.swipeLeft()}
-                                >
-                                    <Entypo name="cross" size={24} color="red"/>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={() => swipeRef.current.swipeRight()}
-                                >
-                                    <AntDesign name="check" size={24} color="green"/>
-                                </TouchableOpacity>
-                            </View>
-                            {/* Footer */}
-                            <View style="flex-row px-5 justify-between items-center relative">
-                                <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-                                    <Entypo name="user" size={30} color="blue"/>
-                                    {/*<Image
-                                    source={{uri: userData.pictures[0]}}r
-                                />*/}
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-                                    <Entypo name="home" size={30} color="blue"/>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
-                                    <Entypo name="chat" size={30} color="blue"/>
-                                </TouchableOpacity>
-                            </View>
-                            {/* End of Footer */}
+                                            ) : (
+                                                setPeopleVorhanden(false)
+                                            )
+                                        }
+                                    />
+                                    <View style={{
+                                        flexDirection: "row",
+                                        justifyContent: "space-evenly",
+                                        marginTop: 520
+                                    }}>
+                                        <TouchableOpacity
+                                            onPress={() => swipeRef.current.swipeLeft()}
+                                            style={{
+                                                alignItems: "center",
+                                                backgroundColor: "#FFFFFF",
+                                                borderRadius: 100,
+                                                padding: 3
+                                            }}
+                                        >
+                                            <Entypo name="cross" size={60} color="red"/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={() => swipeRef.current.swipeRight()}
+                                            style={{
+                                                alignItems: "center",
+                                                backgroundColor: "#FFFFFF",
+                                                borderRadius: 100,
+                                                padding: 3
+                                            }}
+                                        >
+                                            <AntDesign name="check" size={60} color="green"/>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                                :
+                                <View>
+                                    <Text style={{
+                                            fontSize: 30,
+                                            fontStyle: "italic",
+                                            marginTop: 230,
+                                            marginHorizontal: 20,
+                                            color: "#FFFFFF",
+                                            textAlign: "center"
+                                        }}>
+                                            Wir konnten leider keine passenden Leute
+                                        finden...
+                                    </Text>
+                                    <Image
+                                        style={{
+                                            display: "block",
+                                            marginLeft: "auto",
+                                            marginRight: "auto",
+                                            marginTop: 20
+                                        }}
+                                        height={100}
+                                        width={100}
+                                        source={{uri: "https://links.papareact.com/6gb"}}
+                                    />
+                                </View>
+                            }
                         </>
                     ) : (
                         <>
-                            <View>
-                                <SelectList
-                                    setSelected={() => navigation.navigate("Profile")}
-                                    data={[
-                                        {key: 1, value: "Bitte erstelle im Profil einen Filter!"}
-                                    ]}
-                                    save="value"
-                                />
-                            </View>
-                            <View>
-                                <Text>Bitte wähle oder erstelle einen Filter, um die Suche zu starten!</Text>
-                            </View>
-                            {/* Footer */}
-                            <View>
-                                <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-                                    <Image
-                                        source={{uri: userData.picture}}
+                            {filterCreated ?
+                                <View>
+                                    <SelectList
+                                        setSelected={(val) => {
+                                            StartSearch(val)
+                                            setFilterChosen(true)
+                                        }}
+                                        data={filtersData}
+                                        save="value"
+                                        boxStyles={{
+                                            backgroundColor: "#edebeb"
+                                        }}
+                                        dropdownStyles={{
+                                            backgroundColor: "#edebeb"
+                                        }}
                                     />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-                                    <Image
-                                        resizeMode="contain"
-                                        //source={require(eigenes Logo)}
+                                </View>
+                                :
+                                <View>
+                                    <SelectList
+                                        setSelected={() => navigation.navigate("Profile")}
+                                        data={[
+                                            {key: 1, value: "Bitte erstelle im Profil einen Filter!"}
+                                        ]}
+                                        save="value"
                                     />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
-                                    <Ionicons name="chatbubbles-sharp" size={30} color="#ff8836"/>
-                                </TouchableOpacity>
+                                </View>
+                            }
+                            <View>
+                                <Text style={{
+                                    fontSize: 30,
+                                    fontStyle: "italic",
+                                    marginVertical: 250,
+                                    marginHorizontal: 20,
+                                    color: "#FFFFFF",
+                                    textAlign: "center"
+                                }}>
+                                    Bitte wähle oder erstelle einen Filter, um die Suche zu starten!</Text>
                             </View>
-                            {/* End of Footer */}
                         </>
                     )}
                 </View>

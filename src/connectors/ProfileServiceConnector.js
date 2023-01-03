@@ -2,6 +2,9 @@
 
 import { getToken, storeToken } from "../resources/InternalStorage"
 
+let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI3NDk5NzcsInN1YiI6MiwidXNlciI6Mn0.LxNtfs3ZZNFZ4MCoAfybx0YktGVAn7lwYx6qgqmMjNx2UdxXcox6OjOMF1jIcmrXuLW92_hBXWJf13XaM5nZjTljwepvsw0bzIdGZKiYbnh3L72jmp7EIzetkK5XO5990ahGVrnb_YBm-qgx20fgQIFKXxoAAGWtEmij3LjzKYg"
+let ip4v = "192.168.0.207"
+
 async function SignUp(username, email, city, plz, street, houseNumber){
     if (username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
         return
@@ -10,7 +13,7 @@ async function SignUp(username, email, city, plz, street, houseNumber){
     if (isNaN(plzNumber)){
         return "PLZ is not valid!"
     }
-    var query = "http://192.168.178.63:8080/signUp"
+    var query = "http://" + ip4v + ":8080/signUp"
     var user = {
         "username": username,
         "email": email,
@@ -43,7 +46,7 @@ async function ActivateAccount(userid, code){
     var codeDTO = {
         "Code": code
     }
-    query = "http://192.168.178.63:8080/activate/" + userid;
+    let query = "http://" + ip4v + ":8080/activate/" + userid;
     const response = await fetch(query, {
         method: 'PUT',
         headers: {
@@ -77,7 +80,7 @@ async function UpdateUser(user){
 }
 
 async function sendActivationQuery(user, token){
-    query = "http://192.168.178.63:8080/profile/" + user.id;
+    let query = "http://" + ip4v + ":8080/profile/" + user.id;
         const response = await fetch(query, {
             method: 'PUT',
             headers: {
@@ -100,12 +103,12 @@ async function GetProfileById (userId, token) {
     if (userId == "") {
         return
     }
-    let query = "http://192.168.178.63:8080/profile/" + userId;
+    let query = "http://" + ip4v + ":8080/profile/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
             'Content-type': 'application/json',
-            'Authorization': 'Bearer ' + "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzE4MzU1NDUsInN1YiI6MiwidXNlciI6Mn0.sTVRUgPZl04VMSbcGvjRSacucCiVOQ4iYU_Nx4a_IE3jy6JtrXXCOOMjeLaxAWbNho5DFLxjKDFf05JVgTB9Mo8lkeGeogDHfumcz3yBnRv0cOXfTjuATGULF8vyM8sjTkkD3O9hYiK568UBJEFE8geY2q_k-3ONTZLv2ysZt2Y"
+            'Authorization': 'Bearer ' + token
         },
     });
     const resultData = await response.json();
