@@ -138,7 +138,7 @@ async function getUserFromId(userid){
     if (userid == null){
         return "No Id given!"
     }
-    const query = "http://"+ipv4+":8080/profile/" + userid
+    const query = "http://" + ip4v + ":8080/profile/" + userid
     let token = await getToken()
     let request = await fetch(query, {
         method: 'GET',
@@ -161,7 +161,7 @@ async function getUserFromId(userid){
 // Helper
 
 async function sendActivationQuery(user, token){
-    let query = "http://"+ipv4+":8080/profile/" + user.id;
+    let query = "http://" + ip4v + ":8080/profile/" + user.id;
     const response = await fetch(query, {
         method: 'PUT',
         headers: {

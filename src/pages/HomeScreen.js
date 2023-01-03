@@ -128,7 +128,7 @@ const HomeScreen = ({navigation}) => {
                 userId: userId,
                 userSwipedId: userSwipedId
             });
-            /*if (r.match === 'true') {
+            /*if (r.status != '201') {
                 navigation.navigate("Match", {
                     userId,
                     userSwipedId,

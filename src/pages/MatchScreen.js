@@ -92,7 +92,7 @@ const MatchScreen = ({navigation, route}) => {
                                     margin: 10
                                 }}
                                 source={require("./../../assets/defaultPicture.jpg")}
-                                source={{uri: GetImageSource(userSwipedData.pic)}}
+                                //source={{uri: GetImageSource(userSwipedData.pic)}}
                             />
                         </View>
                         <TouchableOpacity style={{
