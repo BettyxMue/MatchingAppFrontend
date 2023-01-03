@@ -104,7 +104,152 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "white"
 
-    }
+    },
+    chatPicture: {
+        borderRadius: "100%",
+        width: 50,
+        height: 50
+    },
+    chatOverviewElement: {
+        width: "90%",
+        backgroundColor: "white",
+        marginTop: "3%",
+        marginBottom: "1%",
+        backgroundColor: "white",
+        borderBottomColor: "#212121",
+        borderBottomWidth: 0.5,
+        display: "flex", 
+        flexDirection: "row", 
+        flexWrap: "wrap",
+        borderRadius: "10%",
+        padding: "3%"
+    },
+    chatOverview: {
+        height: "100%",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginLeft: "5%",
+        marginRight: "5%"
+    },
+    chatOverviewName: {
+        fontSize: 16,
+        fontWeight: "bold"
+    },
+    chatMessagesTitle: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#4287f5",
+        marginTop: "4%"
+    },
+    ChatTopBar: {
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        backgroundColor: "white",
+        height: "15%",
+        width: "100%",
+        alignContent: "center",
+        justifyContent: "center"
+    },
+    chatTopBarSection: {
+        alignContent: "center",
+        justifyContent: "center"
+    },
+    ChatTopBarBackChar: {
+        color: "black",
+        fontSize: 40,
+        fontWeight: "bold",
+        color: "#4287f5" 
+    },
+    chatTopBarPicture: {
+        borderRadius: "100%",
+        width: 30,
+        height: 30,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    ChatTopBarText: {
+        marginTop: "2%",
+        fontWeight: "bold"
+    },
+    ChatTopBarBillChar: {
+        fontSize: 40,
+        fontWeight: "bold",
+        color: "#4287f5",
+        textAlign: "center"
+    },
+    ChatWriterField: {
+        height: "15%", 
+        backgroundColor:"white",
+        alignContent: "center",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        backgroundColor: "white"
+    },
+    ChatWriterInputField: {
+        backgroundColor: "#e6e6e6",
+        width: "75%",
+        marginLeft: "5%",
+        marginTop: "5%",
+        minHeight: "25%",
+        padding: "2%",
+        borderRadius: "15%"
+    },
+    ChatWriterSend: {
+        marginTop: "5%",
+        marginLeft: "2%",
+        justifyContent: "center",
+        alignContent: "center"
+    },
+    ChatWriterSendText: {
+        fontSize: 40,
+        fontWeight: "bold"
+    },
+    ChatWriterTimeStyle: {
+        fontSize: 8,
+        textAlign: "right",
+        fontStyle: "italic"
+    },
+    billingTitle: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#4287f5",
+        marginTop: "4%",
+        textAlign: "auto"
+    },
+    billingTextTitle:{
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#4287f5",
+        textAlign: "center"
+    },
+    billingInputSection:{
+        marginTop: "5%",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap"
+    },
+    billingInputSectionUnder1: {
+        justifyContent: "center",
+        width: "60%"
+    },
+    billingInputSectionUnder2: {
+        marginLeft: "5%",
+        width: "35%"
+
+    },
+    billingText: {
+        fontWeight: "bold"
+    },
+    billindInputField: {
+        height: 40,
+        padding: 10,
+        backgroundColor: "#edebeb",
+        marginTop: 10,
+        marginBottom: 10,
+        borderRadius: 10
+    },
 }); 
 
 export {styles}
