@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useNavigation } from "@react-navigation/native";
+import { payInvoice } from "../../connectors/InvoiceServiceConnector";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import {styles} from '../../resources/Styles'
@@ -43,10 +44,12 @@ const InvoicesListElement = (props) => {
         }
     }
 
-    function showPDF(){
-        const file = new Blob([invoice.invoicepdf], {type: 'application/pdf'})
-        const fileURL = URL.createObjectURL(file)
-        window.open(fileURL)
+    function pay(){
+        navigation.navigate('Payment', {
+            amount: invoice.amount,
+            service: invoice.service,
+            invoice: invoice
+        })
     }
 
     return (
@@ -76,6 +79,7 @@ const InvoicesListElement = (props) => {
                 <View style={styles.invoiceOverviewInvoiceSection}>
                     <TouchableOpacity 
                     style={{display: "flex", flexDirection: "row", flexWrap: "wrap", alignContent:"center"}}
+                    onPress={pay}
                     >
                         <Text style={styles.invoiceOverviewDetailButton}>{detailButton}</Text>
                         <Text style={styles.invoiceOverviewDetailButtonText}>Bezahlen {invoice.id}</Text>

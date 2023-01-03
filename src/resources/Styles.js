@@ -317,6 +317,23 @@ const styles = StyleSheet.create({
     invoiceTotalHeader: {
         fontWeight: "bold",
         fontSize: 16
+    },
+    paymentHeader: {
+        height: "25%",
+        backgroundColor: "#c7c7c7",
+        justifyContent: "center",
+        alignContent: "center"
+    },
+    paymentHeaderText: {
+        fontWeight: "bold",
+        fontSize: 20,
+        textAlign: "center"
+    },
+    paymentBodyHeader: {
+        fontWeight: "bold"
+    },
+    paymentBodyText: {
+        marginBottom: "2%"
     }
 }); 
 

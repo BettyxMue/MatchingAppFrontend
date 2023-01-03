@@ -71,4 +71,82 @@ async function getAllInvoicesByUser(){
     }
     return response
 }
-export {createInvoice, getAllInvoicesByUser}
+
+async function payInvoice(amount, service){
+    let user = await getUser()
+    let token = await getToken()
+    if (user == null || token == null){
+        return
+    }
+    let userid
+    try{
+        userid = parseInt(user.id)
+    }catch(e){
+        console.log(e)
+        return
+    }
+    query = "http://192.168.2.120:8085/create-checkout-session"
+    const request = await fetch(query, {
+        method: 'GET',
+        headers: {
+            'Price': amount,
+            'Service': service
+        }
+    })
+    const response = await request.json()
+
+    if (request.status != 200){
+        return resultData.error;
+    }
+    return response
+}
+
+async function getPaymentIntent(amount){
+    let user = await getUser()
+    let token = await getToken()
+    if (user == null || token == null){
+        return
+    }
+    let userid
+    try{
+        userid = parseInt(user.id)
+    }catch(e){
+        console.log(e)
+        return
+    }
+    query = "http://192.168.2.120:8085/create-payment-intent"
+    const request = await fetch(query, {
+        method: 'GET',
+        headers: {
+            'Price': amount
+        }
+    })
+    const response = await request.json()
+
+    if (request.status != 200){
+        return resultData.error;
+    }
+    return response.client_secret
+}
+
+async function setInvoiceToPayed(invoiceId){
+    let user = await getUser()
+    let token = await getToken()
+    if (user == null || token == null){
+        return
+    }
+
+    query = "http://192.168.2.120:8085/invoice/pay/" + invoiceId
+    const request = await fetch(query, {
+        method: 'PUT'
+    })
+    const response = await request.json()
+
+    if (request.status != 200){
+        return resultData.error;
+    }
+    return response.client_secret
+
+}
+
+export {createInvoice, getAllInvoicesByUser, payInvoice, getPaymentIntent, setInvoiceToPayed}
