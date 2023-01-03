@@ -3,21 +3,22 @@ import {
     TouchableOpacity,
     View,
     Image,
-    Text,
-    StyleSheet,
+    Text
 } from "react-native";
-import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
-import {AntDesign, Entypo, Ionicons} from "@expo/vector-icons";
+import React, {useEffect, useRef} from "react";
+import {AntDesign, Entypo} from "@expo/vector-icons";
 import Swiper from "react-native-deck-swiper";
 import Toast from "react-native-root-toast";
 import {Dislike, GetSearchesByUser, Like, Searching} from "../connectors/MatchingServiceConnector";
 import {SelectList} from "react-native-dropdown-select-list/index";
-import {styles} from "../resources/Styles";
 import {LinearGradient} from "expo-linear-gradient";
+import {getUser} from "../resources/InternalStorage";
 
 const HomeScreen = ({navigation}) => {
-    //const navigation = useNavigation();
+
     const userId = 2;
+    //let userId = getUser()
+
     const [profiles, setProfiles] = React.useState([]);
     const [userData, setUserData] = React.useState([]);
     const [searchId, setSearchId] = React.useState("")
@@ -43,59 +44,6 @@ const HomeScreen = ({navigation}) => {
     useEffect(() => {
         GetFilterOptionData();
     }, []);
-
-    /*async function GetUserData() {
-        GetProfileById(userId, token).then(r => {
-            if (typeof r !== 'object') {
-                showErrorMessage(r);
-                return;
-            }
-            let user = {
-                "firstName": "Babett",
-                "name": "Müller",
-                "gender": 2,
-                "username": "bettyxmue",
-                "email": "mueller_babett@web.de",
-                "street": "Wörthfelder Weg",
-                "houseNumber": "19",
-                "telephoneNumber": "01705579260",
-                "price": 0,
-                "profilePicture": null,
-                "confirmed": false,
-                "active": false,
-                "password": "123456",
-                "searchedSkills": [
-                    {
-                        "id": 2,
-                        "created_at": "2022-12-22T22:11:11.577Z",
-                        "updated_at": "2022-12-22T22:11:11.577Z",
-                        "name": "Mathe",
-                        "level": "Anfänger",
-                        "usersSearching": null,
-                        "usersAchieved": null
-                    }
-                ],
-                "achievedSkills": [
-                    {
-                        "id": 1,
-                        "created_at": "2022-12-22T22:11:11.572Z",
-                        "updated_at": "2022-12-22T22:11:11.572Z",
-                        "name": "Formula 1",
-                        "level": "Experte",
-                        "usersSearching": null,
-                        "usersAchieved": null
-                    }
-                ],
-                CityIdentifier: r.CityIdentifier,
-                city: {
-                    plz: r.city.plz,
-                    place: r.city.place
-                }
-            }
-            setUserData(user)
-        });
-        console.log(userData)
-    }*/
 
     async function GetFilterOptionData() {
         GetSearchesByUser(userId).then(r => {
@@ -130,7 +78,7 @@ const HomeScreen = ({navigation}) => {
                     firstName: possibleUser.firstName,
                     //city: possibleUser.city.place,
                     gender: switchGender(possibleUser.gender),
-                    //picture: i.pictures[0]
+                    //picture: i.profilePictures
                 }
             })
             setProfiles(tempArray)
@@ -189,6 +137,10 @@ const HomeScreen = ({navigation}) => {
         })
     };
 
+    const GetImageSource = (source) => {
+        return `data:image/jpeg;base64,${source}`
+    }
+
     return (
         <SafeAreaView style={{
             height: '100%',
@@ -244,7 +196,7 @@ const HomeScreen = ({navigation}) => {
                                                 title: "DISLIKE",
                                                 style: {
                                                     label: {
-                                                        textAlign: "right",
+                                                        textAlign: "center",
                                                         color: "red",
                                                     },
                                                 },
@@ -254,6 +206,7 @@ const HomeScreen = ({navigation}) => {
                                                 style: {
                                                     label: {
                                                         color: "green",
+                                                        textAlign: "center",
                                                     },
                                                 },
                                             },
@@ -287,6 +240,7 @@ const HomeScreen = ({navigation}) => {
                                                         margin: 10
                                                     }}
                                                     source={require("./../../assets/defaultPicture.jpg")}
+                                                    //source={{uri: GetImageSource(card.profilePictures)}}
                                                 />
                                                 <View>
                                                     <View style={{

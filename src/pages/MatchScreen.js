@@ -1,12 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {Image, ImageBackground, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
+import React, {useEffect,} from 'react';
+import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from "@react-navigation/native";
-import {GetProfileById} from "../connectors/ProfileServiceConnector";
-import {getToken} from "../resources/InternalStorage";
+import {getUserFromId} from "../connectors/ProfileServiceConnector";
 import {Entypo} from "@expo/vector-icons";
 import {styles} from "../resources/Styles";
 import {LinearGradient} from "expo-linear-gradient";
-import {useRoute} from "@react-navigation/core";
 
 const MatchScreen = ({navigation, route}) => {
 
@@ -18,24 +16,22 @@ const MatchScreen = ({navigation, route}) => {
     let temp
     let temp2
 
-    let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI3NzM1NTcsInN1YiI6MiwidXNlciI6Mn0.kFcTJT-YRVCBmRbWdknOpYDIT8TC6Nx1OAY0TJo1oQn6ktNDIISKW2c5kkGHjFOVKbsI5H1KJs90NYujdOCtU_9Rg6QW-h-INGaw02LCXmvSMY-DkGAVSyyT56PSISvKZ6KJPTkVA31h12iYZQ9PhNy6DfyCKu6AEXcE3VRPqGk"
-
     useEffect(() => {
 
-        GetProfileById(userId, token).then(r => {
+        getUserFromId(userId).then(r => {
             console.log(r)
             temp = {
                 firstName: r.firstName,
                 name: r.name,
-                pic: r.profilePicture
+                pic: r.profilePictures
             }
             setUserData(temp)
         })
-        GetProfileById(userSwipedData, token).then(r => {
+        getUserFromId(userSwipedData).then(r => {
             temp2 = {
                 firstName: r.firstName,
                 name: r.name,
-                pic: r.profilePicture
+                pic: r.profilePictures
             }
             setSwipedData(temp2)
         })
