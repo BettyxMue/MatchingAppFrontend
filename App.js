@@ -15,6 +15,7 @@ import StartScreen from "./src/pages/StartScreen";
 import LogInScreen from "./src/pages/LogInScreen";
 import SignUpScreen from "./src/pages/SignUpScreen";
 import {Ionicons} from "@expo/vector-icons";
+import MatchScreen from "./src/pages/MatchScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -95,6 +96,7 @@ const HomeStackScreen = () => {
         <Stack.Navigator screenOptions={{headerShown: true}}>
             <Stack.Screen name="Home" component={HomeScreen} options={{ title: "Finder"}}/>
             <Stack.Screen name="Details" component={DetailsScreen} options={{ title: "Finder"}}/>
+            <Stack.Screen name="Match" component={MatchScreen} options={{ title: "Finder"}}/>
         </Stack.Navigator>
     )
 }

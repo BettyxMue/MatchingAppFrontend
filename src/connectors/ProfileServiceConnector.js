@@ -2,7 +2,7 @@
 
 import { getToken, storeToken } from "../resources/InternalStorage"
 
-let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI3NDk5NzcsInN1YiI6MiwidXNlciI6Mn0.LxNtfs3ZZNFZ4MCoAfybx0YktGVAn7lwYx6qgqmMjNx2UdxXcox6OjOMF1jIcmrXuLW92_hBXWJf13XaM5nZjTljwepvsw0bzIdGZKiYbnh3L72jmp7EIzetkK5XO5990ahGVrnb_YBm-qgx20fgQIFKXxoAAGWtEmij3LjzKYg"
+let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI3NzM1NTcsInN1YiI6MiwidXNlciI6Mn0.kFcTJT-YRVCBmRbWdknOpYDIT8TC6Nx1OAY0TJo1oQn6ktNDIISKW2c5kkGHjFOVKbsI5H1KJs90NYujdOCtU_9Rg6QW-h-INGaw02LCXmvSMY-DkGAVSyyT56PSISvKZ6KJPTkVA31h12iYZQ9PhNy6DfyCKu6AEXcE3VRPqGk"
 let ip4v = "192.168.0.207"
 
 async function SignUp(username, email, city, plz, street, houseNumber){

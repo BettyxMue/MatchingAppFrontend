@@ -110,14 +110,13 @@ const HomeScreen = ({navigation}) => {
 
     async function StartSearch() {
         filtersData.forEach(i => {
-            console.log(i)
             if (i === selectedFilter) {
                 setSearchId((filtersData.indexOf(i)).toString())
             }
         })
 
         console.log(searchId)
-        if (searchId === undefined){
+        if (searchId === "undefined"){
             showErrorMessage("Bitte wähle den Filter erneut aus!")
         }
 
@@ -125,7 +124,6 @@ const HomeScreen = ({navigation}) => {
             let tempArray = []
             console.log(r)
             r.forEach((possibleUser, index) => {
-                console.log(possibleUser)
                 tempArray[index] = {
                     id: possibleUser.id,
                     name: possibleUser.name,
@@ -135,9 +133,8 @@ const HomeScreen = ({navigation}) => {
                     //picture: i.pictures[0]
                 }
             })
-            console.log(tempArray)
             setProfiles(tempArray)
-            if (r !== "No users found!") {
+            if (r !== undefined) {
                 setPeopleVorhanden(true)
             }
         })
@@ -167,8 +164,8 @@ const HomeScreen = ({navigation}) => {
         const userSwipedId = profiles[cardIndex].id;
         Dislike(userId, userSwipedId).then(r => {
             console.log(r)
-            if (r.status !== '200') {
-                showErrorMessage(r);
+            if (typeof r !== 'object') {
+                showErrorMessage("Something went wrong with the Dislike!");
                 return;
             }
         })
@@ -179,12 +176,16 @@ const HomeScreen = ({navigation}) => {
         const userSwipedId = profiles[cardIndex].id;
         Like(userId, userSwipedId).then(r => {
             console.log(r)
-            if (r.status === '201') {
+            navigation.navigate("Match", {
+                userId,
+                userSwipedId
+            });
+            /*if (r.match === 'true') {
                 navigation.navigate("Match", {
                     userId,
                     userSwipedId,
                 });
-            }
+            }*/
         })
     };
 
