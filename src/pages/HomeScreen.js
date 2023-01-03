@@ -177,8 +177,8 @@ const HomeScreen = ({navigation}) => {
         Like(userId, userSwipedId).then(r => {
             console.log(r)
             navigation.navigate("Match", {
-                userId,
-                userSwipedId
+                userId: userId,
+                userSwipedId: userSwipedId
             });
             /*if (r.match === 'true') {
                 navigation.navigate("Match", {

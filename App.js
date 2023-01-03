@@ -93,28 +93,28 @@ export default function App() {
 
 const HomeStackScreen = () => {
     return (
-        <Stack.Navigator screenOptions={{headerShown: true}}>
-            <Stack.Screen name="Home" component={HomeScreen} options={{ title: "Finder"}}/>
-            <Stack.Screen name="Details" component={DetailsScreen} options={{ title: "Finder"}}/>
-            <Stack.Screen name="Match" component={MatchScreen} options={{ title: "Finder"}}/>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Details" component={DetailsScreen} />
+            <Stack.Screen name="Match" component={MatchScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }
 
 const ProfileStackScreen = () => {
     return (
-        <Stack.Navigator screenOptions={{headerShown: true}}>
-            <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: "Finder"}}/>
-            <Stack.Screen name="Filter" component={FilterScreen} options={{ title: "Finder"}}/>
+        <Stack.Navigator screenOptions={{headerShown: false }}>
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Filter" component={FilterScreen} />
         </Stack.Navigator>
     )
 }
 
 const ChatStackScreen = () => {
     return (
-        <Stack.Navigator screenOptions={{headerShown: true}}>
-            <Stack.Screen name="Chat" component={ChatScreen} options={{ title: "Finder"}}/>
-            <Stack.Screen name="Messages" component={MessagesScreen} options={{ title: "Finder"}}/>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Chat" component={ChatScreen} />
+            <Stack.Screen name="Messages" component={MessagesScreen} />
         </Stack.Navigator>
     )
 }

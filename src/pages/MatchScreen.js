@@ -8,10 +8,9 @@ import {styles} from "../resources/Styles";
 import {LinearGradient} from "expo-linear-gradient";
 import {useRoute} from "@react-navigation/core";
 
-const MatchScreen = () => {
+const MatchScreen = ({navigation, route}) => {
 
-    const { params } = useRoute();
-    const { navigation, userId, userSwipedId } = params
+    const { userId, userSwipedId } = route.params
 
     const [userData, setUserData] = React.useState("")
     const [userSwipedData, setSwipedData] = React.useState("")
@@ -27,18 +26,24 @@ const MatchScreen = () => {
             console.log(r)
             temp = {
                 firstName: r.firstName,
-                name: r.name
+                name: r.name,
+                pic: r.profilePicture
             }
             setUserData(temp)
         })
         GetProfileById(userSwipedData, token).then(r => {
             temp2 = {
                 firstName: r.firstName,
-                name: r.name
+                name: r.name,
+                pic: r.profilePicture
             }
             setSwipedData(temp2)
         })
     })
+
+    const GetImageSource = (source) => {
+        return `data:image/jpeg;base64,${source}`
+    }
 
     return (
         <SafeAreaView style={{
@@ -80,6 +85,7 @@ const MatchScreen = () => {
                                     margin: 10
                                 }}
                                 source={require("./../../assets/defaultPicture.jpg")}
+                                //source={{uri: GetImageSource(userData.pic)}}
                             />
                             <Image
                                 style={{
@@ -90,6 +96,7 @@ const MatchScreen = () => {
                                     margin: 10
                                 }}
                                 source={require("./../../assets/defaultPicture.jpg")}
+                                source={{uri: GetImageSource(userSwipedData.pic)}}
                             />
                         </View>
                         <TouchableOpacity style={{
