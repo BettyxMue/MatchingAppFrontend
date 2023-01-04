@@ -55,109 +55,43 @@ export default function App() {
         <ChatProvider>
             <WebSocketProvider>
                 <ChatRoomProvicer>
-                    <RootSiblingParent>
-                        <NavigationContainer StartScreen={(!user) ? 'Home' : 'Start'}>
-                            {(!user) ?
-                                <Stack.Navigator
-                                    screenOptions={{headerShown: true, headerBackButtonMenuEnabled: false}}>
+                        <RootSiblingParent>
+                            <NavigationContainer StartScreen={(!user) ? 'Home' : 'Start'}>
+                                <Stack.Navigator screenOptions={{headerShown: true, headerBackButtonMenuEnabled: false}}>
                                     <Stack.Screen name="Start" component={StartScreen} options={{
                                         headerShown: false
                                     }}/>
-                                    <Stack.Screen name="LogIn" component={LogInScreen}
-                                                  options={({navigation, route}) => ({
-                                                      headerRight: () => {
-                                                          <Button title="Back"/>
-                                                      },
-                                                      headerTransparent: true
-                                                  })}/>
-                                    <Stack.Screen name="Registierung" component={SignUpScreen}
-                                                  options={({navigation, route}) => ({
-                                                      headerRight: () => {
-                                                          <Button title="Back"/>
-                                                      },
-                                                      headerTransparent: true,
-                                                      headerShown: true
-                                                  })}/>
-                                </Stack.Navigator>
-                                :
-                                <Tab.Navigator
-                                    screenOptions={({route}) => ({
-                                        headerShown: false,
-                                        tabBarIcon: ({focused, color, size}) => {
-                                            let iconName
-                                            let rn = route.name
-
-                                            if (rn == "Home"){
-                                                iconName = focused ? 'home' : 'home-outline'
-                                            } else if (rn == "Profil"){
-                                                iconName = focused ? 'person' : 'person-outline'
-                                            } else if (rn == "Chat"){
-                                                iconName = focused ? 'chatbubbles' : 'chatbubbles-outline'
-                                            }
-                                            return <Ionicons name={iconName} size={size} color={color} />
+                                    <Stack.Screen name="LogIn" component={LogInScreen} options={({navigation,route}) => ({
+                                        headerRight: () => {
+                                            <Button title="Back" />
                                         },
-                                    })}
-                                    tabBarOptions={{
-                                        activeTintColor: "blue",
-                                        inactiveTintColor: "blue",
-                                        labelStyle: {paddingBottom: 10, fontSize: 10},
-                                        style: {padding: 10, height: 70}
-                                    }}
-                                >
-                                    <Tab.Screen name="Home" component={HomeStackScreen}/>
-                                    <Tab.Screen name="Profil" component={ProfileStackScreen}/>
-                                    <Tab.Screen name="Chat" component={ChatStackScreen}/>
-                                </Tab.Navigator>
-                            }
-                        </NavigationContainer>
-                    </RootSiblingParent>
+                                        headerTransparent: true
+                                    })}/>
+                                    <Stack.Screen name="Registierung" component={SignUpScreen} options={({navigation,route}) => ({
+                                        headerRight: () => {
+                                            <Button title="Back" />
+                                        },
+                                        headerTransparent: true,
+                                        headerShown: true
+                                    })}/>
+                                    <Stack.Screen name="Details" component={DetailsScreen} options={{headerShown: false}}/>
+                                    <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+                                    <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: false}}/>
+                                    <Stack.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
+                                    <Stack.Screen name="Filter" component={FilterScreen} options={{headerShown: false}}/>
+                                    <Stack.Screen name="Chat" component={ChatScreen} />
+                                    <Stack.Screen name="Messages" component={MessagesScreen}/>
+                                    <Stack.Screen name="ChatDetail" component={ChatDetail} options={({navigation, route}) => ({
+                                        headerShown: false
+                                    })} />
+                                    <Stack.Screen name="CreateBill" component={CreateBill} options={({navigation, route}) => ({
+                                        headerShown: false
+                                    })} />
+                                </Stack.Navigator>
+                            </NavigationContainer>
+                        </RootSiblingParent>
                 </ChatRoomProvicer>
             </WebSocketProvider>
         </ChatProvider>
     );
-}
-
-const HomeStackScreen = () => {
-    return (
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Home" component={HomeScreen}/>
-            <Stack.Screen name="Match" component={MatchScreen}/>
-            <Stack.Screen name="Details" component={DetailsScreen} options={({navigation, route}) => ({
-                headerRight: () => {
-                    <Button title="Back"/>
-                }
-            })}/>
-        </Stack.Navigator>
-    )
-}
-
-const ProfileStackScreen = () => {
-    return (
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Settings" component={SettingsScreen} options={({navigation, route}) => ({
-                headerRight: () => {
-                    <Button title="Back"/>
-                }
-            })}/>
-            <Stack.Screen name="Profil" component={ProfileScreen}/>
-            <Stack.Screen name="Filter" component={FilterScreen} options={({navigation, route}) => ({
-                headerRight: () => {
-                    <Button title="Back"/>
-                }
-            })}/>
-            <Stack.Screen name="CreateBill" component={CreateBill} options={({navitation, route}) => ({
-                headerShown: false
-            })}/>
-        </Stack.Navigator>
-    )
-}
-
-const ChatStackScreen = () => {
-    return (
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="ChatDetail" component={ChatDetail} options={({navitation, route}) => ({
-                headerShown: false
-            })}/>
-        </Stack.Navigator>
-    )
 }
