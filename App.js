@@ -21,10 +21,8 @@ import {registerForPushNotifcations} from './src/resources/Notificator'
 import {storeNotificationToken} from "./src/resources/InternalStorage";
 import * as Notifications from 'expo-notifications'
 import MatchScreen from "./src/pages/MatchScreen";
-import {Ionicons} from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
 
 export default function App() {
 
@@ -76,6 +74,7 @@ export default function App() {
                                     })}/>
                                     <Stack.Screen name="Details" component={DetailsScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+                                    <Stack.Screen name="Match" component={MatchScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Filter" component={FilterScreen} options={{headerShown: false}}/>
