@@ -19,9 +19,9 @@ const ProfileScreen = ({navigation}) => {
         }, 5000);
     }
 
-    //const [userId, setUserId] = React.useState("")
     const [toggleEdit, setToggleEdit] = React.useState(true)
 
+    // const userId = getUser().id
     const userId = 2
 
     const [userName, onChangeUserName] = React.useState("")
