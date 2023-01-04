@@ -1,12 +1,14 @@
 // @ts-nocheck
 
-let ipv4 = "192.168.0.207";
+import {NetworkInfo} from "react-native-network-info";
+
+const ip4v = await NetworkInfo.getIPV4Address();
 
 async function Like(userId1, userId2){
     if (userId1 == "" || userId2 == "") {
         return
     }
-    let query = "http://" + ipv4 + ":8084/like"
+    let query = "http://" + ip4v + ":8084/like"
     let like = {
         "likerid": userId1,
         "likedid": userId2
@@ -30,7 +32,7 @@ async function Dislike(userId1, userId2){
     if (userId1 == "" || userId2 == "") {
         return
     }
-    var query = "http://" + ipv4 + ":8084/dislike"
+    var query = "http://" + ip4v + ":8084/dislike"
     var dislike = {
         "dislikerid": userId1,
         "dislikedid": userId2
@@ -59,7 +61,7 @@ async function Searching(searchId, userId){
     if (searchId == "" || userId == "") {
         return
     }
-    let query = "http://" + ipv4 + ":8084/searching/" + searchId + "/" + userId;
+    let query = "http://" + ip4v + ":8084/searching/" + searchId + "/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -106,7 +108,7 @@ async function DeleteSearch(searchId){
     if (searchId == "") {
         return
     }
-    var query = "http://" + ipv4 + ":8084/search/" + searchId;
+    var query = "http://" + ip4v + ":8084/search/" + searchId;
 
     const response = await fetch(query, {
         method: 'DEL',
@@ -126,7 +128,7 @@ async function DeleteMatch(matchId){
     if (matchId == "") {
         return
     }
-    var query = "http://" + ipv4 + ":8084/match/" + matchId;
+    var query = "http://" + ip4v + ":8084/match/" + matchId;
 
     const response = await fetch(query, {
         method: 'DEL',
@@ -146,7 +148,7 @@ async function GetSearchesByUser (userId) {
     if (userId == "") {
         return
     }
-    let query = "http://" + ipv4 + ":8084/search/user/" + userId;
+    let query = "http://" + ip4v + ":8084/search/user/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
