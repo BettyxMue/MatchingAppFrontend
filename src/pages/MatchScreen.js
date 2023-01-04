@@ -64,7 +64,7 @@ const MatchScreen = ({navigation, route}) => {
                                 fontWeight: "bold"
                             }
                         }>
-                            Du und {userSwipedData.firstName} finden einander toll!
+                            Du und {userSwipedData.firstName} können einander etwas beibringen!
                         </Text>
                         <View style={{
                             flexDirection: "row",

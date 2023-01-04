@@ -17,7 +17,7 @@ import {getUser} from "../resources/InternalStorage";
 const HomeScreen = ({navigation}) => {
 
     const userId = 2;
-    //let userId = getUser()
+    //const userId = getUser().id
 
     const [profiles, setProfiles] = React.useState([]);
     const [userData, setUserData] = React.useState([]);
