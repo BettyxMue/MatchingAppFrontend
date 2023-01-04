@@ -180,20 +180,20 @@ export {SignUp,ActivateAccount,UpdateUser,loginUser,getUserFromId}
 
 
 async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, username, email, city, plz, street, houseNumber, searchedSkills, achievedSkills){
-    if (price == "" || gender == "" || phoneNumber == "" || firstName == "" || name == "" || username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
-        return
-    }
-    let priceNumber = parseInt(price)
-    if (isNaN(priceNumber)){
-        return "Price is not valid!"
-    }
-    let plzNumber = parseInt(plz)
-    if (isNaN(plzNumber)){
-        return "PLZ is not valid!"
-    }
-    let phoneNr = parseInt(phoneNumber)
-    if (isNaN(phoneNr)){
-        return "Phone Number is not valid!"
+
+    let priceNumber
+    let plzNumber
+
+    if (price != ""){
+        priceNumber = parseInt(price)
+        if (isNaN(priceNumber)){
+            return "Price is not valid!"
+    }}
+    if (plz != ""){
+        plzNumber = parseInt(plz)
+        if (isNaN(plzNumber)){
+            return "PLZ is not valid!"
+        }
     }
 
     /*let genderNr
@@ -224,7 +224,7 @@ async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, us
             "email": email,
             "street": street,
             "houseNumber": houseNumber,
-            "telephoneNumber": phoneNumber,
+            //"telephoneNumber": phoneNumber,
             "price": priceNumber,
             "city": {
                 "plz": plzNumber,
@@ -286,29 +286,31 @@ async function GetAllSkills(){
 }
 export {GetAllSkills}
 
-async function RemoveSkillFromUser(userId, skillId){
-    if (uderId == "" || skillId == "") {
+/*async function RemoveSkillFromUser(userId, skillId){
+    if (userId == "" || skillId == "") {
         return
     }
 
     let skillIdNr = parseInt(skillId)
     if (isNaN(skillIdNr)){
-        return "User ID is not valid!"
+        return "Skill ID is not valid!"
     }
     let userIdNr = parseInt(userId)
     if (isNaN(userIdNr)){
         return "User ID is not valid!"
     }
 
-    let query = "http://"+ ip4v +":8080/skill/"
-    let data = {
+    const query = "http://"+ ip4v +":8080/profile/" + userId
+    const token = await getToken()
+    const data = {
         userid: userIdNr,
         skill_ids: [skillIdNr]
     }
     const response = await fetch(query, {
         method: 'PUT',
         headers: {
-            'Content-type': 'application/json'
+            'Content-type': 'application/json',
+            'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(data)
     });
@@ -319,4 +321,4 @@ async function RemoveSkillFromUser(userId, skillId){
     }
     return resultData;
 }
-export {RemoveSkillFromUser}
+export {RemoveSkillFromUser}*/

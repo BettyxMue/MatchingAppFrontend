@@ -232,7 +232,7 @@ const HomeScreen = ({navigation}) => {
                         </View>
                         {/* Footer */}
                         <View>
-                            <TouchableOpacity onPress={navigation.navigate("Profile")}>
+                            <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                                 <Entypo name="user" size={30} color="blue"/>
                                 {/*<Image
                                     source={{uri: userData.pictures[0]}}

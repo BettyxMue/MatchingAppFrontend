@@ -7,6 +7,7 @@ import {Entypo} from "@expo/vector-icons";
 import {styles} from "../resources/Styles";
 import {GetAllSkills, UpdateUserProfile} from "../connectors/ProfileServiceConnector";
 import SelectDropdown from "react-native-select-dropdown";
+import {getUser} from "../resources/InternalStorage";
 
 const FilterScreen = ({navigation}) => {
 
@@ -21,8 +22,8 @@ const FilterScreen = ({navigation}) => {
         }, 5000);
     }
 
-    //const userId = getUser().id
-    const userId = 2
+    const [userId, setUserId] = React.useState("")
+    const [userData, setUserData] = React.useState("")
 
     let filters = [];
     const [userFilters, setUserFilters] = React.useState([])
@@ -42,11 +43,21 @@ const FilterScreen = ({navigation}) => {
     let skills = []
 
     useEffect(() => {
-        GetUserFilters()
+        SetUser().then(r => {
+            GetUserFilters(r.id)
+        })
         GetPossibleSkills()
     }, [])
 
-    async function GetUserFilters() {
+    async function SetUser() {
+        await getUser().then(r => {
+            setUserData(r)
+            setUserId(r.id)
+            return r.id
+        })
+    }
+
+    async function GetUserFilters(userId) {
         GetSearchesByUser(userId).then(r => {
             r.map((filter, index) => {
                 filters[index] = {
@@ -63,12 +74,23 @@ const FilterScreen = ({navigation}) => {
         })
     }
 
-    async function GetPossibleSkills(){
+    async function GetPossibleSkills() {
         GetAllSkills().then(r => {
             r.map((skill, index) => {
-                skills[index] = {
-                    id: skill.id,
-                    name: skill.name
+                if (skills.length == 0) {
+                    skills[index] = {
+                        id: skill.id,
+                        name: skill.name
+                    }
+                } else {
+                    skills.map(skill2 => {
+                        if (skill2.name != skill.name){
+                            skills[index] = {
+                                id: skill.id,
+                                name: skill.name
+                            }
+                        }
+                    })
                 }
             })
             setPossibleSkills(skills)
@@ -92,40 +114,66 @@ const FilterScreen = ({navigation}) => {
                 break
         }
 
-        let skillId;
+        /*let skillId;
 
         possibleSkills.map(skills => {
-            if (skills.name == name){
+            if (skills.name == name && skill.level == level){
                 skillId = skills.id
             }
-        })
-
-        /*GetAllSkills().then(r => {
-            r.map(skill => {
-                if (skill.name == name && skill.level == level) {
-                    skillId = skill.id
-                } else {
-                    showErrorMessage("Please create skill first!")
-                }
-            })
         })*/
 
+        const skillId = await FindNewSkillId(name, level)
+
         CreateSearch(name, skillId, level, genderNr, radius, userId).then(r => {
+            console.log(r)
+        })
+
+        userData.searchedSkills.push(skillId)
+
+        UpdateUserProfile(userData.gender, userData.price, userData.phoneNumber, userData.firstName, userData.name,
+            userData.username, userData.email, userData.city, userData.plz, userData.street, userData.houseNumber,
+            userData.searchedSkills, userData.achievedSkills).then(r => {
             console.log(r)
         })
         setAddToggle(false)
         GetUserFilters()
     }
 
-    async function DeleteFilter(searchId) {
+    async function DeleteFilter(searchId, skillName, skillLevel) {
         DeleteSearch(searchId).then(r => {
             console.log(r)
         })
+
+        const skillId = await FindNewSkillId(skillName, skillLevel)
+
+        userData.searchedSkills.map(skill => {
+            if (skillId == skill.id) {
+                const index = userData.searchedSkills.indexOf(skill)
+                delete userData.searchedSkills[index]
+            }
+        })
+
+        UpdateUserProfile(userData.gender, userData.price, userData.phoneNumber, userData.firstName, userData.name,
+            userData.username, userData.email, userData.city, userData.plz, userData.street, userData.houseNumber,
+            userData.searchedSkills, userData.achievedSkills).then(r => {
+            console.log(r)
+        })
+
         showErrorMessage("Filter erfolgreich gelöscht!")
         GetUserFilters()
     }
 
-    async function UpdateFilter(searchId, name, skill, level, gender, radius) {
+    async function FindNewSkillId(skillName, skillLevel){
+        GetAllSkills().then(r => {
+            r.map(skill => {
+                if (skill.name == skillName && skill.SkillIdentifier == skillLevel){
+                    return skill.id
+                }
+            })
+        })
+    }
+
+    async function UpdateFilter(searchId, name, level, gender, radius) {
         let genderNr
         switch (gender) {
             case "Männlich":
@@ -142,20 +190,22 @@ const FilterScreen = ({navigation}) => {
                 break
         }
 
-        UpdateSearch(searchId, name, skill, level, genderNr, radius, userId).then(r => {
+        const newSkillId = await FindNewSkillId(name, level)
+
+        UpdateSearch(searchId, name, newSkillId, level, genderNr, radius, userId).then(r => {
             if (r.status !== '200') {
                 showErrorMessage(r);
                 return;
             }
         })
 
-        //TODO: Add searched Skills in Profile
-        /*UpdateUserProfile().then(r => {
-            if (r.status !== '200') {
-                showErrorMessage(r);
-                return;
-            }
-        })*/
+        userData.searchedSkills.push(newSkillId)
+
+        UpdateUserProfile(userData.gender, userData.price, userData.phoneNumber, userData.firstName, userData.name,
+            userData.username, userData.email, userData.city, userData.plz, userData.street, userData.houseNumber,
+            userData.searchedSkills, userData.achievedSkills).then(r => {
+            console.log(r)
+        })
         setToggle(false)
         setAddToggle(false)
     }
@@ -188,31 +238,16 @@ const FilterScreen = ({navigation}) => {
                 flex: 1
             }}>
                 {userFilters.map(filter => (
-                    <Collapse style={{borderBottomWidth: 1, borderTopWidth: 1}}>
+                    <Collapse key={filter.searchid} style={{borderBottomWidth: 1, borderTopWidth: 1}}>
                         <CollapseHeader style={{
                             flexDirection: 'row',
                             alignItems: 'center',
                             padding: 10,
                             backgroundColor: '#E6E6E6'
                         }}>
-                            {toggle ?
-                                <View>
-                                    <SelectDropdown
-                                        data={possibleSkills}
-                                        onSelect={(selectedItem, index) => {
-                                            onChangeName(selectedItem.name)
-                                        }}
-                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                            return selectedItem.name
-                                        }}
-                                        defaultButtonText={filter.name}
-                                    />
-                                </View>
-                                :
                                 <View style={{width: '100%'}}>
                                     <Text>{filter.name}</Text>
                                 </View>
-                            }
                         </CollapseHeader>
                         <CollapseBody style={{
                             alignItems: 'left',
@@ -255,11 +290,11 @@ const FilterScreen = ({navigation}) => {
                                             onChangeText={onChangeRadius}
                                             value={filter.radius}
                                             style={styles.registerInputTextInput5}
-                                            textContentType="nickname"
+                                            textContentType="none"
                                         />
                                     </View>
                                     <TouchableOpacity style={{marginLeft: 135, marginTop: 5}}
-                                        onPress={() => UpdateFilter(filter.searchid, newName, filter.skill, newLevel, newGender, newRadius)}>
+                                        onPress={() => UpdateFilter(filter.searchid, newName, newLevel, newGender, newRadius)}>
                                         <Entypo name="check" size={30} color="green"/>
                                     </TouchableOpacity>
                                 </View>
@@ -274,7 +309,7 @@ const FilterScreen = ({navigation}) => {
                                         <TouchableOpacity onPress={() => setToggle(true)}>
                                             <Entypo name="pencil" size={30} color="grey"/>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => DeleteFilter(filter.searchid)}>
+                                        <TouchableOpacity onPress={() => DeleteFilter(filter.searchid, filter.name, filter.level)}>
                                             <Entypo name="cross" size={30} color="red"/>
                                         </TouchableOpacity>
                                     </View>

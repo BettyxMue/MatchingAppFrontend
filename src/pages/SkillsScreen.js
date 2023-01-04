@@ -9,14 +9,11 @@ import {Collapse, CollapseBody, CollapseHeader} from "accordion-collapse-react-n
 import {styles} from "../resources/Styles";
 import SelectDropdown from "react-native-select-dropdown";
 import {Entypo} from "@expo/vector-icons";
-import {getToken} from "../resources/InternalStorage";
+import {getToken, getUser} from "../resources/InternalStorage";
 
 const SkillsScreen = ({navigation}) => {
 
-    //const userId = getUser().id
-    const userId = 2
-
-    let token = getToken()
+    const [userId, setUserId] = React.useState("")
 
     const [toggle, setToggle] = React.useState(false)
     const [addToggle, setAddToggle] = React.useState(false)
@@ -41,13 +38,22 @@ const SkillsScreen = ({navigation}) => {
 
     let skills = []
     const [possibleSkills, setPossibleSkills] = React.useState([])
+    const [skillId, setSkillId] = React.useState("")
 
     useEffect(() => {
-        GetUserData()
+        SetUser().then(r => {
+            GetUserData(r)
+        })
         GetPossibleSkills()
     }, [])
 
-    async function GetUserData() {
+    async function SetUser() {
+        const user = await getUser()
+        setUserId(user.id)
+        return user.id
+    }
+
+    async function GetUserData(userId) {
         getUserFromId(userId).then(r => {
             onChangeUserName(r.username)
             onChangeFirstName(r.firstName)
@@ -68,58 +74,147 @@ const SkillsScreen = ({navigation}) => {
     async function GetPossibleSkills() {
         GetAllSkills().then(r => {
             r.map((skill, index) => {
-                skills[index] = {
-                    id: skill.id,
-                    name: skill.name
+                if (skills.length == 0) {
+                    skills[index] = {
+                        id: skill.id,
+                        name: skill.name
+                    }
+                } else {
+                    skills.map(skill2 => {
+                        if (skill2.name != skill.name){
+                            skills[index] = {
+                                id: skill.id,
+                                name: skill.name
+                            }
+                        }
+                    })
                 }
             })
             setPossibleSkills(skills)
         })
     }
 
-    async function FindSkillId(skillName, skillLevelId) {
+    function FindSkillId(skillName, skillIdentifier){
         GetAllSkills().then(r => {
-            console.log(r)
             r.map(skill => {
-                if (skill.name == skillName && skill.SkillIdentifier == skillLevelId) {
-                    return {
-                        id: skill.id,
-                        name: skill.name
-                    }
+                if (skill.name == skillName && skill.SkillIdentifier == skillIdentifier) {
+                    return skill.id
                 }
             })
         })
     }
 
-    async function UpdateUserSkills(skillId, skillName, newSkillLevelId) {
+    function waitForElement(){
+        if(skillId !== undefined){
+            //variable exists, do what you want
+        }
+        else{
+            setTimeout(waitForElement, 250);
+        }
+    }
 
-        RemoveSkillFromUser(userId, skillId).then(r => {
-            console.log(r)
+    async function UpdateUserSkills(skillName, newSkillLevel) {
+
+        let newSkillLevelId
+        switch (newSkillLevel) {
+            case "Anfänger":
+                newSkillLevelId = 1
+                break
+            case "Fortgeschritten":
+                newSkillLevelId = 2
+                break
+            case "Experte":
+                newSkillLevelId = 3
+                break
+        }
+
+        FindSkillId(skillName, newSkillLevelId).then(r => {
+            setSkillId(r)
         })
 
-        AddUserSkills(skillName, newSkillLevelId).then(r => {
+        waitForElement()
+
+        let newSkill
+        achievedSkills.map(skill => {
+            if (skillId == skill.id) {
+                const index = achievedSkills.indexOf(skill)
+                newSkill = {
+                    id: skillId
+                }
+                achievedSkills[index] = newSkill
+            }
+        })
+
+        UpdateUserProfile(gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, searchedSkills, achievedSkills).then(r => {
             console.log(r)
+        })
+        setToggle(false)
+        GetPossibleSkills()
+    }
+
+    async function AddUserSkills(skillName, skillLevel) {
+
+        let newSkillLevelId
+        switch (skillLevel) {
+            case "Anfänger":
+                newSkillLevelId = 1
+                break
+            case "Fortgeschritten":
+                newSkillLevelId = 2
+                break
+            case "Experte":
+                newSkillLevelId = 3
+                break
+        }
+
+        FindSkillId(skillName, newSkillLevelId).then(r => {
+            setSkillId(r)
+            const newSkill = {
+                id: r
+            }
+            console.log(newSkill)
+
+            achievedSkills.push(newSkill)
+            console.log(achievedSkills)
+
+            UpdateUserProfile(gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, searchedSkills, achievedSkills).then(r => {
+                console.log(r)
+            })
+            setAddToggle(false)
+            GetPossibleSkills()
         })
     }
 
-    async function AddUserSkills(skillName, skillLevelId) {
-        let newSkill = FindSkillId(skillName, skillLevelId)
-        console.log(newSkill)
+    async function RemoveSkill(skillName, skillLevel) {
+        let newSkillLevelId
+        switch (skillLevel) {
+            case "Anfänger":
+                newSkillLevelId = 1
+                break
+            case "Fortgeschritten":
+                newSkillLevelId = 2
+                break
+            case "Experte":
+                newSkillLevelId = 3
+                break
+        }
 
-        let allAchievedSkills = []
-        allAchievedSkills.add(achievedSkills)
-        allAchievedSkills.add(newSkill)
-        console.log(allAchievedSkills)
+        FindSkillId(skillName, newSkillLevelId).then(r => {
+            setSkillId(r)
+        })
 
-        UpdateUserProfile(gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, searchedSkills, allAchievedSkills).then(r =>
-            console.log(r)
-        )
-    }
+        achievedSkills.map(skill => {
+            if (skillId == skill.id) {
+                const index = achievedSkills.indexOf(skill)
+                delete achievedSkills[index]
+            }
+        })
 
-    async function RemoveSkill(skillId) {
-        RemoveSkillFromUser(userId, skillId).then(r => {
+        UpdateUserProfile(gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, searchedSkills, achievedSkills).then(r => {
             console.log(r)
         })
+        setToggle(false)
+        GetPossibleSkills()
     }
 
     function renderSwitch(param) {
@@ -155,32 +250,17 @@ const SkillsScreen = ({navigation}) => {
                 alignContent: "center",
                 flex: 1
             }}>
-                {achievedSkills.map(skill => (
-                    <Collapse style={{borderBottomWidth: 1, borderTopWidth: 1}}>
+                {achievedSkills.map((skill, index) => (
+                    <Collapse key={index} style={{borderBottomWidth: 1, borderTopWidth: 1}}>
                         <CollapseHeader style={{
                             flexDirection: 'row',
                             alignItems: 'center',
                             padding: 10,
                             backgroundColor: '#E6E6E6'
                         }}>
-                            {toggle ?
-                                <View>
-                                    <SelectDropdown
-                                        data={possibleSkills}
-                                        onSelect={(selectedItem, index) => {
-                                            onChangeSkillName(selectedItem.name)
-                                        }}
-                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                            return selectedItem.name
-                                        }}
-                                        defaultButtonText={skill.name}
-                                    />
-                                </View>
-                                :
-                                <View style={{width: '100%'}}>
-                                    <Text>{skill.name}</Text>
-                                </View>
-                            }
+                            <View style={{width: '100%'}}>
+                                <Text>{skill.name}</Text>
+                            </View>
                         </CollapseHeader>
                         <CollapseBody style={{
                             alignItems: 'left',
@@ -208,7 +288,7 @@ const SkillsScreen = ({navigation}) => {
                                             defaultButtonText={renderSwitch(level)}
                                         />
                                         <TouchableOpacity style={{marginLeft: 150}}
-                                            onPress={() => UpdateUserSkills(skill.id, skill.name, level)}>
+                                                          onPress={() => UpdateUserSkills(skill.name, level)}>
                                             <Entypo name="check" size={30} color="green"/>
                                         </TouchableOpacity>
                                     </View>
@@ -218,7 +298,7 @@ const SkillsScreen = ({navigation}) => {
                                     flexDirection: "row",
                                     margin: 10
                                 }}>
-                                    <Text>Level: {skill.level}</Text>
+                                    <Text>Level: {renderSwitch(skill.SkillIdentifier)}</Text>
                                     <View style={{
                                         alignItems: "flex-end",
                                         flexDirection: "row",
@@ -227,7 +307,7 @@ const SkillsScreen = ({navigation}) => {
                                         <TouchableOpacity onPress={() => setToggle(true)}>
                                             <Entypo name="pencil" size={30} color="grey"/>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => RemoveSkill(skill.id)}>
+                                        <TouchableOpacity onPress={() => RemoveSkill(skill.name, skill.level)}>
                                             <Entypo name="cross" size={30} color="red"/>
                                         </TouchableOpacity>
                                     </View>
@@ -260,7 +340,8 @@ const SkillsScreen = ({navigation}) => {
                             }}
                             defaultButtonText={renderSwitch(level)}
                         />
-                        <TouchableOpacity style={styles.editProfileButton} onPress={() => AddUserSkills(skillName, level)}>
+                        <TouchableOpacity style={styles.editProfileButton}
+                                          onPress={() => AddUserSkills(skillName, level)}>
                             <Text style={styles.buttonText}>Speichern</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.editProfileButton} onPress={() => setAddToggle(false)}>
