@@ -1,5 +1,5 @@
 import {KeyboardAvoidingView, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-native'
-import React, {Component, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {CreateSearch, DeleteSearch, GetSearchesByUser, UpdateSearch} from "../connectors/MatchingServiceConnector";
 import Toast from "react-native-root-toast";
 import {Collapse, CollapseHeader, CollapseBody} from "accordion-collapse-react-native";
@@ -150,12 +150,12 @@ const FilterScreen = ({navigation}) => {
         })
 
         //TODO: Add searched Skills in Profile
-        UpdateUserProfile().then(r => {
+        /*UpdateUserProfile().then(r => {
             if (r.status !== '200') {
                 showErrorMessage(r);
                 return;
             }
-        })
+        })*/
         setToggle(false)
         setAddToggle(false)
     }

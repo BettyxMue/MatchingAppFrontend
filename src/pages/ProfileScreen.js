@@ -92,8 +92,7 @@ const ProfileScreen = ({navigation}) => {
                 break
         }
 
-        UpdateUserProfile(userId, genderNr, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, token).then(r => {
-            console.log(r)
+        UpdateUserProfile(genderNr, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber).then(r => {
             showMessage("User erfolgreich geupdated!")
         });
         setToggleEdit(true)

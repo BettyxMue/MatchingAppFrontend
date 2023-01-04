@@ -111,7 +111,7 @@ const SkillsScreen = ({navigation}) => {
         allAchievedSkills.add(newSkill)
         console.log(allAchievedSkills)
 
-        UpdateUserProfile(userId, gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, token, searchedSkills, allAchievedSkills).then(r =>
+        UpdateUserProfile(gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, searchedSkills, allAchievedSkills).then(r =>
             console.log(r)
         )
     }
