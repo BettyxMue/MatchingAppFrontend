@@ -139,7 +139,7 @@ async function getUserFromId(userid){
         return "No Id given!"
     }
     const query = "http://" + ip4v + ":8080/profile/" + userid
-    let token = await getToken()
+    const token = await getToken()
     let request = await fetch(query, {
         method: 'GET',
         headers: {
