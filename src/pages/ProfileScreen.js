@@ -3,9 +3,9 @@ import React, {Component, useEffect} from 'react'
 import {styles} from "../resources/Styles";
 import {LinearGradient} from "expo-linear-gradient";
 import ProfileItem from "../components/profileComponents/ProfileItem";
-import {UpdateUserProfile, GetProfileById} from "../connectors/ProfileServiceConnector";
+import {UpdateUserProfile, getUserFromId} from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
-import {getToken} from "../resources/InternalStorage";
+import {getToken, getUser} from "../resources/InternalStorage";
 
 const ProfileScreen = ({navigation}) => {
 
@@ -22,9 +22,7 @@ const ProfileScreen = ({navigation}) => {
 
     const [toggleEdit, setToggleEdit] = React.useState(true)
 
-    // const userId = getUser().id
-    const userId = 2
-
+    const [userId, setUserId] = React.useState("")
     const [userName, onChangeUserName] = React.useState("")
     const [email, onChangeEmail] = React.useState("")
     const [city, onChangeCity] = React.useState("")
@@ -39,14 +37,23 @@ const ProfileScreen = ({navigation}) => {
 
     let genderString;
 
-    const token = getToken
+    //const token = getToken
+    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI4NTAxMjQsInN1YiI6MiwidXNlciI6Mn0.bq0g_kbUuSf4sUNqdCS36j1G8_nFVzELttvMwrSWtas0Y9L9-xAptzPGYLhYuU-kkGCTbFwnMCCLfR7zFoknfSf6k_P4ek_UkMPVJIAl2qOEcCoFLxkNwEJlWF1_x1b0ns7TEDr0jgef6VuZlxbRWpD-atWoTZLUuLiKtr33yuI"
 
     useEffect(() => {
-        setUserData()
-    }, [userId])
+        SetUser().then(r => {
+            setUserData(r)
+        })
+    }, [])
 
-    async function setUserData() {
-        GetProfileById(userId).then(r => {
+    async function SetUser(){
+        const user = await getUser()
+        setUserId(user.id)
+        return user.id
+    }
+
+    async function setUserData(userId) {
+        getUserFromId(userId).then(r => {
                 switch (r.gender) {
                     case 1:
                         genderString = "Männlich"

@@ -1,10 +1,9 @@
 // @ts-nocheck
 
 import {getToken, getUser, storeToken, storeUser} from "../resources/InternalStorage"
-import { NetworkInfo } from "react-native-network-info";
 
 //let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI3NzM1NTcsInN1YiI6MiwidXNlciI6Mn0.kFcTJT-YRVCBmRbWdknOpYDIT8TC6Nx1OAY0TJo1oQn6ktNDIISKW2c5kkGHjFOVKbsI5H1KJs90NYujdOCtU_9Rg6QW-h-INGaw02LCXmvSMY-DkGAVSyyT56PSISvKZ6KJPTkVA31h12iYZQ9PhNy6DfyCKu6AEXcE3VRPqGk"
-const ip4v = await NetworkInfo.getIPV4Address();
+let ip4v = "192.168.0.207"
 
 async function SignUp(username, email, city, plz, street, houseNumber){
     if (username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
@@ -84,7 +83,7 @@ async function loginUser(loginObject){
     if (loginObject == null){
         return "No Login Data provided!"
     }
-    const query = "http://"+ ipv4 +":8080/login"
+    const query = "http://"+ ip4v +":8080/login"
     const response = await fetch(query, {
         method: 'PUT',
         headers: {
@@ -111,8 +110,6 @@ async function loginUser(loginObject){
     });
     return true;
 }
-
-export {SignUp,ActivateAccount,UpdateUser}
 
 /*async function GetProfileById (userId, token) {
     if (userId == "") {
@@ -141,28 +138,28 @@ async function getUserFromId(userid){
     }
     const query = "http://" + ip4v + ":8080/profile/" + userid
     const token = await getToken()
-    let request = await fetch(query, {
+    const request = await fetch(query, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token
         }
     })
-    this.response = await this.request.json();
+    const response = await request.json();
 
-    if(this.request.status != 200){
+    if(request.status != 200){
         console.log("Error when querying user")
-        return this.request.statusText
+        return request.statusText
     }
 
-    return this.response
+    return response
 }
 
 
 // Helper
 
 async function sendActivationQuery(user, token){
-    let query = "http://" + ip4v + ":8080/profile/" + user.id;
+    const query = "http://" + ip4v + ":8080/profile/" + user.id;
     const response = await fetch(query, {
         method: 'PUT',
         headers: {
@@ -212,12 +209,14 @@ async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, us
             break
     }*/
 
-    const userId = await getUser().id
+    const userStore = await getUser()
+    const userId = userStore.id
     const token = await getToken()
+    let user
 
-    let query = "http://"+ ip4v +":8080/profile/" + userId
-    if (searchedSkills == "" & achievedSkills == ""){
-        let user = {
+    const query = "http://"+ ip4v +":8080/profile/" + userId
+    if (searchedSkills == undefined & achievedSkills == undefined){
+        user = {
             "firstName": firstName,
             "name": name,
             "gender": gender,
@@ -233,7 +232,7 @@ async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, us
             }
         }
     } else {
-        let user = {
+        user = {
             "firstName": firstName,
             "name": name,
             "gender": gender,
@@ -269,11 +268,13 @@ async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, us
 export {UpdateUserProfile};
 
 async function GetAllSkills(){
-    let query = "http://"+ ip4v +":8080/skill/"
+    const query = "http://"+ ip4v +":8080/skill/"
+    const token = await getToken()
     const response = await fetch(query, {
         method: 'GET',
         headers: {
-            'Content-type': 'application/json'
+            'Content-type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     });
     const resultData = await response.json();

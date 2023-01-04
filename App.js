@@ -19,6 +19,7 @@ import { ChatProvider, ChatRoomProvicer, WebSocketProvider } from "./src/resourc
 import {registerForPushNotifcations} from './src/resources/Notificator'
 import { storeNotificationToken } from "./src/resources/InternalStorage";
 import * as Notifications from 'expo-notifications'
+import SkillsScreen from "./src/pages/SkillsScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -74,6 +75,7 @@ export default function App() {
                     <Stack.Screen name="Settings" component={SettingsScreen}/>
                     <Stack.Screen name="Profile" component={ProfileScreen}/>
                     <Stack.Screen name="Filter" component={FilterScreen}/>
+                    <Stack.Screen name="Skills" component={SkillsScreen}/>
                     <Stack.Screen name="Chat" component={ChatScreen}/>
                     <Stack.Screen name="Messages" component={MessagesScreen}/>
                     <Stack.Screen name="ChatDetail" component={ChatDetail} options={({navitation, route}) => ({
