@@ -75,6 +75,7 @@ export default function App() {
                                     <Stack.Screen name="Details" component={DetailsScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Match" component={MatchScreen} options={{headerShown: false}}/>
+                                    <Stack.Screen name="Filter" component={FilterScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Filter" component={FilterScreen} options={{headerShown: false}}/>
