@@ -14,7 +14,6 @@ const ChatMessages = (props) => {
     };
 
     useEffect(() => {
-        console.log("Received new Data!");
 
     }, [props])
 

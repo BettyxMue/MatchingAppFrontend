@@ -9,20 +9,17 @@ import { ChatContext } from "../resources/page-context"
 
 const ChatDetail = ({navigation, route}) => { 
     const { user } = route.params
-    console.log(route.params)
     const chat = useContext(ChatContext);
 
     const [chatCache, setChatCache] = React.useState({})
 
     useEffect(() => {
-        console.log("Chat Detail ist erreicht!")
-        console.log(chat)
+
         //setChatCache({})
         //setChatCache(chat)
 
     }, [chat.messages])
 
-    console.log(chat); 
 
     return (
         <View style={{backgroundColor: "white", height: "100%", flex: 1}}>
