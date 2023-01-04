@@ -9,13 +9,14 @@ import {Collapse, CollapseBody, CollapseHeader} from "accordion-collapse-react-n
 import {styles} from "../resources/Styles";
 import SelectDropdown from "react-native-select-dropdown";
 import {Entypo} from "@expo/vector-icons";
+import {getToken} from "../resources/InternalStorage";
 
 const SkillsScreen = ({navigation}) => {
 
-    //const [userId, setUserId] = React.useState("")
+    //const userId = getUser().id
     const userId = 2
 
-    let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI4MDMxMTEsInN1YiI6MiwidXNlciI6Mn0.ynsCyq3kjptBtu8IlhjPiJWwC6rQXZQslNJFIKVUxeGtZb6ADFdM2xzucOiUqDRG2BHXBYgxZhSWjYc7KAVS07jgZmsoo9xR_ekGgCLenYVfIq2vTok-RbM-LkdaZPxn4N7AdAqrGTS5Xe9hUGwQ4gCc_L7D1p9vwYZ3MN3q1WM"
+    let token = getToken()
 
     const [toggle, setToggle] = React.useState(false)
     const [addToggle, setAddToggle] = React.useState(false)

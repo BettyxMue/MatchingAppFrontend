@@ -5,6 +5,7 @@ import {LinearGradient} from "expo-linear-gradient";
 import ProfileItem from "../components/profileComponents/ProfileItem";
 import {UpdateUserProfile, GetProfileById} from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
+import {getToken} from "../resources/InternalStorage";
 
 const ProfileScreen = ({navigation}) => {
 
@@ -38,17 +39,14 @@ const ProfileScreen = ({navigation}) => {
 
     let genderString;
 
-    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI4MDMxMTEsInN1YiI6MiwidXNlciI6Mn0.ynsCyq3kjptBtu8IlhjPiJWwC6rQXZQslNJFIKVUxeGtZb6ADFdM2xzucOiUqDRG2BHXBYgxZhSWjYc7KAVS07jgZmsoo9xR_ekGgCLenYVfIq2vTok-RbM-LkdaZPxn4N7AdAqrGTS5Xe9hUGwQ4gCc_L7D1p9vwYZ3MN3q1WM"
+    const token = getToken
 
     useEffect(() => {
-        /*getUser().then(r => {
-            setUserId(r.id)
-        })*/
         setUserData()
     }, [userId])
 
     async function setUserData() {
-        GetProfileById(userId, token).then(r => {
+        GetProfileById(userId).then(r => {
                 switch (r.gender) {
                     case 1:
                         genderString = "Männlich"
