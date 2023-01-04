@@ -21,7 +21,9 @@ const StartScreen = ({navigation}) => {
                       navigation.navigate('Registierung')}>
                         <Text style={styles.buttonText}>Registieren</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => {
+                        navigation.navigate('LogIn')
+                    }}>
                         <Text style={styles.buttonText}>Login</Text>
                     </TouchableOpacity>
                 </View>

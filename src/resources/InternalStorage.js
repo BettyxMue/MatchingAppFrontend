@@ -36,4 +36,21 @@ const getToken = async () => {
     }
 }
 
-export {storeUser, storeToken, getUser, getToken}
+const storeNotificationToken = async (notifyToken) => {
+    try {
+        await AsyncStorage.setItem('@notificationToken', notifyToken)
+    }catch(e){
+        console.log(e)
+    }
+}
+
+const getNotificationToken = async () => {
+    try{
+        const token = AsyncStorage.setItem('@notificationToken', notifyToken)
+        return token
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export {storeUser, storeToken, getUser, getToken, storeNotificationToken, getNotificationToken}
