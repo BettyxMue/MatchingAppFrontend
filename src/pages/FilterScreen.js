@@ -23,11 +23,10 @@ const FilterScreen = ({navigation}) => {
 
     //const [userId, setUserId] = React.useState("")
     const userId = 2
+
     let filters = [];
     const [userFilters, setUserFilters] = React.useState([])
     const [possibleSkills, setPossibleSkills] = React.useState([])
-
-    let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI2MDMxMzcsInN1YiI6MiwidXNlciI6Mn0.fQ7DX2j6u5qSu3bfsR8zQaNUytL_bk2z4IGkmZeIQ2mEH3wLYEb6LPSyPc3oXpzeQghliJgzKuvG1Cs-LIR3rkBsz36-z7lnzBGHShPiNR-O-PFfBGTtSCvXLCUCCXy5ZjjP_njMe1WFJ5oeRGJKieEn8btLkeSKkqp6DeUWUaw"
 
     const [toggle, setToggle] = React.useState(false)
     const [addToggle, setAddToggle] = React.useState(false)
@@ -68,8 +67,8 @@ const FilterScreen = ({navigation}) => {
         GetAllSkills().then(r => {
             r.map((skill, index) => {
                 skills[index] = {
-                    id: skills.id,
-                    name: skills.name
+                    id: skill.id,
+                    name: skill.name
                 }
             })
             setPossibleSkills(skills)
@@ -98,8 +97,6 @@ const FilterScreen = ({navigation}) => {
         possibleSkills.map(skills => {
             if (skills.name == name){
                 skillId = skills.id
-            } else {
-                showErrorMessage("Skill not found!")
             }
         })
 
@@ -116,12 +113,16 @@ const FilterScreen = ({navigation}) => {
         CreateSearch(name, skillId, level, genderNr, radius, userId).then(r => {
             console.log(r)
         })
+        setAddToggle(false)
+        GetUserFilters()
     }
 
     async function DeleteFilter(searchId) {
         DeleteSearch(searchId).then(r => {
             console.log(r)
         })
+        showErrorMessage("Filter erfolgreich gelöscht!")
+        GetUserFilters()
     }
 
     async function UpdateFilter(searchId, name, skill, level, gender, radius) {
@@ -148,6 +149,7 @@ const FilterScreen = ({navigation}) => {
             }
         })
 
+        //TODO: Add searched Skills in Profile
         UpdateUserProfile().then(r => {
             if (r.status !== '200') {
                 showErrorMessage(r);
@@ -198,10 +200,10 @@ const FilterScreen = ({navigation}) => {
                                     <SelectDropdown
                                         data={possibleSkills}
                                         onSelect={(selectedItem, index) => {
-                                            onChangeName(selectedItem)
+                                            onChangeName(selectedItem.name)
                                         }}
                                         buttonTextAfterSelection={(selectedItem, index) => {
-                                            return selectedItem
+                                            return selectedItem.name
                                         }}
                                         defaultButtonText={filter.name}
                                     />
@@ -213,60 +215,69 @@ const FilterScreen = ({navigation}) => {
                             }
                         </CollapseHeader>
                         <CollapseBody style={{
-                            alignItems: 'center',
-                            justifyContent: 'center',
+                            alignItems: 'left',
+                            justifyContent: 'left',
                             flexDirection: 'row',
                             backgroundColor: '#EDEDED'
                         }}>
                             {toggle ?
                                 <View style={{
-                                    width: "90%"
+                                    width: "100%",
+                                    flexDirection: "row"
                                 }}>
-                                    <Text style={styles.titleFilterItem}>Level:</Text>
-                                    <SelectDropdown
-                                        data={possibleLevels}
-                                        onSelect={(selectedItem, index) => {
-                                            onChangeLevel(selectedItem)
-                                        }}
-                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                            return selectedItem
-                                        }}
-                                        defaultButtonText={filter.level}
-                                    />
-                                    <Text style={styles.titleFilterItem}>Geschlecht:</Text>
-                                    <SelectDropdown
-                                        data={genders}
-                                        onSelect={(selectedItem, index) => {
-                                            onChangeGender(selectedItem)
-                                        }}
-                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                            return selectedItem
-                                        }}
-                                        defaultButtonText={renderSwitch(filter.gender)}
-                                    />
-                                    <Text style={styles.titleFilterItem}>Radius:</Text>
-                                    <TextInput
-                                        onChangeText={onChangeRadius}
-                                        value={filter.radius}
-                                        style={styles.registerInputTextInput5}
-                                        textContentType="nickname"
-                                    />
-                                    <TouchableOpacity
+                                    <View style={{
+                                        paddingLeft: 15
+                                    }}>
+                                        <Text style={styles.titleFilterItem}>Level:</Text>
+                                        <SelectDropdown
+                                            data={possibleLevels}
+                                            onSelect={(selectedItem, index) => {
+                                                onChangeLevel(selectedItem)
+                                            }}
+                                            buttonTextAfterSelection={(selectedItem, index) => {
+                                                return selectedItem
+                                            }}
+                                            defaultButtonText={filter.level}
+                                        />
+                                        <Text style={styles.titleFilterItem}>Geschlecht:</Text>
+                                        <SelectDropdown
+                                            data={genders}
+                                            onSelect={(selectedItem, index) => {
+                                                onChangeGender(selectedItem)
+                                            }}
+                                            buttonTextAfterSelection={(selectedItem, index) => {
+                                                return selectedItem
+                                            }}
+                                            defaultButtonText={renderSwitch(filter.gender)}
+                                        />
+                                        <Text style={styles.titleFilterItem}>Radius:</Text>
+                                        <TextInput
+                                            onChangeText={onChangeRadius}
+                                            value={filter.radius}
+                                            style={styles.registerInputTextInput5}
+                                            textContentType="nickname"
+                                        />
+                                    </View>
+                                    <TouchableOpacity style={{marginLeft: 135, marginTop: 5}}
                                         onPress={() => UpdateFilter(filter.searchid, newName, filter.skill, newLevel, newGender, newRadius)}>
                                         <Entypo name="check" size={30} color="green"/>
                                     </TouchableOpacity>
                                 </View>
                                 :
-                                <View>
-                                    <Text>Level: {filter.level}</Text>
-                                    <Text>Gesuchtes Geschlecht: {renderSwitch(filter.gender)}</Text>
-                                    <Text>Radius: {filter.radius}</Text>
-                                    <TouchableOpacity onPress={() => setToggle(true)}>
-                                        <Entypo name="pencil" size={30} color="grey"/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => DeleteFilter(filter.searchid)}>
-                                        <Entypo name="cross" size={30} color="red"/>
-                                    </TouchableOpacity>
+                                <View style={{flexDirection: "row"}}>
+                                    <View style={{paddingLeft: 10, paddingTop: 5, paddingBottom: 5}}>
+                                        <Text>Level: {filter.level}</Text>
+                                        <Text>Gesuchtes Geschlecht: {renderSwitch(filter.gender)}</Text>
+                                        <Text>Radius: {filter.radius}</Text>
+                                    </View>
+                                    <View style={{paddingLeft: 55, paddingTop: 17, flexDirection: "row"}}>
+                                        <TouchableOpacity onPress={() => setToggle(true)}>
+                                            <Entypo name="pencil" size={30} color="grey"/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => DeleteFilter(filter.searchid)}>
+                                            <Entypo name="cross" size={30} color="red"/>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             }
                         </CollapseBody>
@@ -278,10 +289,10 @@ const FilterScreen = ({navigation}) => {
                         <SelectDropdown
                             data={possibleSkills}
                             onSelect={(selectedItem, index) => {
-                                onChangeName(selectedItem)
+                                onChangeName(selectedItem.name)
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem
+                                return selectedItem.name
                             }}
                             defaultButtonText={newName}
                         />
@@ -314,11 +325,12 @@ const FilterScreen = ({navigation}) => {
                             style={styles.registerInputTextInput5}
                             textContentType="nickname"
                         />
-                        <TouchableOpacity onPress={() => CreateFilter(newName, newLevel, newGender, newRadius, userId)}>
-                            <Text>Speichern</Text>
+                        <TouchableOpacity style={styles.editProfileButton}
+                                          onPress={() => CreateFilter(newName, newLevel, newGender, newRadius, userId)}>
+                            <Text style={styles.continueButtonText}>Speichern</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setAddToggle(false)}>
-                            <Text>Zurück</Text>
+                        <TouchableOpacity style={styles.editProfileButton} onPress={() => setAddToggle(false)}>
+                            <Text style={styles.continueButtonText}>Zurück</Text>
                         </TouchableOpacity>
                     </View>
                     :

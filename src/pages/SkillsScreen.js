@@ -3,7 +3,6 @@ import {KeyboardAvoidingView, Platform, SafeAreaView, Text, TextInput, Touchable
 import {
     UpdateUserProfile,
     GetProfileById,
-    AddSkill,
     GetAllSkills,
     RemoveSkillFromUser
 } from "../connectors/ProfileServiceConnector";
@@ -17,7 +16,7 @@ const SkillsScreen = ({navigation}) => {
     //const [userId, setUserId] = React.useState("")
     const userId = 2
 
-    let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI2MDMxMzcsInN1YiI6MiwidXNlciI6Mn0.fQ7DX2j6u5qSu3bfsR8zQaNUytL_bk2z4IGkmZeIQ2mEH3wLYEb6LPSyPc3oXpzeQghliJgzKuvG1Cs-LIR3rkBsz36-z7lnzBGHShPiNR-O-PFfBGTtSCvXLCUCCXy5ZjjP_njMe1WFJ5oeRGJKieEn8btLkeSKkqp6DeUWUaw"
+    let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI4MDMxMTEsInN1YiI6MiwidXNlciI6Mn0.ynsCyq3kjptBtu8IlhjPiJWwC6rQXZQslNJFIKVUxeGtZb6ADFdM2xzucOiUqDRG2BHXBYgxZhSWjYc7KAVS07jgZmsoo9xR_ekGgCLenYVfIq2vTok-RbM-LkdaZPxn4N7AdAqrGTS5Xe9hUGwQ4gCc_L7D1p9vwYZ3MN3q1WM"
 
     const [toggle, setToggle] = React.useState(false)
     const [addToggle, setAddToggle] = React.useState(false)
@@ -68,11 +67,10 @@ const SkillsScreen = ({navigation}) => {
 
     async function GetPossibleSkills() {
         GetAllSkills().then(r => {
-            console.log(r)
             r.map((skill, index) => {
                 skills[index] = {
-                    id: skills.id,
-                    name: skills.name
+                    id: skill.id,
+                    name: skill.name
                 }
             })
             setPossibleSkills(skills)
@@ -81,9 +79,13 @@ const SkillsScreen = ({navigation}) => {
 
     async function FindSkillId(skillName, skillLevelId) {
         GetAllSkills().then(r => {
+            console.log(r)
             r.map(skill => {
-                if (skill.name == skillName && skill.skillLevel.id == skillLevelId) {
-                    return skill.id
+                if (skill.name == skillName && skill.SkillIdentifier == skillLevelId) {
+                    return {
+                        id: skill.id,
+                        name: skill.name
+                    }
                 }
             })
         })
@@ -102,10 +104,12 @@ const SkillsScreen = ({navigation}) => {
 
     async function AddUserSkills(skillName, skillLevelId) {
         let newSkill = FindSkillId(skillName, skillLevelId)
+        console.log(newSkill)
 
         let allAchievedSkills = []
         allAchievedSkills.add(achievedSkills)
         allAchievedSkills.add(newSkill)
+        console.log(allAchievedSkills)
 
         UpdateUserProfile(userId, gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, token, searchedSkills, allAchievedSkills).then(r =>
             console.log(r)
@@ -164,10 +168,10 @@ const SkillsScreen = ({navigation}) => {
                                     <SelectDropdown
                                         data={possibleSkills}
                                         onSelect={(selectedItem, index) => {
-                                            onChangeSkillName(selectedItem)
+                                            onChangeSkillName(selectedItem.name)
                                         }}
                                         buttonTextAfterSelection={(selectedItem, index) => {
-                                            return selectedItem
+                                            return selectedItem.name
                                         }}
                                         defaultButtonText={skill.name}
                                     />
@@ -179,40 +183,54 @@ const SkillsScreen = ({navigation}) => {
                             }
                         </CollapseHeader>
                         <CollapseBody style={{
-                            alignItems: 'center',
-                            justifyContent: 'center',
+                            alignItems: 'left',
+                            justifyContent: 'left',
                             flexDirection: 'row',
                             backgroundColor: '#EDEDED'
                         }}>
                             {toggle ?
                                 <View style={{
-                                    width: "90%"
+                                    width: "100%",
                                 }}>
                                     <Text style={styles.titleFilterItem}>Level:</Text>
-                                    <SelectDropdown
-                                        data={possibleLevels}
-                                        onSelect={(selectedItem, index) => {
-                                            onChangeLevel(selectedItem)
-                                        }}
-                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                            return selectedItem
-                                        }}
-                                        defaultButtonText={renderSwitch(level)}
-                                    />
-                                    <TouchableOpacity
-                                        onPress={() => UpdateUserSkills(skill.id, skill.name, level)}>
-                                        <Entypo name="check" size={30} color="green"/>
-                                    </TouchableOpacity>
+                                    <View style={{
+                                        flexDirection: "row",
+
+                                    }}>
+                                        <SelectDropdown
+                                            data={possibleLevels}
+                                            onSelect={(selectedItem, index) => {
+                                                onChangeLevel(selectedItem)
+                                            }}
+                                            buttonTextAfterSelection={(selectedItem, index) => {
+                                                return selectedItem
+                                            }}
+                                            defaultButtonText={renderSwitch(level)}
+                                        />
+                                        <TouchableOpacity style={{marginLeft: 150}}
+                                            onPress={() => UpdateUserSkills(skill.id, skill.name, level)}>
+                                            <Entypo name="check" size={30} color="green"/>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                                 :
-                                <View>
-                                    <Text>Level: {renderSwitch(skill.level)}</Text>
-                                    <TouchableOpacity onPress={() => setToggle(true)}>
-                                        <Entypo name="pencil" size={30} color="grey"/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => RemoveSkill(skill.id)}>
-                                        <Entypo name="cross" size={30} color="red"/>
-                                    </TouchableOpacity>
+                                <View style={{
+                                    flexDirection: "row",
+                                    margin: 10
+                                }}>
+                                    <Text>Level: {skill.level}</Text>
+                                    <View style={{
+                                        alignItems: "flex-end",
+                                        flexDirection: "row",
+                                        paddingLeft: 220
+                                    }}>
+                                        <TouchableOpacity onPress={() => setToggle(true)}>
+                                            <Entypo name="pencil" size={30} color="grey"/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => RemoveSkill(skill.id)}>
+                                            <Entypo name="cross" size={30} color="red"/>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             }
                         </CollapseBody>
@@ -224,10 +242,10 @@ const SkillsScreen = ({navigation}) => {
                         <SelectDropdown
                             data={possibleSkills}
                             onSelect={(selectedItem, index) => {
-                                onChangeSkillName(selectedItem)
+                                onChangeSkillName(selectedItem.name)
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem
+                                return selectedItem.name
                             }}
                             defaultButtonText={skillName}
                         />
@@ -242,11 +260,11 @@ const SkillsScreen = ({navigation}) => {
                             }}
                             defaultButtonText={renderSwitch(level)}
                         />
-                        <TouchableOpacity onPress={() => AddUserSkills(skillName, level)}>
-                            <Text>Speichern</Text>
+                        <TouchableOpacity style={styles.editProfileButton} onPress={() => AddUserSkills(skillName, level)}>
+                            <Text style={styles.buttonText}>Speichern</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setAddToggle(false)}>
-                            <Text>Zurück</Text>
+                        <TouchableOpacity style={styles.editProfileButton} onPress={() => setAddToggle(false)}>
+                            <Text style={styles.buttonText}>Zurück</Text>
                         </TouchableOpacity>
                     </View>
                     :

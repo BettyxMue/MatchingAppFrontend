@@ -89,7 +89,7 @@ const ProfileItem = ({
         return (
             <View style={styles.containerProfileItem}>
                     {/*<Image source={profilePicture} /> {/*how to change pb?*/}
-                    <View>
+                    <View style={{width: "127%"}}>
                         <View style={{
                             marginTop: 10,
                             marginBottom: 10,
@@ -147,30 +147,34 @@ const ProfileItem = ({
                         <View style={styles.profileDescription}>
                             <Text style={styles.titleProfileItem}>Adresse:</Text>
                             <View style={{width: "100%"}}>
-                                <TextInput
-                                    onChangeText={onChangeStreet}
-                                    value={street}
-                                    style={styles.registerInputTextInput3}
-                                    textContentType="streetAddressLine1"
-                                />
-                                <TextInput
-                                    onChangeText={onChangeHouseNumber}
-                                    value={houseNumber}
-                                    style={styles.registerInputTextInput3}
-                                    textContentType="streetAddressLine2"
-                                />
-                                <TextInput
-                                    onChangeText={onChangePLZ}
-                                    value={plz}
-                                    style={styles.registerInputTextInput3}
-                                    textContentType="postalCode"
-                                />
-                                <TextInput
-                                    onChangeText={onChangeCity}
-                                    value={city}
-                                    style={styles.registerInputTextInput3}
-                                    textContentType="addressCity"
-                                />
+                                <View style={{flexDirection: "row"}}>
+                                    <TextInput
+                                        onChangeText={onChangeStreet}
+                                        value={street}
+                                        style={styles.registerInputTextInput3}
+                                        textContentType="streetAddressLine1"
+                                    />
+                                    <TextInput
+                                        onChangeText={onChangeHouseNumber}
+                                        value={houseNumber}
+                                        style={styles.registerInputTextInput3}
+                                        textContentType="streetAddressLine2"
+                                    />
+                                </View>
+                                <View style={{flexDirection: "row"}}>
+                                    <TextInput
+                                        onChangeText={onChangePLZ}
+                                        value={plz}
+                                        style={styles.registerInputTextInput3}
+                                        textContentType="postalCode"
+                                    />
+                                    <TextInput
+                                        onChangeText={onChangeCity}
+                                        value={city}
+                                        style={styles.registerInputTextInput3}
+                                        textContentType="addressCity"
+                                    />
+                                </View>
                             </View>
                         </View>
                         <View style={styles.profileDescription}>
@@ -200,7 +204,19 @@ const ProfileItem = ({
                                 textContentType="nickname"
                             />
                         </View>
-                        <TouchableOpacity style={styles.editProfileButton} onPress={onContinueButton}>
+                        <TouchableOpacity style={{
+                            alignContent: "center",
+                            alignItems: "center",
+                            alignSelf: "left",
+                            justifyContent: "center",
+                            width: "67%",
+                            borderRadius: 10,
+                            backgroundColor: 'blue',
+                            padding: 10,
+                            marginLeft: 22,
+                            marginTop: 10
+                        }}
+                                          onPress={onContinueButton}>
                             <Text style={styles.continueButtonText}>Speichern</Text>
                         </TouchableOpacity>
                     </View>

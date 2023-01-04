@@ -1,11 +1,9 @@
 import {KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import React, {Component, useEffect} from 'react'
-import {getUser, storeUser} from "../resources/InternalStorage";
 import {styles} from "../resources/Styles";
 import {LinearGradient} from "expo-linear-gradient";
-import {Entypo} from "@expo/vector-icons";
 import ProfileItem from "../components/profileComponents/ProfileItem";
-import {UpdateUserProfile, GetProfileById, SignUp, UpdateUser} from "../connectors/ProfileServiceConnector";
+import {UpdateUserProfile, GetProfileById} from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
 
 const ProfileScreen = ({navigation}) => {
@@ -40,7 +38,7 @@ const ProfileScreen = ({navigation}) => {
 
     let genderString;
 
-    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI2MDMxMzcsInN1YiI6MiwidXNlciI6Mn0.fQ7DX2j6u5qSu3bfsR8zQaNUytL_bk2z4IGkmZeIQ2mEH3wLYEb6LPSyPc3oXpzeQghliJgzKuvG1Cs-LIR3rkBsz36-z7lnzBGHShPiNR-O-PFfBGTtSCvXLCUCCXy5ZjjP_njMe1WFJ5oeRGJKieEn8btLkeSKkqp6DeUWUaw"
+    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI4MDMxMTEsInN1YiI6MiwidXNlciI6Mn0.ynsCyq3kjptBtu8IlhjPiJWwC6rQXZQslNJFIKVUxeGtZb6ADFdM2xzucOiUqDRG2BHXBYgxZhSWjYc7KAVS07jgZmsoo9xR_ekGgCLenYVfIq2vTok-RbM-LkdaZPxn4N7AdAqrGTS5Xe9hUGwQ4gCc_L7D1p9vwYZ3MN3q1WM"
 
     useEffect(() => {
         /*getUser().then(r => {
@@ -101,6 +99,10 @@ const ProfileScreen = ({navigation}) => {
         setToggleEdit(true)
     }
 
+    async function Logout(){
+        //TODO: Logout
+    }
+
     return (
         <SafeAreaView style={{
             height: '100%',
@@ -144,28 +146,9 @@ const ProfileScreen = ({navigation}) => {
                                                       onPress={() => navigation.navigate("Filter")}>
                                         <Text style={styles.continueButtonText}>Filter bearbeiten</Text>
                                     </TouchableOpacity>
-                                </View>
-                                <View style={{
-                                    backgroundColor: "white",
-                                    flexDirection: "row",
-                                    flexWrap: "wrap",
-                                    padding: 5,
-
-                                }}>
-                                    <TouchableOpacity style={{
-                                        alignItems: "flex-end"
-                                    }}
-                                                      onPress={() => navigation.navigate("Profile")}>
-                                        <Entypo name="user" size={30} color="black"/>
-                                        {/*<Image
-                                        source={{userData.pictures[0]}}
-                                        />*/}
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-                                        <Entypo name="home" size={30} color="blue"/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
-                                        <Entypo name="chat" size={30} color="blue"/>
+                                    <TouchableOpacity style={styles.editProfileButton}
+                                                      onPress={() => Logout}>
+                                        <Text style={styles.continueButtonText}>Logout</Text>
                                     </TouchableOpacity>
                                 </View>
                             </ScrollView>
@@ -200,20 +183,6 @@ const ProfileScreen = ({navigation}) => {
                                     onChangeUsername={onChangeUserName}
                                     onChangeTelephoneNumber={onChangePhoneNumber}
                                 />
-                                <View>
-                                    <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-                                        <Entypo name="user" size={30} color="white"/>
-                                        {/*<Image
-                                        source={{uri: userData.pictures[0]}}
-                                        />*/}
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-                                        <Entypo name="home" size={30} color="blue"/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
-                                        <Entypo name="chat" size={30} color="blue"/>
-                                    </TouchableOpacity>
-                                </View>
                             </ScrollView>
                         </View>
                     }

@@ -3,6 +3,7 @@
 import { getToken, storeToken } from "../resources/InternalStorage"
 
 let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI2MDMxMzcsInN1YiI6MiwidXNlciI6Mn0.fQ7DX2j6u5qSu3bfsR8zQaNUytL_bk2z4IGkmZeIQ2mEH3wLYEb6LPSyPc3oXpzeQghliJgzKuvG1Cs-LIR3rkBsz36-z7lnzBGHShPiNR-O-PFfBGTtSCvXLCUCCXy5ZjjP_njMe1WFJ5oeRGJKieEn8btLkeSKkqp6DeUWUaw"
+let ipv4 = "192.168.0.207"
 
 async function SignUp(username, email, city, plz, street, houseNumber){
     if (username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
@@ -12,7 +13,7 @@ async function SignUp(username, email, city, plz, street, houseNumber){
     if (isNaN(plzNumber)){
         return "PLZ is not valid!"
     }
-    var query = "http://192.168.0.159:8080/signUp"
+    var query = "http://"+ ipv4 +":8080/signUp"
     var user = {
         "username": username,
         "email": email,
@@ -45,7 +46,7 @@ async function ActivateAccount(userid, code){
     var codeDTO = {
         "Code": code
     }
-    let query = "http://192.168.0.159:8080/activate/" + userid;
+    let query = "http://"+ ipv4 +":8080/activate/" + userid;
     const response = await fetch(query, {
         method: 'PUT',
         headers: {
@@ -79,7 +80,7 @@ async function UpdateUser(user){
 }
 
 async function sendActivationQuery(user, token){
-    let query = "http://192.168.0.159:8080/profile/" + user.id;
+    let query = "http://"+ ipv4 +":8080/profile/" + user.id;
         const response = await fetch(query, {
             method: 'PUT',
             headers: {
@@ -102,7 +103,7 @@ async function GetProfileById (userId, token) {
     if (userId == "") {
         return
     }
-    let query = "http://192.168.0.159:8080/profile/" + userId;
+    let query = "http://"+ ipv4 +":8080/profile/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -119,7 +120,7 @@ async function GetProfileById (userId, token) {
 }
 export {GetProfileById}
 
-async function UpdateUserProfile(userId, gender, price, phoneNumber, firstName, name, username, email, city, plz, street, houseNumber, token){
+async function UpdateUserProfile(userId, gender, price, phoneNumber, firstName, name, username, email, city, plz, street, houseNumber, token, searchedSkills, achievedSkills){
     if (price == "" || gender == "" || phoneNumber == "" || firstName == "" || name == "" || username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
         return
     }
@@ -149,21 +150,40 @@ async function UpdateUserProfile(userId, gender, price, phoneNumber, firstName, 
             break
     }*/
 
-    let query = "http://192.168.0.159:8080/profile/" + userId
-    let user = {
-        "firstName": firstName,
-        "name": name,
-        "gender": gender,
-        "username": username,
-        "email": email,
-        "street": street,
-        "houseNumber": houseNumber,
-        "telephoneNumber": phoneNumber,
-        //"password": pw,
-        "price": priceNumber,
-        "city": {
-            "plz": plzNumber,
-            "place": city
+    let query = "http://"+ ipv4 +":8080/profile/" + userId
+    if (searchedSkills == "" & achievedSkills == ""){
+        let user = {
+            "firstName": firstName,
+            "name": name,
+            "gender": gender,
+            "username": username,
+            "email": email,
+            "street": street,
+            "houseNumber": houseNumber,
+            "telephoneNumber": phoneNumber,
+            "price": priceNumber,
+            "city": {
+                "plz": plzNumber,
+                "place": city
+            }
+        }
+    } else {
+        let user = {
+            "firstName": firstName,
+            "name": name,
+            "gender": gender,
+            "username": username,
+            "email": email,
+            "street": street,
+            "houseNumber": houseNumber,
+            "telephoneNumber": phoneNumber,
+            "price": priceNumber,
+            "city": {
+                "plz": plzNumber,
+                "place": city
+            },
+            "achievedSkills": achievedSkills,
+            "searchedSkills": searchedSkills
         }
     }
     const response = await fetch(query, {
@@ -188,7 +208,7 @@ async function AddSkill(skillName, level){
         return
     }
 
-    let query = "http://192.168.0.159:8080/skill/"
+    let query = "http://"+ ipv4 +":8080/skill/"
     let skill = {
         "name": skillName,
         "level": level
@@ -210,7 +230,7 @@ async function AddSkill(skillName, level){
 export {AddSkill}
 
 async function GetAllSkills(){
-    let query = "http://192.168.0.159:8080/skill/"
+    let query = "http://"+ ipv4+":8080/skill/"
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -240,7 +260,7 @@ async function RemoveSkillFromUser(userId, skillId){
         return "User ID is not valid!"
     }
 
-    let query = "http://192.168.0.159:8080/skill/"
+    let query = "http://"+ ipv4 +":8080/skill/"
     let data = {
         userid: userIdNr,
         skill_ids: [skillIdNr]
