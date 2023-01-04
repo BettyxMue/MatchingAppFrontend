@@ -21,7 +21,7 @@ const FilterScreen = ({navigation}) => {
         }, 5000);
     }
 
-    //const [userId, setUserId] = React.useState("")
+    //const userId = getUser().id
     const userId = 2
 
     let filters = [];

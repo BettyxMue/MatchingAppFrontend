@@ -2,9 +2,8 @@ import React, {useEffect} from "react";
 import {KeyboardAvoidingView, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {
     UpdateUserProfile,
-    GetProfileById,
     GetAllSkills,
-    RemoveSkillFromUser
+    RemoveSkillFromUser, getUserFromId
 } from "../connectors/ProfileServiceConnector";
 import {Collapse, CollapseBody, CollapseHeader} from "accordion-collapse-react-native";
 import {styles} from "../resources/Styles";
@@ -48,7 +47,7 @@ const SkillsScreen = ({navigation}) => {
     }, [])
 
     async function GetUserData() {
-        GetProfileById(userId, token).then(r => {
+        getUserFromId(userId).then(r => {
             onChangeUserName(r.username)
             onChangeFirstName(r.firstName)
             onChangeName(r.name)

@@ -268,32 +268,6 @@ async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, us
 }
 export {UpdateUserProfile};
 
-async function AddSkill(skillName, level){
-    if (skillName == "" || level == "") {
-        return
-    }
-
-    let query = "http://"+ ip4v +":8080/skill/"
-    let skill = {
-        "name": skillName,
-        "level": level
-    }
-    const response = await fetch(query, {
-        method: 'PUT',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(skill)
-    });
-    const resultData = await response.json();
-
-    if (response.status != 200){
-        return resultData.error;
-    }
-    return resultData;
-}
-export {AddSkill}
-
 async function GetAllSkills(){
     let query = "http://"+ ip4v +":8080/skill/"
     const response = await fetch(query, {
