@@ -1,20 +1,21 @@
 // @ts-nocheck
 
 import { getToken, storeToken, storeUser } from "../resources/InternalStorage"
+import { NetworkInfo } from "react-native-network-info";
 
 //let token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI3NzM1NTcsInN1YiI6MiwidXNlciI6Mn0.kFcTJT-YRVCBmRbWdknOpYDIT8TC6Nx1OAY0TJo1oQn6ktNDIISKW2c5kkGHjFOVKbsI5H1KJs90NYujdOCtU_9Rg6QW-h-INGaw02LCXmvSMY-DkGAVSyyT56PSISvKZ6KJPTkVA31h12iYZQ9PhNy6DfyCKu6AEXcE3VRPqGk"
-let ip4v = "192.168.0.207"
+const ip4v = await NetworkInfo.getIPV4Address();
 
 async function SignUp(username, email, city, plz, street, houseNumber){
     if (username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
         return
     }
-    var plzNumber = parseInt(plz)
+    let plzNumber = parseInt(plz)
     if (isNaN(plzNumber)){
         return "PLZ is not valid!"
     }
-    var query = "http://" + ip4v + ":8080/signUp"
-    var user = {
+    const query = "http://" + ip4v + ":8080/signUp"
+    let user = {
         "username": username,
         "email": email,
         "street": street,
@@ -43,10 +44,10 @@ async function ActivateAccount(userid, code){
     if (userid == "" || code == ""){
         return
     }
-    var codeDTO = {
+    let codeDTO = {
         "Code": code
     }
-    let query = "http://" + ip4v + ":8080/activate/" + userid;
+    const query = "http://" + ip4v + ":8080/activate/" + userid;
     const response = await fetch(query, {
         method: 'PUT',
         headers: {
@@ -59,7 +60,7 @@ async function ActivateAccount(userid, code){
     if (response.status != 200){
         return resultData.error;
     }
-    token = resultData.token
+    const token = resultData.token
     if (token != null) {
         storeToken(token)
     }else{
@@ -83,7 +84,7 @@ async function loginUser(loginObject){
     if (loginObject == null){
         return "No Login Data provided!"
     }
-    let query = "http://"+ ipv4 +":8080/login"
+    const query = "http://"+ ipv4 +":8080/login"
     const response = await fetch(query, {
         method: 'PUT',
         headers: {
