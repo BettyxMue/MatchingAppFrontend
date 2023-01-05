@@ -9,10 +9,11 @@ import {Collapse, CollapseBody, CollapseHeader} from "accordion-collapse-react-n
 import {styles} from "../resources/Styles";
 import SelectDropdown from "react-native-select-dropdown";
 import {Entypo} from "@expo/vector-icons";
-import {getToken, getUser} from "../resources/InternalStorage";
+import {getToken, getUser, storeUser} from "../resources/InternalStorage";
 
 const SkillsScreen = ({navigation}) => {
 
+    const [userData, setUserData] = React.useState([])
     const [userId, setUserId] = React.useState("")
 
     const [toggle, setToggle] = React.useState(false)
@@ -52,7 +53,8 @@ const SkillsScreen = ({navigation}) => {
     }, [])
 
     async function SetUser() {
-        const user = await getUser()
+        const user = (await getUser())
+        setUserData(user)
         setUserId(user.id)
         return user.id
     }
@@ -133,7 +135,8 @@ const SkillsScreen = ({navigation}) => {
             console.log(r)
         })
         setToggle(false)
-        //GetPossibleSkills()
+        GetPossibleSkills()
+        storeUser(userData)
     }
 
     async function AddUserSkills(skillName, skillLevel) {
@@ -166,7 +169,8 @@ const SkillsScreen = ({navigation}) => {
             console.log(r)
         })
         setAddToggle(false)
-        //GetPossibleSkills()
+        GetPossibleSkills()
+        storeUser(userData)
     }
 
     async function RemoveSkill(skillName, skillLevel) {
@@ -192,6 +196,7 @@ const SkillsScreen = ({navigation}) => {
         })
         setToggle(false)
         GetPossibleSkills()
+        storeUser(userData)
     }
 
     function renderSwitch(param) {

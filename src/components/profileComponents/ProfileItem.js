@@ -33,11 +33,16 @@ const ProfileItem = ({
 
     const genders = ["Weiblich", "Männlich", "Divers"]
 
+    const GetImageSource = (source) => {
+        return `data:image/jpeg;base64,${source}`
+    }
+
     if (toggle === 1) {
         return (
             <View style={styles.containerProfileItem}>
                 <View>
-                    {/*<Image source={profilePicture}/>*/}
+                    {/*<Image source={require("./../../assests/defaultPicture.jpg")} /> {/*how to change pb?*/}
+                    {/*<Image source={{uri: GetImageSource(card.profilePictures)}}*/}
                 </View>
                 <View style={styles.profileDescription}>
                     <Text style={styles.descriptionProfileItem}>Willkommen,</Text>
@@ -88,7 +93,11 @@ const ProfileItem = ({
     if (toggle === 0) {
         return (
             <View style={styles.containerProfileItem}>
-                    {/*<Image source={profilePicture} /> {/*how to change pb?*/}
+                    {/*TODO: Upload new Picture?
+                    <View>
+                            <Image source={require("./../../assests/defaultPicture.jpg")} /> {/*how to change pb?
+                    </View>*/}
+                    {/*<Image source={{uri: GetImageSource(card.profilePictures)}}*/}
                     <View style={{width: "127%"}}>
                         <View style={{
                             marginTop: 10,

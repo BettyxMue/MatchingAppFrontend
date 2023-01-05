@@ -7,7 +7,7 @@ import {Entypo} from "@expo/vector-icons";
 import {styles} from "../resources/Styles";
 import {GetAllSkills, getUserFromId, UpdateUserProfile} from "../connectors/ProfileServiceConnector";
 import SelectDropdown from "react-native-select-dropdown";
-import {getUser} from "../resources/InternalStorage";
+import {getUser, storeUser} from "../resources/InternalStorage";
 
 const FilterScreen = ({navigation}) => {
 
@@ -23,6 +23,7 @@ const FilterScreen = ({navigation}) => {
     }
 
     const [userId, setUserId] = React.useState("")
+    const [userData, setUserData] = React.useState([])
     const [userName, onChangeUserName] = React.useState("")
     const [email, onChangeEmail] = React.useState("")
     const [city, onChangeCity] = React.useState("")
@@ -67,7 +68,8 @@ const FilterScreen = ({navigation}) => {
     }, [])
 
     async function SetUser() {
-        const user = await getUser()
+        const user = (await getUser())
+        setUserData(user)
         setUserId(user.id)
         return user.id
     }
@@ -177,6 +179,7 @@ const FilterScreen = ({navigation}) => {
         })
         setAddToggle(false)
         GetUserFilters()
+        storeUser(userData)
     }
 
     async function DeleteFilter(searchId, skillName, skillLevel) {
@@ -219,6 +222,7 @@ const FilterScreen = ({navigation}) => {
 
         showErrorMessage("Filter erfolgreich gelöscht!")
         GetUserFilters()
+        storeUser(userData)
     }
 
     async function UpdateFilter(searchId, name, level, gender, radius) {
@@ -284,6 +288,8 @@ const FilterScreen = ({navigation}) => {
         })
 
         setToggle(false)
+        GetSearchesByUser()
+        storeUser(userData)
     }
 
     function renderSwitch(param) {
