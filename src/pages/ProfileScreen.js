@@ -6,6 +6,7 @@ import ProfileItem from "../components/profileComponents/ProfileItem";
 import {UpdateUserProfile, getUserFromId} from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
 import {getToken, getUser} from "../resources/InternalStorage";
+import BottomBar from "../components/layout/BottomBar";
 
 const ProfileScreen = ({navigation}) => {
 
@@ -36,9 +37,6 @@ const ProfileScreen = ({navigation}) => {
     const [price, onChangePrice] = React.useState("")
 
     let genderString;
-
-    //const token = getToken
-    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI4NTAxMjQsInN1YiI6MiwidXNlciI6Mn0.bq0g_kbUuSf4sUNqdCS36j1G8_nFVzELttvMwrSWtas0Y9L9-xAptzPGYLhYuU-kkGCTbFwnMCCLfR7zFoknfSf6k_P4ek_UkMPVJIAl2qOEcCoFLxkNwEJlWF1_x1b0ns7TEDr0jgef6VuZlxbRWpD-atWoTZLUuLiKtr33yuI"
 
     useEffect(() => {
         SetUser().then(r => {
@@ -143,7 +141,9 @@ const ProfileScreen = ({navigation}) => {
                                         <Text style={styles.continueButtonText}>Profil bearbeiten</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.editProfileButton}
-                                                      onPress={() => navigation.navigate("Skills")}>
+                                                      onPress={() => navigation.navigate("OtherProfile", {
+                                                              otherId: 17
+                                                          })}>
                                         <Text style={styles.continueButtonText}>Skills bearbeiten</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.editProfileButton}
@@ -191,6 +191,7 @@ const ProfileScreen = ({navigation}) => {
                         </View>
                     }
                 </LinearGradient>
+                <BottomBar />
             </KeyboardAvoidingView>
         </SafeAreaView>
     )

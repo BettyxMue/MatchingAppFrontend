@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Image, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {styles} from "../../resources/Styles";
 import SelectDropdown from 'react-native-select-dropdown'
@@ -35,8 +35,39 @@ const ProfileItem = ({
 
     const genders = ["Weiblich", "Männlich", "Divers"]
 
+    const [searchedSkillsToggle, setSearchedSkillsToggle] = React.useState(false)
+    const [achievedSkillsToggle, setAchievedSkillsToggle] = React.useState(false)
+
+    let userSearchedSkills = []
+    let userAchievedSkills = []
+
+    useEffect(() => {
+        EvaluateData()
+    })
+
     const GetImageSource = (source) => {
         return `data:image/jpeg;base64,${source}`
+    }
+
+    function EvaluateData(){
+        if (searchedSkills != undefined){
+            setSearchedSkillsToggle(true)
+            searchedSkills.map((skill, index) => {
+                userAchievedSkills[index] = {
+                    name: skill.name,
+                    levelId: skill.SkillIdentifier
+                }
+            })
+        }
+        if (achievedSkills != undefined){
+            setAchievedSkillsToggle(true)
+            achievedSkills.map((skill, index) => {
+                userAchievedSkills[index] = {
+                    name: skill.name,
+                    levelId: skill.SkillIdentifier
+                }
+            })
+        }
     }
 
     function renderSwitch(id){
@@ -289,18 +320,34 @@ const ProfileItem = ({
                     </Text>
                 </View>
                 <View style={styles.profileDescription}>
-                    <Text style={styles.titleProfileItem}>Erlernte Skills:</Text>
-                    <Text style={styles.descriptionProfileItem}>
-                        {price} €
-                    </Text>
+                    <Text style={styles.titleProfileItem}>Gesuchte Skills:</Text>
+                    {searchedSkillsToggle ? (
+                        userSearchedSkills.forEach(skill =>
+                                <Text style={styles.descriptionProfileItem}>
+                                    {skill.name} - Level: {renderSwitch(skill.levelId)}
+                                </Text>
+                            )
+                        )
+                        : (
+                        <Text style={styles.descriptionProfileItem}>
+                            noch keine Skills vorhanden
+                        </Text>
+                        )
+                    }
                 </View>
                 <View style={styles.profileDescription}>
-                    <Text style={styles.titleProfileItem}>Gesuchte Skills:</Text>
-                    {searchedSkills.map(skill =>
+                    <Text style={styles.titleProfileItem}>Erlernte Skills:</Text>
+                    {achievedSkillsToggle ?
+                        userAchievedSkills.forEach(skill =>
+                            <Text style={styles.descriptionProfileItem}>
+                                {skill.name} - Level: {renderSwitch(skill.levelId)}
+                            </Text>
+                        )
+                        :
                         <Text style={styles.descriptionProfileItem}>
-                            {skill.name} - Level: {renderSwitch(skill.SkillIdentifier)}
+                            noch keine Skills vorhanden
                         </Text>
-                    )}
+                    }
                 </View>
             </View>
         );

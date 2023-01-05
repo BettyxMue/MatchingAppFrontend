@@ -6,6 +6,7 @@ import ProfileItem from "../components/profileComponents/ProfileItem";
 import {UpdateUserProfile, getUserFromId} from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
 import {getToken, getUser} from "../resources/InternalStorage";
+import BottomBar from "../components/layout/BottomBar";
 
 const ProfileScreen = ({navigation, route}) => {
 
@@ -36,18 +37,14 @@ const ProfileScreen = ({navigation, route}) => {
     const [achievedSkills, onChangeAchievedSkills] = React.useState("")
     const [searchedSkills, onChangeSearchedSkills] = React.useState("")
 
-
     let genderString;
-
-    //const token = getToken
-    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI4NTAxMjQsInN1YiI6MiwidXNlciI6Mn0.bq0g_kbUuSf4sUNqdCS36j1G8_nFVzELttvMwrSWtas0Y9L9-xAptzPGYLhYuU-kkGCTbFwnMCCLfR7zFoknfSf6k_P4ek_UkMPVJIAl2qOEcCoFLxkNwEJlWF1_x1b0ns7TEDr0jgef6VuZlxbRWpD-atWoTZLUuLiKtr33yuI"
 
     useEffect(() => {
         setUserData(otherUserId)
-    }, [])
+    }, [otherUserId])
 
-    async function setUserData(userId) {
-        getUserFromId(userId).then(r => {
+    async function setUserData(otherUserId) {
+        getUserFromId(otherUserId).then(r => {
                 switch (r.gender) {
                     case 1:
                         genderString = "Männlich"
@@ -79,6 +76,12 @@ const ProfileScreen = ({navigation, route}) => {
         )
     }
 
+    function goBack(){
+        navigation.goBack()
+    }
+
+    const backButtonChar = "\u276e"
+
     return (
         <SafeAreaView style={{
             height: '100%',
@@ -89,8 +92,30 @@ const ProfileScreen = ({navigation, route}) => {
                 alignContent: "center",
                 flex: 1
             }}>
+                <View style={{
+                    marginBottom: "1%",
+                    width: "100%"
+                }}>
+                    <TouchableOpacity style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        alignContent: "center",
+                        justifyContent: "center"
+                    }}
+                    onPress={goBack}>
+                        <Text style={{
+                            fontSize: 40,
+                            fontWeight: "bold",
+                            color: "#4287f5"
+                        }}>{backButtonChar}</Text>
+                    </TouchableOpacity>
+                </View>
                 <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
-                    <ScrollView>
+                    <ScrollView style={{
+                        width: "100%",
+                        height: "90%"
+                    }}>
                         <ProfileItem
                             name={name}
                             city={city}
@@ -108,19 +133,9 @@ const ProfileScreen = ({navigation, route}) => {
                             achievedSkills={achievedSkills}
                             searchedSkills={searchedSkills}
                         />
-
-                        <View>
-                            <TouchableOpacity style={styles.editProfileButton}
-                                              onPress={() => navigation.navigate("Skills")}>
-                                <Text style={styles.continueButtonText}>Vorhandene Skills ansehen</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.editProfileButton}
-                                              onPress={() => navigation.navigate("Filter")}>
-                                <Text style={styles.continueButtonText}>Gesuchte Skills ansehen</Text>
-                            </TouchableOpacity>
-                        </View>
                     </ScrollView>
                 </LinearGradient>
+                <BottomBar />
             </KeyboardAvoidingView>
         </SafeAreaView>
     )

@@ -20,6 +20,7 @@ import {registerForPushNotifcations} from './src/resources/Notificator'
 import { storeNotificationToken } from "./src/resources/InternalStorage";
 import * as Notifications from 'expo-notifications'
 import SkillsScreen from "./src/pages/SkillsScreen";
+import OtherProfileScreen from "./src/pages/OtherProfileScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -70,12 +71,13 @@ export default function App() {
                       headerTransparent: true,
                       headerShown: true
                     })}/>
-                    <Stack.Screen name="Details" component={DetailsScreen}/>
-                    <Stack.Screen name="Home" component={HomeScreen}/>
-                    <Stack.Screen name="Settings" component={SettingsScreen}/>
-                    <Stack.Screen name="Profile" component={ProfileScreen}/>
-                    <Stack.Screen name="Filter" component={FilterScreen}/>
-                    <Stack.Screen name="Skills" component={SkillsScreen}/>
+                    <Stack.Screen name="Details" component={DetailsScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name="OtherProfile" component={OtherProfileScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name="Filter" component={FilterScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name="Skills" component={SkillsScreen} options={{headerShown: false}}/>
                     <Stack.Screen name="Chat" component={ChatScreen}/>
                     <Stack.Screen name="Messages" component={MessagesScreen}/>
                     <Stack.Screen name="ChatDetail" component={ChatDetail} options={({navitation, route}) => ({

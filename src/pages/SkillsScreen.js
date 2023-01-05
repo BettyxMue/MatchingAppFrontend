@@ -3,13 +3,14 @@ import {KeyboardAvoidingView, Platform, SafeAreaView, Text, TextInput, Touchable
 import {
     UpdateUserProfile,
     GetAllSkills,
-    RemoveSkillFromUser, getUserFromId
+    getUserFromId
 } from "../connectors/ProfileServiceConnector";
 import {Collapse, CollapseBody, CollapseHeader} from "accordion-collapse-react-native";
 import {styles} from "../resources/Styles";
 import SelectDropdown from "react-native-select-dropdown";
 import {Entypo} from "@expo/vector-icons";
 import {getToken, getUser, storeUser} from "../resources/InternalStorage";
+import BottomBar from "../components/layout/BottomBar";
 
 const SkillsScreen = ({navigation}) => {
 
@@ -340,6 +341,7 @@ const SkillsScreen = ({navigation}) => {
                         </TouchableOpacity>
                     </View>
                 }
+                <BottomBar />
             </KeyboardAvoidingView>
         </SafeAreaView>
     )

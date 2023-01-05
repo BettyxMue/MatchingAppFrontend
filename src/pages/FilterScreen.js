@@ -8,6 +8,7 @@ import {styles} from "../resources/Styles";
 import {GetAllSkills, getUserFromId, UpdateUserProfile} from "../connectors/ProfileServiceConnector";
 import SelectDropdown from "react-native-select-dropdown";
 import {getUser, storeUser} from "../resources/InternalStorage";
+import BottomBar from "../components/layout/BottomBar";
 
 const FilterScreen = ({navigation}) => {
 
@@ -460,6 +461,7 @@ const FilterScreen = ({navigation}) => {
                         </TouchableOpacity>
                     </View>
                 }
+                <BottomBar />
             </KeyboardAvoidingView>
         </SafeAreaView>
     )
