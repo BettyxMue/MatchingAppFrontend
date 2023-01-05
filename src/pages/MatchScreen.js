@@ -2,7 +2,7 @@ import React, {useEffect,} from 'react';
 import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from "@react-navigation/native";
 import {getUserFromId} from "../connectors/ProfileServiceConnector";
-import {Entypo} from "@expo/vector-icons";
+import {Ionicons} from "@expo/vector-icons";
 import {styles} from "../resources/Styles";
 import {LinearGradient} from "expo-linear-gradient";
 
@@ -20,7 +20,7 @@ const MatchScreen = ({navigation, route}) => {
 
         GetUserData()
         GetUserSwipedData()
-    })
+    }, [userId, userSwipedId])
 
     function GetUserData() {
         getUserFromId(userId).then(r => {
@@ -50,92 +50,88 @@ const MatchScreen = ({navigation, route}) => {
     }
 
     return (
-        <SafeAreaView style={{
-            height: '120%',
-            width: '100%',
-            alignContent: "center"
-        }}>
-            <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
+        <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
+            <View style={{
+                height: "100%",
+                width: "80%",
+                paddingVertical: 150
+            }}>
                 <View style={{
-                    height: "100%",
-                    paddingTop: 20
+                    alignItems: "center",
+                    paddingBottom: "10%"
                 }}>
-                    <View style={{
-                        alignItems: "center",
-                        alignContent: "center"
-                    }}>
-                        <Entypo name="heart" size={70} color="red"/>
-                    </View>
-                    <Text style={
-                        {
-                            marginTop: 5,
+                    <Ionicons name="happy" size={80} color="white"/>
+                </View>
+                <Text style={
+                    {
+                        marginTop: 5,
+                        textAlign: "center",
+                        fontSize: 30,
+                        fontWeight: "bold",
+                        color: "white"
+                    }
+                }>
+                    Du und {userSwipedData.firstName} können einander etwas beibringen!
+                </Text>
+                <View style={{
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    width: "100%",
+                    marginVertical: "10%"
+                }}>
+                    <Image
+                        style={{
+                            resizeMode: "cover",
+                            height: 90,
+                            width: 90,
+                            borderRadius: 100,
+                            margin: 10
+                        }}
+                        source={require("./../../assets/defaultPicture.jpg")}
+                        //source={{uri: GetImageSource(userData.pic)}}
+                    />
+                    <Image
+                        style={{
+                            resizeMode: "cover",
+                            height: 90,
+                            width: 90,
+                            borderRadius: 100,
+                            margin: 10
+                        }}
+                        source={require("./../../assets/defaultPicture.jpg")}
+                        //source={{uri: GetImageSource(userSwipedData.pic)}}
+                    />
+                </View>
+                <TouchableOpacity style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingVertical: 12,
+                    paddingHorizontal: 32,
+                    borderRadius: 20,
+                    elevation: 3,
+                    backgroundColor: '#ffffff',
+                    borderColor: '#ffffff',
+                    marginHorizontal: "10%",
+                    borderWidth: 1
+                }}>
+                    <Text
+                        onPress={() => {
+                            navigation.goBack();
+                            navigation.navigate("Chat", {
+                                userSwipedId
+                            });
+                        }}
+                        style={{
                             textAlign: "center",
                             fontSize: 20,
-                            fontWeight: "bold"
-                        }
-                    }>
-                        Du und {userSwipedData.firstName} können einander etwas beibringen!
+                            color: "black"
+                        }}
+                    >
+                        Schicke doch gleich eine Nachricht!
                     </Text>
-                    <View style={{
-                        flexDirection: "row",
-                        justifyContent: "space-evenly",
-                        width: "80%",
-                        marginTop: 5
-                    }}>
-                        <Image
-                            style={{
-                                resizeMode: "cover",
-                                height: "10%",
-                                width: "10%",
-                                borderRadius: 100,
-                                margin: 10
-                            }}
-                            source={require("./../../assets/defaultPicture.jpg")}
-                            //source={{uri: GetImageSource(userData.pic)}}
-                        />
-                        <Image
-                            style={{
-                                resizeMode: "cover",
-                                height: "10%",
-                                width: "10%",
-                                borderRadius: 100,
-                                margin: 10
-                            }}
-                            source={require("./../../assets/defaultPicture.jpg")}
-                            //source={{uri: GetImageSource(userSwipedData.pic)}}
-                        />
-                    </View>
-                    <TouchableOpacity style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        paddingVertical: 12,
-                        paddingHorizontal: 32,
-                        borderRadius: 20,
-                        elevation: 3,
-                        backgroundColor: '#ffffff',
-                        borderColor: '#ffffff',
-                        marginTop: '5%',
-                        borderWidth: 1
-                    }}>
-                        <Text
-                            onPress={() => {
-                                navigation.goBack();
-                                navigation.navigate("Chat", {
-                                    userSwipedId
-                                });
-                            }}
-                            style={{
-                                textAlign: "center",
-                                fontSize: 15,
-                                color: "black"
-                            }}
-                        >
-                            Schicke doch gleich eine Nachricht!
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </LinearGradient>
-        </SafeAreaView>
+                </TouchableOpacity>
+            </View>
+        </LinearGradient>
     )
 }
 export default MatchScreen

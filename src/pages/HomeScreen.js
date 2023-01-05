@@ -25,6 +25,7 @@ const HomeScreen = ({navigation}) => {
     const [filterCreated, setFilterCreated] = React.useState(false);
     const [filtersData, setFiltersData] = React.useState([]);
     let filterOptionData = [];
+    let frontLoadedData = []
 
     const [peopleVorhanden, setPeopleVorhanden] = React.useState(false)
     const [filterChosen, setFilterChosen] = React.useState(false)
@@ -143,6 +144,11 @@ const HomeScreen = ({navigation}) => {
         return `data:image/jpeg;base64,${source}`
     }
 
+    function noCard(){
+        setPeopleVorhanden(false)
+        setProfiles([])
+    }
+
     return (
         <SafeAreaView style={{
             height: '100%',
@@ -173,7 +179,9 @@ const HomeScreen = ({navigation}) => {
                     }}>
                     {(filterCreated && filterChosen) ? (
                         <>
-                            <View>
+                            <View style={{
+                                paddingTop: "1%"
+                            }}>
                                 <SelectList
                                     setSelected={(val) => {
                                         setSelectedFilter(val)
@@ -259,6 +267,9 @@ const HomeScreen = ({navigation}) => {
                                                         }}
                                                         source={require("./../../assets/defaultPicture.jpg")}
                                                         //source={{uri: GetImageSource(card.profilePictures)}}
+                                                        onClick={() => navigation.navigate("UserProfile", {
+                                                            otherId: card.id
+                                                        })}
                                                     />
                                                     <View>
                                                         <View style={{
@@ -280,7 +291,7 @@ const HomeScreen = ({navigation}) => {
                                                     </View>
                                                 </View>
                                             ) : (
-                                                setFilterChosen(false)
+                                                noCard()
                                             )
                                         }
                                     />
@@ -343,7 +354,9 @@ const HomeScreen = ({navigation}) => {
                     ) : (
                         <>
                             {filterCreated ?
-                                <View>
+                                <View style={{
+                                    paddingTop: "1%"
+                                }}>
                                     <SelectList
                                         setSelected={(val) => {
                                             StartSearch(val)
