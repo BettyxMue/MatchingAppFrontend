@@ -165,3 +165,21 @@ async function GetSearchesByUser (userId) {
 
 }
 export {GetSearchesByUser}
+
+async function Exploring(){
+    const userStore = await getUser()
+    const userId = userStore.id
+    const query = "http://" + ip4v + ":8084/exploring/" + userId;
+    const response = await fetch(query, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    });
+    const resultData = await response.json();
+    if (response.status != 200){
+        return resultData.error;
+    }
+    return resultData;
+}
+export {Exploring}

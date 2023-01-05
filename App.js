@@ -16,6 +16,7 @@ import LogInScreen from "./src/pages/LogInScreen";
 import SignUpScreen from "./src/pages/SignUpScreen";
 import ChatDetail from "./src/pages/ChatDetail";
 import CreateBill from "./src/pages/CreateBill"
+import ExploreScreen from "./src/pages/ExploreScreen"
 import {ChatProvider, ChatRoomProvicer, WebSocketProvider} from "./src/resources/page-context";
 import {registerForPushNotifcations} from './src/resources/Notificator'
 import {storeNotificationToken} from "./src/resources/InternalStorage";
@@ -75,6 +76,7 @@ export default function App() {
                                     <Stack.Screen name="Details" component={DetailsScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Match" component={MatchScreen} options={{headerShown: false}}/>
+                                    <Stack.Screen name="Explore" component={ExploreScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Filter" component={FilterScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
