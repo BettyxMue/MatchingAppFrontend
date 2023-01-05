@@ -168,16 +168,6 @@ const FilterScreen = ({navigation}) => {
         GetUserFilters()
     }
 
-    async function FindNewSkillId(skillName, skillLevel){
-        GetAllSkills().then(r => {
-            r.map(skill => {
-                if (skill.name == skillName && skill.SkillIdentifier == skillLevel){
-                    return skill.id
-                }
-            })
-        })
-    }
-
     async function UpdateFilter(searchId, name, level, gender, radius) {
         let genderNr
         switch (gender) {
