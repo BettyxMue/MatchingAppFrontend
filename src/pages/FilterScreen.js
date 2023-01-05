@@ -121,7 +121,7 @@ const FilterScreen = ({navigation}) => {
                 skills[index] = skill.name
             })
             skills.forEach(skill => {
-                if (!allSkillsFiltered.includes(skill)){
+                if (!allSkillsFiltered.includes(skill)) {
                     allSkillsFiltered.push(skill)
                 }
             })
@@ -310,6 +310,12 @@ const FilterScreen = ({navigation}) => {
         }
     }
 
+    function goBack() {
+        navigation.goBack()
+    }
+
+    const backButtonChar = "\u276e"
+
     return (
         <SafeAreaView style={{
             height: '100%',
@@ -320,148 +326,170 @@ const FilterScreen = ({navigation}) => {
                 alignContent: "center",
                 flex: 1
             }}>
-                {userFilters.map(filter => (
-                    <Collapse key={filter.searchid} style={{borderBottomWidth: 1, borderTopWidth: 1}}>
-                        <CollapseHeader style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            padding: 10,
-                            backgroundColor: '#E6E6E6'
-                        }}>
+                <View>
+                    <View style={{
+                        marginBottom: "1%",
+                        width: "100%"
+                    }}>
+                        <TouchableOpacity style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            alignContent: "center",
+                            justifyContent: "center"
+                        }}
+                                          onPress={goBack}>
+                            <Text style={{
+                                fontSize: 40,
+                                fontWeight: "bold",
+                                color: "#4287f5"
+                            }}>{backButtonChar}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {userFilters.map(filter => (
+                        <Collapse key={filter.searchid} style={{borderBottomWidth: 1, borderTopWidth: 1}}>
+                            <CollapseHeader style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                padding: 10,
+                                backgroundColor: '#E6E6E6'
+                            }}>
                                 <View style={{width: '100%'}}>
                                     <Text>{filter.name}</Text>
                                 </View>
-                        </CollapseHeader>
-                        <CollapseBody style={{
-                            alignItems: 'left',
-                            justifyContent: 'left',
-                            flexDirection: 'row',
-                            backgroundColor: '#EDEDED'
-                        }}>
-                            {toggle ?
-                                <View style={{
-                                    width: "100%",
-                                    flexDirection: "row"
-                                }}>
+                            </CollapseHeader>
+                            <CollapseBody style={{
+                                alignItems: 'left',
+                                justifyContent: 'left',
+                                flexDirection: 'row',
+                                backgroundColor: '#EDEDED'
+                            }}>
+                                {toggle ?
                                     <View style={{
-                                        paddingLeft: 15
+                                        width: "100%",
+                                        flexDirection: "row"
                                     }}>
-                                        <Text style={styles.titleFilterItem}>Level:</Text>
-                                        <SelectDropdown
-                                            data={possibleLevels}
-                                            onSelect={(selectedItem, index) => {
-                                                onChangeLevel(selectedItem)
-                                            }}
-                                            buttonTextAfterSelection={(selectedItem, index) => {
-                                                return selectedItem
-                                            }}
-                                            defaultButtonText={filter.level}
-                                        />
-                                        <Text style={styles.titleFilterItem}>Geschlecht:</Text>
-                                        <SelectDropdown
-                                            data={genders}
-                                            onSelect={(selectedItem, index) => {
-                                                onChangeGender(selectedItem)
-                                            }}
-                                            buttonTextAfterSelection={(selectedItem, index) => {
-                                                return selectedItem
-                                            }}
-                                            defaultButtonText={renderSwitch(filter.gender)}
-                                        />
-                                        <Text style={styles.titleFilterItem}>Radius:</Text>
-                                        <TextInput
-                                            onChangeText={onChangeRadius}
-                                            value={filter.radius}
-                                            style={styles.registerInputTextInput5}
-                                            textContentType="none"
-                                        />
-                                    </View>
-                                    <TouchableOpacity style={{marginLeft: 135, marginTop: 5}}
-                                        onPress={() => UpdateFilter(filter.searchid, newName, newLevel, newGender, newRadius)}>
-                                        <Entypo name="check" size={30} color="green"/>
-                                    </TouchableOpacity>
-                                </View>
-                                :
-                                <View style={{flexDirection: "row"}}>
-                                    <View style={{paddingLeft: 10, paddingTop: 5, paddingBottom: 5}}>
-                                        <Text>Level: {filter.level}</Text>
-                                        <Text>Gesuchtes Geschlecht: {renderSwitch(filter.gender)}</Text>
-                                        <Text>Radius: {filter.radius} km</Text>
-                                    </View>
-                                    <View style={{paddingLeft: 55, paddingTop: 17, flexDirection: "row"}}>
-                                        <TouchableOpacity onPress={() => setToggle(true)}>
-                                            <Entypo name="pencil" size={30} color="grey"/>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => DeleteFilter(filter.searchid, filter.name, filter.level)}>
-                                            <Entypo name="cross" size={30} color="red"/>
+                                        <View style={{
+                                            paddingLeft: 15
+                                        }}>
+                                            <Text style={styles.titleFilterItem}>Level:</Text>
+                                            <SelectDropdown
+                                                data={possibleLevels}
+                                                onSelect={(selectedItem, index) => {
+                                                    onChangeLevel(selectedItem)
+                                                }}
+                                                buttonTextAfterSelection={(selectedItem, index) => {
+                                                    return selectedItem
+                                                }}
+                                                defaultButtonText={filter.level}
+                                            />
+                                            <Text style={styles.titleFilterItem}>Geschlecht:</Text>
+                                            <SelectDropdown
+                                                data={genders}
+                                                onSelect={(selectedItem, index) => {
+                                                    onChangeGender(selectedItem)
+                                                }}
+                                                buttonTextAfterSelection={(selectedItem, index) => {
+                                                    return selectedItem
+                                                }}
+                                                defaultButtonText={renderSwitch(filter.gender)}
+                                            />
+                                            <Text style={styles.titleFilterItem}>Radius:</Text>
+                                            <TextInput
+                                                onChangeText={onChangeRadius}
+                                                value={filter.radius}
+                                                style={styles.registerInputTextInput5}
+                                                textContentType="none"
+                                            />
+                                        </View>
+                                        <TouchableOpacity style={{marginLeft: 135, marginTop: 5}}
+                                                          onPress={() => UpdateFilter(filter.searchid, newName, newLevel, newGender, newRadius)}>
+                                            <Entypo name="check" size={30} color="green"/>
                                         </TouchableOpacity>
                                     </View>
-                                </View>
-                            }
-                        </CollapseBody>
-                    </Collapse>
-                ))}
-                {addToggle ?
-                    <View>
-                        <Text style={styles.titleFilterItem}>Bezeichnung:</Text>
-                        <SelectDropdown
-                            data={possibleSkills}
-                            onSelect={(selectedItem, index) => {
-                                onChangeName(selectedItem)
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem
-                            }}
-                            defaultButtonText={newName}
-                        />
-                        <Text style={styles.titleFilterItem}>Gesuchtes Level:</Text>
-                        <SelectDropdown
-                            data={possibleLevels}
-                            onSelect={(selectedItem, index) => {
-                                onChangeLevel(selectedItem)
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem
-                            }}
-                            defaultButtonText={newLevel}
-                        />
-                        <Text style={styles.titleFilterItem}>Gesuchtes Geschlecht:</Text>
-                        <SelectDropdown
-                            data={genders}
-                            onSelect={(selectedItem, index) => {
-                                onChangeGender(selectedItem)
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem
-                            }}
-                            defaultButtonText={renderSwitch(newGender)}
-                        />
-                        <Text style={styles.titleFilterItem}>Gesuchter Radius: (in km)</Text>
-                        <TextInput
-                            onChangeText={onChangeRadius}
-                            value={newRadius}
-                            style={styles.registerInputTextInput5}
-                            textContentType="nickname"
-                        />
-                        <TouchableOpacity style={styles.editProfileButton}
-                                          onPress={() => CreateFilter(newName, newLevel, newGender, newRadius, userId)}>
-                            <Text style={styles.continueButtonText}>Speichern</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.editProfileButton} onPress={() => setAddToggle(false)}>
-                            <Text style={styles.continueButtonText}>Zurück</Text>
-                        </TouchableOpacity>
-                    </View>
-                    :
-                    <View style={{
-                        marginTop: 10,
-                        marginHorizontal: 5
-                    }}>
-                        <TouchableOpacity style={styles.saveProfileButton} onPress={() => setAddToggle(true)}>
-                            <Text style={styles.buttonText}>Erstelle einen neuen Filter</Text>
-                        </TouchableOpacity>
-                    </View>
-                }
-                <BottomBar />
+                                    :
+                                    <View style={{flexDirection: "row"}}>
+                                        <View style={{paddingLeft: 10, paddingTop: 5, paddingBottom: 5}}>
+                                            <Text>Level: {filter.level}</Text>
+                                            <Text>Gesuchtes Geschlecht: {renderSwitch(filter.gender)}</Text>
+                                            <Text>Radius: {filter.radius} km</Text>
+                                        </View>
+                                        <View style={{paddingLeft: 55, paddingTop: 17, flexDirection: "row"}}>
+                                            <TouchableOpacity onPress={() => setToggle(true)}>
+                                                <Entypo name="pencil" size={30} color="grey"/>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => DeleteFilter(filter.searchid, filter.name, filter.level)}>
+                                                <Entypo name="cross" size={30} color="red"/>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                }
+                            </CollapseBody>
+                        </Collapse>
+                    ))}
+                    {addToggle ?
+                        <View>
+                            <Text style={styles.titleFilterItem}>Bezeichnung:</Text>
+                            <SelectDropdown
+                                data={possibleSkills}
+                                onSelect={(selectedItem, index) => {
+                                    onChangeName(selectedItem)
+                                }}
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem
+                                }}
+                                defaultButtonText={newName}
+                            />
+                            <Text style={styles.titleFilterItem}>Gesuchtes Level:</Text>
+                            <SelectDropdown
+                                data={possibleLevels}
+                                onSelect={(selectedItem, index) => {
+                                    onChangeLevel(selectedItem)
+                                }}
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem
+                                }}
+                                defaultButtonText={newLevel}
+                            />
+                            <Text style={styles.titleFilterItem}>Gesuchtes Geschlecht:</Text>
+                            <SelectDropdown
+                                data={genders}
+                                onSelect={(selectedItem, index) => {
+                                    onChangeGender(selectedItem)
+                                }}
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem
+                                }}
+                                defaultButtonText={renderSwitch(newGender)}
+                            />
+                            <Text style={styles.titleFilterItem}>Gesuchter Radius: (in km)</Text>
+                            <TextInput
+                                onChangeText={onChangeRadius}
+                                value={newRadius}
+                                style={styles.registerInputTextInput5}
+                                textContentType="nickname"
+                            />
+                            <TouchableOpacity style={styles.editProfileButton}
+                                              onPress={() => CreateFilter(newName, newLevel, newGender, newRadius, userId)}>
+                                <Text style={styles.continueButtonText}>Speichern</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.editProfileButton} onPress={() => setAddToggle(false)}>
+                                <Text style={styles.continueButtonText}>Zurück</Text>
+                            </TouchableOpacity>
+                        </View>
+                        :
+                        <View style={{
+                            marginTop: 10,
+                            marginHorizontal: 5
+                        }}>
+                            <TouchableOpacity style={styles.saveProfileButton} onPress={() => setAddToggle(true)}>
+                                <Text style={styles.buttonText}>Erstelle einen neuen Filter</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
+                </View>
+                <BottomBar/>
             </KeyboardAvoidingView>
         </SafeAreaView>
     )

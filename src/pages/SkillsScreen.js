@@ -8,7 +8,7 @@ import {
 import {Collapse, CollapseBody, CollapseHeader} from "accordion-collapse-react-native";
 import {styles} from "../resources/Styles";
 import SelectDropdown from "react-native-select-dropdown";
-import {Entypo} from "@expo/vector-icons";
+import {Entypo, Ionicons} from "@expo/vector-icons";
 import {getToken, getUser, storeUser} from "../resources/InternalStorage";
 import BottomBar from "../components/layout/BottomBar";
 
@@ -89,7 +89,7 @@ const SkillsScreen = ({navigation}) => {
                 skills[index] = skill.name
             })
             skills.forEach(skill => {
-                if (!allSkillsFiltered.includes(skill)){
+                if (!allSkillsFiltered.includes(skill)) {
                     allSkillsFiltered.push(skill)
                 }
             })
@@ -223,6 +223,12 @@ const SkillsScreen = ({navigation}) => {
         }
     }
 
+    function goBack(){
+        navigation.goBack()
+    }
+
+    const backButtonChar = "\u276e"
+
     return (
         <SafeAreaView style={{
             height: '100%',
@@ -233,115 +239,137 @@ const SkillsScreen = ({navigation}) => {
                 alignContent: "center",
                 flex: 1
             }}>
-                {achievedSkills.map((skill, index) => (
-                    <Collapse key={index} style={{borderBottomWidth: 1, borderTopWidth: 1}}>
-                        <CollapseHeader style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            padding: 10,
-                            backgroundColor: '#E6E6E6'
-                        }}>
-                            <View style={{width: '100%'}}>
-                                <Text>{skill.name}</Text>
-                            </View>
-                        </CollapseHeader>
-                        <CollapseBody style={{
-                            alignItems: 'left',
-                            justifyContent: 'left',
-                            flexDirection: 'row',
-                            backgroundColor: '#EDEDED'
-                        }}>
-                            {toggle ?
-                                <View style={{
-                                    width: "100%",
-                                }}>
-                                    <Text style={styles.titleFilterItem}>Level:</Text>
-                                    <View style={{
-                                        flexDirection: "row",
-
-                                    }}>
-                                        <SelectDropdown
-                                            data={possibleLevels}
-                                            onSelect={(selectedItem, index) => {
-                                                onChangeLevel(selectedItem)
-                                            }}
-                                            buttonTextAfterSelection={(selectedItem, index) => {
-                                                return selectedItem
-                                            }}
-                                            defaultButtonText={renderSwitch(level)}
-                                        />
-                                        <TouchableOpacity style={{marginLeft: 150}}
-                                                          onPress={() => UpdateUserSkills(skill.name, skill.level)}>
-                                            <Entypo name="check" size={30} color="green"/>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                                :
-                                <View style={{
-                                    flexDirection: "row",
-                                    margin: 10
-                                }}>
-                                    <Text>Level: {renderSwitch(skill.SkillIdentifier)}</Text>
-                                    <View style={{
-                                        alignItems: "flex-end",
-                                        flexDirection: "row",
-                                        paddingLeft: 220
-                                    }}>
-                                        <TouchableOpacity onPress={() => setToggle(true)}>
-                                            <Entypo name="pencil" size={30} color="grey"/>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => RemoveSkill(skill.name, skill.SkillIdentifier)}>
-                                            <Entypo name="cross" size={30} color="red"/>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            }
-                        </CollapseBody>
-                    </Collapse>
-                ))}
-                {addToggle ?
-                    <View>
-                        <Text style={styles.titleFilterItem}>Bezeichnung:</Text>
-                        <SelectDropdown
-                            data={possibleSkills}
-                            onSelect={(selectedItem, index) => {
-                                onChangeSkillName(selectedItem)
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem
-                            }}
-                            defaultButtonText={skillName}
-                        />
-                        <Text style={styles.titleFilterItem}>Gesuchtes Level:</Text>
-                        <SelectDropdown
-                            data={possibleLevels}
-                            onSelect={(selectedItem, index) => {
-                                onChangeLevel(selectedItem)
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem
-                            }}
-                            defaultButtonText={renderSwitch(level)}
-                        />
-                        <TouchableOpacity style={styles.editProfileButton}
-                                          onPress={() => AddUserSkills(skillName, level)}>
-                            <Text style={styles.buttonText}>Speichern</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.editProfileButton} onPress={() => setAddToggle(false)}>
-                            <Text style={styles.buttonText}>Zurück</Text>
-                        </TouchableOpacity>
-                    </View>
-                    :
+                <View>
                     <View style={{
-                        marginTop: 10,
-                        marginHorizontal: 5
+                        marginBottom: "1%",
+                        width: "100%"
                     }}>
-                        <TouchableOpacity style={styles.saveProfileButton} onPress={() => setAddToggle(true)}>
-                            <Text style={styles.buttonText}>Erstelle einen neuen Skill</Text>
+                        <TouchableOpacity style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            alignContent: "center",
+                            justifyContent: "center"
+                        }}
+                                          onPress={goBack}>
+                            <Text style={{
+                                fontSize: 40,
+                                fontWeight: "bold",
+                                color: "#4287f5"
+                            }}>{backButtonChar}</Text>
                         </TouchableOpacity>
                     </View>
-                }
-                <BottomBar />
+                    {achievedSkills.map((skill, index) => (
+                        <Collapse key={index} style={{borderBottomWidth: 1, borderTopWidth: 1}}>
+                            <CollapseHeader style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                padding: 10,
+                                backgroundColor: '#E6E6E6'
+                            }}>
+                                <View style={{width: '100%'}}>
+                                    <Text>{skill.name}</Text>
+                                </View>
+                            </CollapseHeader>
+                            <CollapseBody style={{
+                                alignItems: 'left',
+                                justifyContent: 'left',
+                                flexDirection: 'row',
+                                backgroundColor: '#EDEDED'
+                            }}>
+                                {toggle ?
+                                    <View style={{
+                                        width: "100%",
+                                    }}>
+                                        <Text style={styles.titleFilterItem}>Level:</Text>
+                                        <View style={{
+                                            flexDirection: "row",
+
+                                        }}>
+                                            <SelectDropdown
+                                                data={possibleLevels}
+                                                onSelect={(selectedItem, index) => {
+                                                    onChangeLevel(selectedItem)
+                                                }}
+                                                buttonTextAfterSelection={(selectedItem, index) => {
+                                                    return selectedItem
+                                                }}
+                                                defaultButtonText={renderSwitch(level)}
+                                            />
+                                            <TouchableOpacity style={{marginLeft: 150}}
+                                                              onPress={() => UpdateUserSkills(skill.name, skill.level)}>
+                                                <Entypo name="check" size={30} color="green"/>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    :
+                                    <View style={{
+                                        flexDirection: "row",
+                                        margin: 10
+                                    }}>
+                                        <Text>Level: {renderSwitch(skill.SkillIdentifier)}</Text>
+                                        <View style={{
+                                            alignItems: "flex-end",
+                                            flexDirection: "row",
+                                            paddingLeft: 220
+                                        }}>
+                                            <TouchableOpacity onPress={() => setToggle(true)}>
+                                                <Entypo name="pencil" size={30} color="grey"/>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => RemoveSkill(skill.name, skill.SkillIdentifier)}>
+                                                <Entypo name="cross" size={30} color="red"/>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                }
+                            </CollapseBody>
+                        </Collapse>
+                    ))}
+                    {addToggle ?
+                        <View>
+                            <Text style={styles.titleFilterItem}>Bezeichnung:</Text>
+                            <SelectDropdown
+                                data={possibleSkills}
+                                onSelect={(selectedItem, index) => {
+                                    onChangeSkillName(selectedItem)
+                                }}
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem
+                                }}
+                                defaultButtonText={skillName}
+                            />
+                            <Text style={styles.titleFilterItem}>Gesuchtes Level:</Text>
+                            <SelectDropdown
+                                data={possibleLevels}
+                                onSelect={(selectedItem, index) => {
+                                    onChangeLevel(selectedItem)
+                                }}
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem
+                                }}
+                                defaultButtonText={renderSwitch(level)}
+                            />
+                            <TouchableOpacity style={styles.editProfileButton}
+                                              onPress={() => AddUserSkills(skillName, level)}>
+                                <Text style={styles.buttonText}>Speichern</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.editProfileButton} onPress={() => setAddToggle(false)}>
+                                <Text style={styles.buttonText}>Zurück</Text>
+                            </TouchableOpacity>
+                        </View>
+                        :
+                        <View style={{
+                            marginTop: 10,
+                            marginHorizontal: 5
+                        }}>
+                            <TouchableOpacity style={styles.saveProfileButton} onPress={() => setAddToggle(true)}>
+                                <Text style={styles.buttonText}>Erstelle einen neuen Skill</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
+                </View>
+                <BottomBar/>
             </KeyboardAvoidingView>
         </SafeAreaView>
     )
