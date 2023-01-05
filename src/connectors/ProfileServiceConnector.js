@@ -215,7 +215,7 @@ async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, us
     let user
 
     const query = "http://"+ ip4v +":8080/profile/" + userId
-    if (searchedSkills == undefined & achievedSkills == undefined){
+    if (searchedSkills.length == 0 & achievedSkills.length == 0){
         user = {
             "firstName": firstName,
             "name": name,
@@ -224,8 +224,9 @@ async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, us
             "email": email,
             "street": street,
             "houseNumber": houseNumber,
-            //"telephoneNumber": phoneNumber,
+            "telephoneNumber": phoneNumber,
             "price": priceNumber,
+            "CityIdentifier": plzNumber,
             "city": {
                 "plz": plzNumber,
                 "place": city
@@ -242,6 +243,7 @@ async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, us
             "houseNumber": houseNumber,
             "telephoneNumber": phoneNumber,
             "price": priceNumber,
+            "CityIdentifier": plzNumber,
             "city": {
                 "plz": plzNumber,
                 "place": city

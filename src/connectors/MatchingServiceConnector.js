@@ -1,11 +1,14 @@
 // @ts-nocheck
+import {getUser} from "../resources/InternalStorage";
+
+let ip4v = "192.168.0.207"
 
 async function Like(userId1, userId2){
     if (userId1 == "" || userId2 == "") {
         return
     }
-    var query = "http://192.168.0.159:8084/like"
-    var like = {
+    const query = "http://" + ip4v +":8084/like"
+    const like = {
         "likerid": userId1,
         "likedid": userId2
     }
@@ -28,8 +31,8 @@ async function Dislike(userId1, userId2){
     if (userId1 == "" || userId2 == "") {
         return
     }
-    var query = "http://192.168.0.159:8084/dislike"
-    var dislike = {
+    const query = "http://" + ip4v +":8084/dislike"
+    const dislike = {
         "dislikerid": userId1,
         "dislikedid": userId2
     }
@@ -57,7 +60,7 @@ async function Searching(searchId, userId){
     if (searchId == "" || userId == "") {
         return
     }
-    let query = "http://192.168.0.159:8084/searching/" + searchId + "/" + userId;
+    const query = "http://" + ip4v +":8084/searching/" + searchId + "/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -72,8 +75,8 @@ async function Searching(searchId, userId){
 }
 export {Searching}
 
-async function CreateSearch(name, skill, level, gender, radius, userId){
-    if (name == "" || skill == "" || level == "" || gender == "" || radius == "" || userId == "") {
+async function CreateSearch(name, skill, level, gender, radius){
+    if (name == "" || skill == "" || level == "" || gender == "" || radius == "") {
         return
     }
 
@@ -89,19 +92,17 @@ async function CreateSearch(name, skill, level, gender, radius, userId){
     if (isNaN(radiusNr)){
         return "Radius is not valid!"
     }
-    let userIdNr = parseInt(userId)
-    if (isNaN(userIdNr)){
-        return "User ID is not valid!"
-    }
 
-    let query = "http://192.168.0.159:8084/search"
-    let search = {
+    const userStore = await getUser()
+    const userId = userStore.id
+    const query = "http://" + ip4v +":8084/search"
+    const search = {
         "name": name,
         "skill": skillNr,
         "level": level,
         "gender": genderNr,
         "radius": radiusNr,
-        "created_by": userIdNr
+        "created_by": userId
     }
     const response = await fetch(query, {
         method: 'PUT',
@@ -122,7 +123,7 @@ async function DeleteSearch(searchId){
     if (searchId == "") {
         return
     }
-    var query = "http://192.168.0.159:8084/search/" + searchId;
+    const query = "http://" + ip4v +":8084/search/" + searchId;
 
     const response = await fetch(query, {
         method: 'DELETE',
@@ -142,7 +143,7 @@ async function DeleteMatch(matchId){
     if (matchId == "") {
         return
     }
-    var query = "http://192.168.0.159:8084/match/" + matchId;
+    const query = "http://" + ip4v +":8084/match/" + matchId;
 
     const response = await fetch(query, {
         method: 'DELETE',
@@ -162,7 +163,7 @@ async function GetSearchesByUser (userId) {
     if (userId == "") {
         return
     }
-    let query = "http://192.168.0.159:8084/search/user/" + userId;
+    const query = "http://" + ip4v +":8084/search/user/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -177,8 +178,8 @@ async function GetSearchesByUser (userId) {
 }
 export {GetSearchesByUser}
 
-async function UpdateSearch(searchId, name, skill, level, gender, radius, userId){
-    if (searchId == "" || name == "" || skill == "" || level == "" || gender == "" || radius == "" || userId == "") {
+async function UpdateSearch(searchId, name, skill, level, gender, radius){
+    if (searchId == "" || name == "" || skill == "" || level == "" || gender == "" || radius == "") {
         return
     }
 
@@ -194,19 +195,17 @@ async function UpdateSearch(searchId, name, skill, level, gender, radius, userId
     if (isNaN(radiusNr)){
         return "Radius is not valid!"
     }
-    let userIdNr = parseInt(userId)
-    if (isNaN(userIdNr)){
-        return "User ID is not valid!"
-    }
 
-    let query = "http://192.168.0.159:8084/search/" + searchId
-    let search = {
+    const query = "http://" + ip4v +":8084/search/" + searchId
+    const userStore = await getUser()
+    const userId = userStore.id
+    const search = {
         "name": name,
         "skill": skillNr,
         "level": level,
         "gender": genderNr,
         "radius": radiusNr,
-        "created_by": userIdNr
+        "created_by": userId
     }
     const response = await fetch(query, {
         method: 'PUT',

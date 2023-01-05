@@ -5,7 +5,7 @@ import Toast from "react-native-root-toast";
 import {Collapse, CollapseHeader, CollapseBody} from "accordion-collapse-react-native";
 import {Entypo} from "@expo/vector-icons";
 import {styles} from "../resources/Styles";
-import {GetAllSkills, UpdateUserProfile} from "../connectors/ProfileServiceConnector";
+import {GetAllSkills, getUserFromId, UpdateUserProfile} from "../connectors/ProfileServiceConnector";
 import SelectDropdown from "react-native-select-dropdown";
 import {getUser} from "../resources/InternalStorage";
 
@@ -23,7 +23,19 @@ const FilterScreen = ({navigation}) => {
     }
 
     const [userId, setUserId] = React.useState("")
-    const [userData, setUserData] = React.useState("")
+    const [userName, onChangeUserName] = React.useState("")
+    const [email, onChangeEmail] = React.useState("")
+    const [city, onChangeCity] = React.useState("")
+    const [plz, onChangePLZ] = React.useState("")
+    const [street, onChangeStreet] = React.useState("")
+    const [houseNumber, onChangeHouseNumber] = React.useState("")
+    const [phoneNumber, onChangePhoneNumber] = React.useState("")
+    const [firstName, onChangeFirstName] = React.useState("")
+    const [nameOfUser, onChangeNameofUser] = React.useState("")
+    const [genderOfUser, onChangeGenderofUser] = React.useState("")
+    const [price, onChangePrice] = React.useState("")
+    const [achievedSkills, onAchievedSkills] = React.useState([])
+    const [searchedSkills, onSearchedSkills] = React.useState([])
 
     let filters = [];
     const [userFilters, setUserFilters] = React.useState([])
@@ -43,20 +55,38 @@ const FilterScreen = ({navigation}) => {
 
     let skills = []
     let allSkillsVar = []
+    let allSkillsFiltered = []
     const [allSkills, setAllSkills] = React.useState([])
 
     useEffect(() => {
         SetUser().then(r => {
-            GetUserFilters(r.id)
+            GetUserFilters(r)
+            GetUserData(r)
         })
         GetPossibleSkills()
     }, [])
 
     async function SetUser() {
-        await getUser().then(r => {
-            setUserData(r)
-            setUserId(r.id)
-            return r.id
+        const user = await getUser()
+        setUserId(user.id)
+        return user.id
+    }
+
+    async function GetUserData(userId) {
+        getUserFromId(userId).then(r => {
+            onChangeUserName(r.username)
+            onChangeFirstName(r.firstName)
+            onChangeNameofUser(r.name)
+            onChangeCity(r.city.place)
+            onChangePLZ((r.city.plz).toString())
+            onChangeGenderofUser(r.gender)
+            onChangeEmail(r.email)
+            onChangeHouseNumber(r.houseNumber)
+            onChangePhoneNumber(r.telephoneNumber)
+            onChangeStreet(r.street)
+            onChangePrice((r.price).toString())
+            onAchievedSkills(r.achievedSkills)
+            onSearchedSkills(r.searchedSkills)
         })
     }
 
@@ -85,17 +115,14 @@ const FilterScreen = ({navigation}) => {
                     name: skill.name,
                     skillIdentifier: skill.SkillIdentifier
                 }
-                if (skills.length == 0) {
-                    skills[index] = skill.name
-                } else {
-                    skills.map(skill2 => {
-                        if (skill2.name != skill.name){
-                            skills[index] = skill.name
-                        }
-                    })
+                skills[index] = skill.name
+            })
+            skills.forEach(skill => {
+                if (!allSkillsFiltered.includes(skill)){
+                    allSkillsFiltered.push(skill)
                 }
             })
-            setPossibleSkills(skills)
+            setPossibleSkills(allSkillsFiltered)
             setAllSkills(allSkillsVar)
         })
     }
@@ -117,9 +144,22 @@ const FilterScreen = ({navigation}) => {
                 break
         }
 
+        let newSkillLevelId
+        switch (level) {
+            case "Anfänger":
+                newSkillLevelId = 1
+                break
+            case "Fortgeschritten":
+                newSkillLevelId = 2
+                break
+            case "Experte":
+                newSkillLevelId = 3
+                break
+        }
+
         let newSkillId
         allSkills.map(skill => {
-            if (skill.name == name && skill.skillIdentifier == level) {
+            if (skill.name == name && skill.skillIdentifier == newSkillLevelId) {
                 newSkillId = skill.id
             }
         })
@@ -128,11 +168,11 @@ const FilterScreen = ({navigation}) => {
             console.log(r)
         })
 
-        userData.searchedSkills.push({id: newSkillId})
+        searchedSkills.push({id: newSkillId})
 
-        UpdateUserProfile(userData.gender, userData.price, userData.phoneNumber, userData.firstName, userData.name,
-            userData.username, userData.email, userData.city, userData.plz, userData.street, userData.houseNumber,
-            userData.searchedSkills, userData.achievedSkills).then(r => {
+        UpdateUserProfile(genderOfUser, price, phoneNumber, firstName, nameOfUser,
+            userName, email, city, plz, street, houseNumber,
+            searchedSkills, achievedSkills).then(r => {
             console.log(r)
         })
         setAddToggle(false)
@@ -144,23 +184,36 @@ const FilterScreen = ({navigation}) => {
             console.log(r)
         })
 
+        let newSkillLevelId
+        switch (skillLevel) {
+            case "Anfänger":
+                newSkillLevelId = 1
+                break
+            case "Fortgeschritten":
+                newSkillLevelId = 2
+                break
+            case "Experte":
+                newSkillLevelId = 3
+                break
+        }
+
         let skillId
         allSkills.map(skill => {
-            if (skill.name == skillName && skill.skillIdentifier == skillLevel) {
+            if (skill.name == skillName && skill.skillIdentifier == newSkillLevelId) {
                 skillId = skill.id
             }
         })
 
-        userData.searchedSkills.map(skill => {
+        let searched = []
+        searchedSkills.map(skill => {
             if (skillId == skill.id) {
-                const index = userData.searchedSkills.indexOf(skill)
-                delete userData.searchedSkills[index]
+                searched = searchedSkills.filter(skill2 => skill2 !== skill)
             }
         })
+        onSearchedSkills(searched)
 
-        UpdateUserProfile(userData.gender, userData.price, userData.phoneNumber, userData.firstName, userData.name,
-            userData.username, userData.email, userData.city, userData.plz, userData.street, userData.houseNumber,
-            userData.searchedSkills, userData.achievedSkills).then(r => {
+        UpdateUserProfile(genderOfUser, price, phoneNumber, firstName, nameOfUser,
+            userName, email, city, plz, street, houseNumber, searched, achievedSkills).then(r => {
             console.log(r)
         })
 
@@ -185,40 +238,52 @@ const FilterScreen = ({navigation}) => {
                 break
         }
 
+        let newSkillLevelId
+        switch (level) {
+            case "Anfänger":
+                newSkillLevelId = 1
+                break
+            case "Fortgeschritten":
+                newSkillLevelId = 2
+                break
+            case "Experte":
+                newSkillLevelId = 3
+                break
+        }
+
         let newSkillId
         allSkills.map(skill => {
-            if (skill.name == name && skill.skillIdentifier == level) {
+            if (skill.name == name && skill.skillIdentifier == newSkillLevelId) {
                 newSkillId = skill.id
             }
         })
 
         let newSkill
-        userData.searchedSkills.map(skill => {
+        searchedSkills.map(skill => {
             if (name == skill.name) {
-                const index = userData.searchedSkills.indexOf(skill)
+                const index = searchedSkills.indexOf(skill)
                 newSkill = {
                     id: newSkillId
                 }
-                userData.searchedSkills[index] = newSkill
+                searchedSkills[index] = newSkill
             }
         })
 
-        UpdateSearch(searchId, name, newSkillId, level, genderNr, radius, userId).then(r => {
+        UpdateSearch(searchId, name, newSkillId, level, genderNr, radius).then(r => {
             if (r.status !== '200') {
                 showErrorMessage(r);
                 return;
             }
         })
 
-        userData.searchedSkills.push(newSkillId)
+        searchedSkills.push(newSkillId)
 
-        UpdateUserProfile(userData.gender, userData.price, userData.phoneNumber, userData.firstName, userData.name,
-            userData.username, userData.email, userData.city, userData.plz, userData.street, userData.houseNumber,
-            userData.searchedSkills, userData.achievedSkills).then(r => {
+        UpdateUserProfile(genderOfUser, price, phoneNumber, firstName, nameOfUser,
+            userName, email, city, plz, street, houseNumber, searchedSkills, achievedSkills).then(r => {
             console.log(r)
         })
+
         setToggle(false)
-        setAddToggle(false)
     }
 
     function renderSwitch(param) {
@@ -314,7 +379,7 @@ const FilterScreen = ({navigation}) => {
                                     <View style={{paddingLeft: 10, paddingTop: 5, paddingBottom: 5}}>
                                         <Text>Level: {filter.level}</Text>
                                         <Text>Gesuchtes Geschlecht: {renderSwitch(filter.gender)}</Text>
-                                        <Text>Radius: {filter.radius}</Text>
+                                        <Text>Radius: {filter.radius} km</Text>
                                     </View>
                                     <View style={{paddingLeft: 55, paddingTop: 17, flexDirection: "row"}}>
                                         <TouchableOpacity onPress={() => setToggle(true)}>
@@ -335,10 +400,10 @@ const FilterScreen = ({navigation}) => {
                         <SelectDropdown
                             data={possibleSkills}
                             onSelect={(selectedItem, index) => {
-                                onChangeName(selectedItem.name)
+                                onChangeName(selectedItem)
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem.name
+                                return selectedItem
                             }}
                             defaultButtonText={newName}
                         />
@@ -364,7 +429,7 @@ const FilterScreen = ({navigation}) => {
                             }}
                             defaultButtonText={renderSwitch(newGender)}
                         />
-                        <Text style={styles.titleFilterItem}>Gesuchter Radius:</Text>
+                        <Text style={styles.titleFilterItem}>Gesuchter Radius: (in km)</Text>
                         <TextInput
                             onChangeText={onChangeRadius}
                             value={newRadius}

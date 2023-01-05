@@ -179,14 +179,15 @@ const SkillsScreen = ({navigation}) => {
             }
         })
 
+        let achieved = []
         achievedSkills.map(skill => {
             if (skillId == skill.id) {
-                const index = achievedSkills.indexOf(skill)
-                delete achievedSkills[index]
+                achieved = achievedSkills.filter(skill2 => skill2 !== skill)
             }
         })
+        onAchievedSkills(achieved)
 
-        UpdateUserProfile(gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, searchedSkills, achievedSkills).then(r => {
+        UpdateUserProfile(gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, searchedSkills, achieved).then(r => {
             console.log(r)
         })
         setToggle(false)
