@@ -78,7 +78,6 @@ export default function App() {
                                     <Stack.Screen name="Filter" component={FilterScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
-                                    <Stack.Screen name="Filter" component={FilterScreen} options={{headerShown: false}}/>
                                     <Stack.Screen name="Chat" component={ChatScreen} />
                                     <Stack.Screen name="Messages" component={MessagesScreen}/>
                                     <Stack.Screen name="ChatDetail" component={ChatDetail} options={({navigation, route}) => ({

@@ -6,19 +6,18 @@ import {
     Text
 } from "react-native";
 import React, {useEffect, useRef} from "react";
-import {AntDesign, Entypo} from "@expo/vector-icons";
+import {AntDesign, Entypo, Ionicons} from "@expo/vector-icons";
 import Swiper from "react-native-deck-swiper";
 import Toast from "react-native-root-toast";
 import {Dislike, GetSearchesByUser, Like, Searching} from "../connectors/MatchingServiceConnector";
 import {SelectList} from "react-native-dropdown-select-list/index";
 import {LinearGradient} from "expo-linear-gradient";
 import {getUser} from "../resources/InternalStorage";
+import BottomBar from "../components/layout/BottomBar";
 
 const HomeScreen = ({navigation}) => {
 
-    const userId = 2;
-    //const userId = getUser().id
-
+    const [userId, setUserId] = React.useState("")
     const [profiles, setProfiles] = React.useState([]);
     const [userData, setUserData] = React.useState([]);
     const [searchId, setSearchId] = React.useState("")
@@ -42,12 +41,20 @@ const HomeScreen = ({navigation}) => {
     }
 
     useEffect(() => {
-        GetFilterOptionData();
+        SetUser().then(r => {
+            GetFilterOptionData(r);
+        })
     }, []);
 
-    async function GetFilterOptionData() {
-        GetSearchesByUser(userId).then(r => {
-            filterOptionData = [];
+    async function SetUser() {
+        const user = (await getUser())
+        setUserData(user)
+        setUserId(user.id)
+        return user.id
+    }
+
+    function GetFilterOptionData(id) {
+        GetSearchesByUser(id).then(r => {
             r.forEach(i => {
                 filterOptionData[i.searchid] = i.name;
             })
@@ -56,19 +63,20 @@ const HomeScreen = ({navigation}) => {
         setFilterCreated(true);
     }
 
-    async function StartSearch() {
+    function StartSearch() {
+        let tempId
         filtersData.forEach(i => {
             if (i === selectedFilter) {
-                setSearchId((filtersData.indexOf(i)).toString())
+                setSearchId((filtersData.indexOf(i)))
+                tempId = filtersData.indexOf(i)
             }
         })
 
-        console.log(searchId)
-        if (searchId === "undefined"){
-            showErrorMessage("Bitte wähle den Filter erneut aus!")
+        if (tempId == undefined) {
+            showErrorMessage("Etwas ging schief. Bitte wähle den Filter erneut aus!")
         }
 
-        Searching(searchId, userId).then(r => {
+        Searching(tempId).then(r => {
             let tempArray = []
             console.log(r)
             r.forEach((possibleUser, index) => {
@@ -128,12 +136,6 @@ const HomeScreen = ({navigation}) => {
                 userId: userId,
                 userSwipedId: userSwipedId
             });
-            /*if (r.status != '201') {
-                navigation.navigate("Match", {
-                    userId,
-                    userSwipedId,
-                });
-            }*/
         })
     };
 
@@ -147,11 +149,27 @@ const HomeScreen = ({navigation}) => {
             width: '100%',
             alignContent: "center"
         }}>
+            <View style={{
+                marginBottom: "1%",
+                width: "100%"
+            }}>
+                <TouchableOpacity style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    alignContent: "center",
+                    justifyContent: "center"
+                }} onPress={() => {
+                    navigation.navigate("Details")
+                }}>
+                    <Ionicons name="search-circle" size={35} color="#3860ff"/>
+                </TouchableOpacity>
+            </View>
             <LinearGradient colors={['#3860ff', '#389bff']}>
                 <View
                     style={{
                         width: "100%",
-                        height: "100%"
+                        height: "90%"
                     }}>
                     {(filterCreated && filterChosen) ? (
                         <>
@@ -213,56 +231,56 @@ const HomeScreen = ({navigation}) => {
                                         }}
                                         renderCard={(card) =>
                                             card ? (
-                                            <View
-                                                key={card.id}
-                                                style={{
-                                                    backgroundColor: "#ffffff",
-                                                    borderRadius: 20,
-                                                    marginTop: -30,
-                                                    height: "60%",
-                                                    width: "100%",
-                                                    shadowColor: "#000",
-                                                    shadowOffset: {
-                                                        width: 0,
-                                                        height: 1
-                                                    },
-                                                    shadowOpacity: 0.2,
-                                                    shadowRadius: 1.41,
-                                                    elevation: 2
-                                                }}
-                                            >
-                                                <Image
+                                                <View
+                                                    key={card.id}
                                                     style={{
-                                                        resizeMode: "cover",
-                                                        height: "75%",
-                                                        width: "95%",
+                                                        backgroundColor: "#ffffff",
                                                         borderRadius: 20,
-                                                        margin: 10
+                                                        marginTop: -30,
+                                                        height: "60%",
+                                                        width: "100%",
+                                                        shadowColor: "#000",
+                                                        shadowOffset: {
+                                                            width: 0,
+                                                            height: 1
+                                                        },
+                                                        shadowOpacity: 0.2,
+                                                        shadowRadius: 1.41,
+                                                        elevation: 2
                                                     }}
-                                                    source={require("./../../assets/defaultPicture.jpg")}
-                                                    //source={{uri: GetImageSource(card.profilePictures)}}
-                                                />
-                                                <View>
-                                                    <View style={{
-                                                        marginLeft: 15
-                                                    }}>
-                                                        <Text style={{
-                                                            fontSize: 30,
-                                                            fontWeight: "bold"
+                                                >
+                                                    <Image
+                                                        style={{
+                                                            resizeMode: "cover",
+                                                            height: "75%",
+                                                            width: "95%",
+                                                            borderRadius: 20,
+                                                            margin: 10
+                                                        }}
+                                                        source={require("./../../assets/defaultPicture.jpg")}
+                                                        //source={{uri: GetImageSource(card.profilePictures)}}
+                                                    />
+                                                    <View>
+                                                        <View style={{
+                                                            marginLeft: 15
                                                         }}>
-                                                            {card.firstName} {card.name}
-                                                        </Text>
-                                                        <Text style={{
-                                                            fontSize: 20,
-                                                            paddingTop: 8
-                                                        }}>
-                                                            {card.gender} {/*+ ", " + {card.city}*/}
-                                                        </Text>
+                                                            <Text style={{
+                                                                fontSize: 30,
+                                                                fontWeight: "bold"
+                                                            }}>
+                                                                {card.firstName} {card.name}
+                                                            </Text>
+                                                            <Text style={{
+                                                                fontSize: 20,
+                                                                paddingTop: 8
+                                                            }}>
+                                                                {card.gender} {/*+ ", " + {card.city}*/}
+                                                            </Text>
+                                                        </View>
                                                     </View>
                                                 </View>
-                                            </View>
                                             ) : (
-                                                setPeopleVorhanden(false)
+                                                setFilterChosen(false)
                                             )
                                         }
                                     />
@@ -298,14 +316,14 @@ const HomeScreen = ({navigation}) => {
                                 :
                                 <View>
                                     <Text style={{
-                                            fontSize: 30,
-                                            fontStyle: "italic",
-                                            marginTop: 230,
-                                            marginHorizontal: 20,
-                                            color: "#FFFFFF",
-                                            textAlign: "center"
-                                        }}>
-                                            Wir konnten leider keine passenden Leute
+                                        fontSize: 30,
+                                        fontStyle: "italic",
+                                        marginTop: 230,
+                                        marginHorizontal: 20,
+                                        color: "#FFFFFF",
+                                        textAlign: "center"
+                                    }}>
+                                        Wir konnten leider keine passenden Leute
                                         finden...
                                     </Text>
                                     <Image
@@ -315,8 +333,8 @@ const HomeScreen = ({navigation}) => {
                                             marginRight: "auto",
                                             marginTop: 20
                                         }}
-                                        height={100}
-                                        width={100}
+                                        height={75}
+                                        width={75}
                                         source={{uri: "https://links.papareact.com/6gb"}}
                                     />
                                 </View>
@@ -366,6 +384,7 @@ const HomeScreen = ({navigation}) => {
                         </>
                     )}
                 </View>
+                <BottomBar navigation={navigation}/>
             </LinearGradient>
         </SafeAreaView>
     );

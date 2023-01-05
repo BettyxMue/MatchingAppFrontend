@@ -1,8 +1,8 @@
 // @ts-nocheck
 
-import {NetworkInfo} from "react-native-network-info";
+import {getUser} from "../resources/InternalStorage";
 
-const ip4v = await NetworkInfo.getIPV4Address();
+const ip4v = "192.168.0.207"
 
 async function Like(userId1, userId2){
     if (userId1 == "" || userId2 == "") {
@@ -57,11 +57,13 @@ async function Dislike(userId1, userId2){
 }
 export {Dislike}
 
-async function Searching(searchId, userId){
-    if (searchId == "" || userId == "") {
+async function Searching(searchId){
+    if (searchId == undefined) {
         return
     }
-    let query = "http://" + ip4v + ":8084/searching/" + searchId + "/" + userId;
+    const userStore = await getUser()
+    const userId = userStore.id
+    const query = "http://" + ip4v + ":8084/searching/" + searchId + "/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -80,7 +82,7 @@ async function CreateSearch(searchId, name, skill, level, gender, radius){
     if (searchId == "" || name == "" || skill == "" || level == "" || gender == "" || radius == "") {
         return
     }
-    var query = "http://" + ipv4 + ":8084/search"
+    var query = "http://" + ip4v + ":8084/search"
     var search = {
         "searchid": searchId,
         "name": name,
@@ -148,7 +150,7 @@ async function GetSearchesByUser (userId) {
     if (userId == "") {
         return
     }
-    let query = "http://" + ip4v + ":8084/search/user/" + userId;
+    const query = "http://" + ip4v + ":8084/search/user/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
