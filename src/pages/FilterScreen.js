@@ -40,7 +40,10 @@ const FilterScreen = ({navigation}) => {
 
     const genders = ["Weiblich", "Männlich", "Divers", "Keine Präferenz"]
     const possibleLevels = ["Anfänger", "Fortgeschritten", "Experte"]
+
     let skills = []
+    let allSkillsVar = []
+    const [allSkills, setAllSkills] = React.useState([])
 
     useEffect(() => {
         SetUser().then(r => {
@@ -77,23 +80,23 @@ const FilterScreen = ({navigation}) => {
     async function GetPossibleSkills() {
         GetAllSkills().then(r => {
             r.map((skill, index) => {
+                allSkillsVar[index] = {
+                    id: skill.id,
+                    name: skill.name,
+                    skillIdentifier: skill.SkillIdentifier
+                }
                 if (skills.length == 0) {
-                    skills[index] = {
-                        id: skill.id,
-                        name: skill.name
-                    }
+                    skills[index] = skill.name
                 } else {
                     skills.map(skill2 => {
                         if (skill2.name != skill.name){
-                            skills[index] = {
-                                id: skill.id,
-                                name: skill.name
-                            }
+                            skills[index] = skill.name
                         }
                     })
                 }
             })
             setPossibleSkills(skills)
+            setAllSkills(allSkillsVar)
         })
     }
 
@@ -114,21 +117,18 @@ const FilterScreen = ({navigation}) => {
                 break
         }
 
-        /*let skillId;
-
-        possibleSkills.map(skills => {
-            if (skills.name == name && skill.level == level){
-                skillId = skills.id
+        let newSkillId
+        allSkills.map(skill => {
+            if (skill.name == name && skill.skillIdentifier == level) {
+                newSkillId = skill.id
             }
-        })*/
+        })
 
-        const skillId = await FindNewSkillId(name, level)
-
-        CreateSearch(name, skillId, level, genderNr, radius, userId).then(r => {
+        CreateSearch(name, newSkillId, level, genderNr, radius, userId).then(r => {
             console.log(r)
         })
 
-        userData.searchedSkills.push(skillId)
+        userData.searchedSkills.push({id: newSkillId})
 
         UpdateUserProfile(userData.gender, userData.price, userData.phoneNumber, userData.firstName, userData.name,
             userData.username, userData.email, userData.city, userData.plz, userData.street, userData.houseNumber,
@@ -144,7 +144,12 @@ const FilterScreen = ({navigation}) => {
             console.log(r)
         })
 
-        const skillId = await FindNewSkillId(skillName, skillLevel)
+        let skillId
+        allSkills.map(skill => {
+            if (skill.name == skillName && skill.skillIdentifier == skillLevel) {
+                skillId = skill.id
+            }
+        })
 
         userData.searchedSkills.map(skill => {
             if (skillId == skill.id) {
@@ -190,7 +195,23 @@ const FilterScreen = ({navigation}) => {
                 break
         }
 
-        const newSkillId = await FindNewSkillId(name, level)
+        let newSkillId
+        allSkills.map(skill => {
+            if (skill.name == name && skill.skillIdentifier == level) {
+                newSkillId = skill.id
+            }
+        })
+
+        let newSkill
+        userData.searchedSkills.map(skill => {
+            if (name == skill.name) {
+                const index = userData.searchedSkills.indexOf(skill)
+                newSkill = {
+                    id: newSkillId
+                }
+                userData.searchedSkills[index] = newSkill
+            }
+        })
 
         UpdateSearch(searchId, name, newSkillId, level, genderNr, radius, userId).then(r => {
             if (r.status !== '200') {
