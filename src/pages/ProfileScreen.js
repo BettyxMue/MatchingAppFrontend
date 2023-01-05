@@ -7,6 +7,7 @@ import {UpdateUserProfile, getUserFromId} from "../connectors/ProfileServiceConn
 import Toast from "react-native-root-toast";
 import {getToken, getUser, storeUser} from "../resources/InternalStorage";
 import BottomBar from "../components/layout/BottomBar";
+import {Ionicons} from "@expo/vector-icons";
 
 const ProfileScreen = ({navigation}) => {
 
@@ -44,7 +45,7 @@ const ProfileScreen = ({navigation}) => {
         })
     }, [])
 
-    async function SetUser(){
+    async function SetUser() {
         const user = await getUser()
         setUserId(user.id)
         return user.id
@@ -101,7 +102,7 @@ const ProfileScreen = ({navigation}) => {
         setToggleEdit(true)
     }
 
-    function Logout(){
+    function Logout() {
         navigation.navigate("Start")
         storeUser(null)
     }
@@ -116,83 +117,104 @@ const ProfileScreen = ({navigation}) => {
                 alignContent: "center",
                 flex: 1
             }}>
+                <View style={{
+                    marginBottom: "1%",
+                    width: "100%"
+                }}>
+                    <TouchableOpacity style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        alignContent: "center",
+                        justifyContent: "center"
+                    }} onPress={() => {
+                        navigation.navigate("Details")
+                    }}>
+                        <Ionicons name="search-circle" size={35} color="#3860ff"/>
+                    </TouchableOpacity>
+                </View>
                 <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
-                    {toggleEdit ?
-                        <View>
-                            <ScrollView>
-                                <ProfileItem
-                                    name={name}
-                                    city={city}
-                                    toggle={1}
-                                    username={userName}
-                                    firstName={firstName}
-                                    gender={gender}
-                                    email={email}
-                                    street={street}
-                                    houseNumber={houseNumber}
-                                    plz={plz.toString()}
-                                    phoneNumber={phoneNumber}
-                                    //profilePicture={userId.profilePicture[0]}
-                                    price={price}
-                                />
+                    <View style={{
+                        width: "100%",
+                        height: "90%"
+                    }}>
+                        {toggleEdit ?
+                            <View>
+                                <ScrollView>
+                                    <ProfileItem
+                                        name={name}
+                                        city={city}
+                                        toggle={1}
+                                        username={userName}
+                                        firstName={firstName}
+                                        gender={gender}
+                                        email={email}
+                                        street={street}
+                                        houseNumber={houseNumber}
+                                        plz={plz.toString()}
+                                        phoneNumber={phoneNumber}
+                                        //profilePicture={userId.profilePicture[0]}
+                                        price={price}
+                                    />
 
-                                <View>
-                                    <TouchableOpacity style={styles.editProfileButton}
-                                                      onPress={() => setToggleEdit(false)}>
-                                        <Text style={styles.continueButtonText}>Profil bearbeiten</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.editProfileButton}
-                                                      onPress={() => navigation.navigate("OtherProfile", {
+                                    <View>
+                                        <TouchableOpacity style={styles.editProfileButton}
+                                                          onPress={() => setToggleEdit(false)}>
+                                            <Text style={styles.continueButtonText}>Profil bearbeiten</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.editProfileButton}
+                                                          onPress={() => navigation.navigate("OtherProfile", {
                                                               otherId: 17
                                                           })}>
-                                        <Text style={styles.continueButtonText}>Skills bearbeiten</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.editProfileButton}
-                                                      onPress={() => navigation.navigate("Filter")}>
-                                        <Text style={styles.continueButtonText}>Filter bearbeiten</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.editProfileButton}
-                                                      onPress={() => Logout}>
-                                        <Text style={styles.continueButtonText}>Logout</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </ScrollView>
-                        </View>
-                        :
-                        <View>
-                            <ScrollView>
-                                <ProfileItem
-                                    name={name}
-                                    city={city}
-                                    toggle={0}
-                                    username={userName}
-                                    firstName={firstName}
-                                    gender={gender}
-                                    email={email}
-                                    street={street}
-                                    houseNumber={houseNumber}
-                                    plz={plz}
-                                    phoneNumber={phoneNumber}
-                                    //profilePicture={userId.profilePicture[0]}
-                                    price={price}
-                                    onContinueButton={onContinueButton}
-                                    onChangeCity={onChangeCity}
-                                    onChangeGender={onChangeGender}
-                                    onChangeEmail={onChangeEmail}
-                                    onChangeFirstName={onChangeFirstName}
-                                    onChangeName={onChangeName}
-                                    onChangePLZ={onChangePLZ}
-                                    onChangePrice={onChangePrice}
-                                    onChangeStreet={onChangeStreet}
-                                    onChangeHouseNumber={onChangeHouseNumber}
-                                    onChangeUsername={onChangeUserName}
-                                    onChangeTelephoneNumber={onChangePhoneNumber}
-                                />
-                            </ScrollView>
-                        </View>
-                    }
+                                            <Text style={styles.continueButtonText}>Skills bearbeiten</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.editProfileButton}
+                                                          onPress={() => navigation.navigate("Filter")}>
+                                            <Text style={styles.continueButtonText}>Filter bearbeiten</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.editProfileButton}
+                                                          onPress={() => Logout}>
+                                            <Text style={styles.continueButtonText}>Logout</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </ScrollView>
+                            </View>
+                            :
+                            <View>
+                                <ScrollView>
+                                    <ProfileItem
+                                        name={name}
+                                        city={city}
+                                        toggle={0}
+                                        username={userName}
+                                        firstName={firstName}
+                                        gender={gender}
+                                        email={email}
+                                        street={street}
+                                        houseNumber={houseNumber}
+                                        plz={plz}
+                                        phoneNumber={phoneNumber}
+                                        //profilePicture={userId.profilePicture[0]}
+                                        price={price}
+                                        onContinueButton={onContinueButton}
+                                        onChangeCity={onChangeCity}
+                                        onChangeGender={onChangeGender}
+                                        onChangeEmail={onChangeEmail}
+                                        onChangeFirstName={onChangeFirstName}
+                                        onChangeName={onChangeName}
+                                        onChangePLZ={onChangePLZ}
+                                        onChangePrice={onChangePrice}
+                                        onChangeStreet={onChangeStreet}
+                                        onChangeHouseNumber={onChangeHouseNumber}
+                                        onChangeUsername={onChangeUserName}
+                                        onChangeTelephoneNumber={onChangePhoneNumber}
+                                    />
+                                </ScrollView>
+                            </View>
+                        }
+                    </View>
                 </LinearGradient>
-                <BottomBar />
+                <BottomBar/>
             </KeyboardAvoidingView>
         </SafeAreaView>
     )
