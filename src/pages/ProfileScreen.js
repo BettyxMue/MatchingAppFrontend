@@ -5,7 +5,7 @@ import {LinearGradient} from "expo-linear-gradient";
 import ProfileItem from "../components/profileComponents/ProfileItem";
 import {UpdateUserProfile, getUserFromId} from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
-import {getToken, getUser} from "../resources/InternalStorage";
+import {getToken, getUser, storeUser} from "../resources/InternalStorage";
 import BottomBar from "../components/layout/BottomBar";
 
 const ProfileScreen = ({navigation}) => {
@@ -101,8 +101,9 @@ const ProfileScreen = ({navigation}) => {
         setToggleEdit(true)
     }
 
-    async function Logout(){
-        //TODO: Logout
+    function Logout(){
+        navigation.navigate("Start")
+        storeUser(null)
     }
 
     return (
