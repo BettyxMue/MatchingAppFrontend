@@ -7,7 +7,7 @@ import {UpdateUserProfile, getUserFromId} from "../connectors/ProfileServiceConn
 import Toast from "react-native-root-toast";
 import {getToken, getUser} from "../resources/InternalStorage";
 
-const ProfileScreen = ({navigation}) => {
+const ProfileScreen = ({navigation, route}) => {
 
     async function showMessage(message) {
         let toast = Toast.show(message, {
@@ -20,9 +20,8 @@ const ProfileScreen = ({navigation}) => {
         }, 5000);
     }
 
-    const [toggleEdit, setToggleEdit] = React.useState(true)
+    const { otherUserId } = route.params
 
-    const [userId, setUserId] = React.useState("")
     const [userName, onChangeUserName] = React.useState("")
     const [email, onChangeEmail] = React.useState("")
     const [city, onChangeCity] = React.useState("")
@@ -44,16 +43,8 @@ const ProfileScreen = ({navigation}) => {
     const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzI4NTAxMjQsInN1YiI6MiwidXNlciI6Mn0.bq0g_kbUuSf4sUNqdCS36j1G8_nFVzELttvMwrSWtas0Y9L9-xAptzPGYLhYuU-kkGCTbFwnMCCLfR7zFoknfSf6k_P4ek_UkMPVJIAl2qOEcCoFLxkNwEJlWF1_x1b0ns7TEDr0jgef6VuZlxbRWpD-atWoTZLUuLiKtr33yuI"
 
     useEffect(() => {
-        SetUser().then(r => {
-            setUserData(r)
-        })
+        setUserData(otherUserId)
     }, [])
-
-    async function SetUser() {
-        const user = await getUser()
-        setUserId(user.id)
-        return user.id
-    }
 
     async function setUserData(userId) {
         getUserFromId(userId).then(r => {
