@@ -34,6 +34,9 @@ const ProfileScreen = ({navigation}) => {
     const [name, onChangeName] = React.useState("")
     const [gender, onChangeGender] = React.useState("")
     const [price, onChangePrice] = React.useState("")
+    const [achievedSkills, onChangeAchievedSkills] = React.useState("")
+    const [searchedSkills, onChangeSearchedSkills] = React.useState("")
+
 
     let genderString;
 
@@ -79,32 +82,10 @@ const ProfileScreen = ({navigation}) => {
                 onChangePhoneNumber(r.telephoneNumber)
                 onChangeStreet(r.street)
                 onChangePrice((r.price).toString())
+                onChangeAchievedSkills(r.achievedSkills)
+                onChangeSearchedSkills(r.searchedSkills)
             }
         )
-    }
-
-    async function onContinueButton() {
-        let genderNr
-        switch (gender) {
-            case "Männlich":
-                genderNr = 1
-                break
-            case "Weiblich":
-                genderNr = 2
-                break
-            case "Divers":
-                genderNr = 3
-                break
-        }
-
-        UpdateUserProfile(genderNr, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber).then(r => {
-            showMessage("User erfolgreich geupdated!")
-        });
-        setToggleEdit(true)
-    }
-
-    async function Logout() {
-        //TODO: Logout
     }
 
     return (
@@ -133,6 +114,8 @@ const ProfileScreen = ({navigation}) => {
                             phoneNumber={phoneNumber}
                             //profilePicture={userId.profilePicture[0]}
                             price={price}
+                            achievedSkills={achievedSkills}
+                            searchedSkills={searchedSkills}
                         />
 
                         <View>

@@ -17,6 +17,8 @@ const ProfileItem = ({
                          phoneNumber,
                          profilePicture,
                          price,
+                         searchedSkills,
+                         achievedSkills,
                          onChangeFirstName,
                          onChangeUsername,
                          onChangeName,
@@ -35,6 +37,20 @@ const ProfileItem = ({
 
     const GetImageSource = (source) => {
         return `data:image/jpeg;base64,${source}`
+    }
+
+    function renderSwitch(id){
+        switch (id){
+            case 1:
+                return "Anfänger"
+                break
+            case 2:
+                return "Fortgeschritten"
+                break
+            case 3:
+                return "Experte"
+                break
+        }
     }
 
     if (toggle === 1) {
@@ -271,6 +287,20 @@ const ProfileItem = ({
                     <Text style={styles.descriptionProfileItem}>
                         {price} €
                     </Text>
+                </View>
+                <View style={styles.profileDescription}>
+                    <Text style={styles.titleProfileItem}>Erlernte Skills:</Text>
+                    <Text style={styles.descriptionProfileItem}>
+                        {price} €
+                    </Text>
+                </View>
+                <View style={styles.profileDescription}>
+                    <Text style={styles.titleProfileItem}>Gesuchte Skills:</Text>
+                    {searchedSkills.map(skill =>
+                        <Text style={styles.descriptionProfileItem}>
+                            {skill.name} - Level: {renderSwitch(skill.SkillIdentifier)}
+                        </Text>
+                    )}
                 </View>
             </View>
         );
