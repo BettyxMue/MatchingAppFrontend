@@ -39,6 +39,7 @@ const SkillsScreen = ({navigation}) => {
     let allSkillsVar = []
     const [allSkills, setAllSkills] = React.useState([])
     let skills = []
+    let allSkillsFiltered = []
     const [possibleSkills, setPossibleSkills] = React.useState([])
     const [skillId, setSkillId] = React.useState("")
 
@@ -82,18 +83,14 @@ const SkillsScreen = ({navigation}) => {
                     name: skill.name,
                     skillIdentifier: skill.SkillIdentifier
                 }
-                if (skills.length == 0) {
-                    skills[index] = skill.name
-                } else {
-                    let ctr = 0
-                    skills.map(skill2 => {
-                        if (skill2.name != skill.name) {
-                            skills[index] = skill.name
-                        }
-                    })
+                skills[index] = skill.name
+            })
+            skills.forEach(skill => {
+                if (!allSkillsFiltered.includes(skill)){
+                    allSkillsFiltered.push(skill)
                 }
             })
-            setPossibleSkills(skills)
+            setPossibleSkills(allSkillsFiltered)
             setAllSkills(allSkillsVar)
         })
     }
@@ -136,7 +133,7 @@ const SkillsScreen = ({navigation}) => {
             console.log(r)
         })
         setToggle(false)
-        GetPossibleSkills()
+        //GetPossibleSkills()
     }
 
     async function AddUserSkills(skillName, skillLevel) {
@@ -169,7 +166,7 @@ const SkillsScreen = ({navigation}) => {
             console.log(r)
         })
         setAddToggle(false)
-        GetPossibleSkills()
+        //GetPossibleSkills()
     }
 
     async function RemoveSkill(skillName, skillLevel) {
