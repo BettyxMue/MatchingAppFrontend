@@ -46,10 +46,9 @@ const LogInScreen =  ({navigation}) => {
         let webSocket = OpenWSConnection();
         websocket(webSocket);
         showErrorMessage("Logged in!");
-        navigation.navigate('Invoices')
-        /*GetChats().then(() => {
-          navigation.navigate('Invoices')
-        })*/
+        GetChats().then(() => {
+          navigation.navigate('Chat')
+        })
       })
     })
   }

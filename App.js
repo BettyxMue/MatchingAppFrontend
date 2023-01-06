@@ -18,7 +18,7 @@ import CreateBill from "./src/pages/CreateBill"
 import InvoicesScreen from './src/pages/InvoicesScreen'
 import InvoiceDetail from './src/pages/InvoiceDetail'
 import PaymentScreen from './src/pages/PaymentScreen'
-import { ChatProvider, ChatRoomProvicer, WebSocketProvider } from "./src/resources/page-context";
+import { ChatArrayProvicer, ChatProvider, ChatRoomProvicer, WebSocketProvider } from "./src/resources/page-context";
 import {registerForPushNotifcations} from './src/resources/Notificator'
 import { storeNotificationToken } from "./src/resources/InternalStorage";
 import {StripeProvider} from '@stripe/stripe-react-native'
@@ -51,62 +51,65 @@ export default function App() {
     })
     
     return (
-      <ChatProvider>
-        <WebSocketProvider>
-          <ChatRoomProvicer>
-            <StripeProvider
-              publishableKey="pk_test_51MMAKCKk0KHEbPNGlJYBHadqSjLpxKh8LApAEqQSVk1O4VJbWxBKz2kLmYyMVNxqT6cFR9vOOZyNE0ZX8KDotCFQ00RFXAsr1k"
-              urlScheme="http://192.168.2.120"
-            >
-              <RootSiblingParent>
-                <NavigationContainer StartScreen={(!user) ? 'Home' : 'Start'}>
-                    <Stack.Navigator screenOptions={{headerShown: true, headerBackButtonMenuEnabled: false}}>
-                      <Stack.Screen name="Start" component={StartScreen} options={{
-                        headerShown: false
-                      }}/>
-                      <Stack.Screen name="LogIn" component={LogInScreen} options={({navigation,route}) => ({
-                        headerRight: () => {
-                          <Button title="Back" />
-                        },
-                        headerTransparent: true
-                      })}/>
-                      <Stack.Screen name="Registierung" component={SignUpScreen} options={({navigation,route}) => ({
-                        headerRight: () => {
-                          <Button title="Back" />
-                        },
-                        headerTransparent: true,
-                        headerShown: true
-                      })}/>
-                      <Stack.Screen name="Details" component={DetailsScreen}/>
-                      <Stack.Screen name="Home" component={HomeScreen}/>
-                      <Stack.Screen name="Settings" component={SettingsScreen}/>
-                      <Stack.Screen name="Profile" component={ProfileScreen}/>
-                      <Stack.Screen name="Filter" component={FilterScreen}/>
-                      <Stack.Screen name="Chat" component={ChatScreen}/>
-                      <Stack.Screen name="Messages" component={MessagesScreen}/>
-                      <Stack.Screen name="ChatDetail" component={ChatDetail} options={({navitation, route}) => ({
-                        headerShown: false
-                      })} />
-                      <Stack.Screen name="CreateBill" component={CreateBill} options={({navitation, route}) => ({
-                        headerShown: false
-                      })} />
-                      <Stack.Screen name="Invoices" component={InvoicesScreen} options={({navitation, route}) => ({
-                        headerShown: true
-                      })} />
-                      <Stack.Screen name="Invoice" component={InvoiceDetail} options={({navitation, route}) => ({
-                        headerShown: false
-                      })} />
-                      <Stack.Screen name="Payment" component={PaymentScreen} options={({navitation, route}) => ({
-                        headerShown: false
-                      })} />
-                    </Stack.Navigator>
-                </NavigationContainer>
-              </RootSiblingParent>
-            </StripeProvider>
-            
-          </ChatRoomProvicer>
-        </WebSocketProvider>
-      </ChatProvider>
+      <ChatArrayProvicer>
+        <ChatProvider>
+          <WebSocketProvider>
+            <ChatRoomProvicer>
+              <StripeProvider
+                publishableKey="pk_test_51MMAKCKk0KHEbPNGlJYBHadqSjLpxKh8LApAEqQSVk1O4VJbWxBKz2kLmYyMVNxqT6cFR9vOOZyNE0ZX8KDotCFQ00RFXAsr1k"
+                urlScheme="http://192.168.2.120"
+              >
+                <RootSiblingParent>
+                  <NavigationContainer StartScreen={(!user) ? 'Home' : 'Start'}>
+                      <Stack.Navigator screenOptions={{headerShown: true, headerBackButtonMenuEnabled: false}}>
+                        <Stack.Screen name="Start" component={StartScreen} options={{
+                          headerShown: false
+                        }}/>
+                        <Stack.Screen name="LogIn" component={LogInScreen} options={({navigation,route}) => ({
+                          headerRight: () => {
+                            <Button title="Back" />
+                          },
+                          headerTransparent: true
+                        })}/>
+                        <Stack.Screen name="Registierung" component={SignUpScreen} options={({navigation,route}) => ({
+                          headerRight: () => {
+                            <Button title="Back" />
+                          },
+                          headerTransparent: true,
+                          headerShown: true
+                        })}/>
+                        <Stack.Screen name="Details" component={DetailsScreen}/>
+                        <Stack.Screen name="Home" component={HomeScreen}/>
+                        <Stack.Screen name="Settings" component={SettingsScreen}/>
+                        <Stack.Screen name="Profile" component={ProfileScreen}/>
+                        <Stack.Screen name="Filter" component={FilterScreen}/>
+                        <Stack.Screen name="Chat" component={ChatScreen}/>
+                        <Stack.Screen name="Messages" component={MessagesScreen}/>
+                        <Stack.Screen name="ChatDetail" component={ChatDetail} options={({navitation, route}) => ({
+                          headerShown: false
+                        })} />
+                        <Stack.Screen name="CreateBill" component={CreateBill} options={({navitation, route}) => ({
+                          headerShown: false
+                        })} />
+                        <Stack.Screen name="Invoices" component={InvoicesScreen} options={({navitation, route}) => ({
+                          headerShown: true
+                        })} />
+                        <Stack.Screen name="Invoice" component={InvoiceDetail} options={({navitation, route}) => ({
+                          headerShown: false
+                        })} />
+                        <Stack.Screen name="Payment" component={PaymentScreen} options={({navitation, route}) => ({
+                          headerShown: false
+                        })} />
+                      </Stack.Navigator>
+                  </NavigationContainer>
+                </RootSiblingParent>
+              </StripeProvider>
+                      
+            </ChatRoomProvicer>
+          </WebSocketProvider>
+        </ChatProvider>
+      </ChatArrayProvicer>
+      
     );
 }
 

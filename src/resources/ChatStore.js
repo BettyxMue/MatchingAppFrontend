@@ -75,7 +75,6 @@ function appendChatMessageToChat(chatID, message, sendTo, From){
         console.log("Chat nicht vorhanden, baue ein...")
         //TODO neuen Chat anlegen
     }else{
-        console.log(newMessage)
         global.chatArray[position].messages.push(newMessage)
     }
 }

@@ -6,7 +6,6 @@ import {styles} from '../resources/Styles'
 
 const InvoiceDetail = ({navigation, route}) => {
     const {invoice} = route.params
-    console.log(invoice)
     const detailButton = "\u27A4"
     const payed= "\u2705"
     const pending = "\u231B"

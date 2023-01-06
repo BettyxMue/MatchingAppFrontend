@@ -12,7 +12,6 @@ const ChatBubble = (props) => {
     function formatDate(date){
         if(typeof date == "string"){
             let date = Date.parse(date)
-            console.log(date)
         }
         let localDate = new Date(date)
         return localDate.toLocaleDateString("de-de") + " " + localDate.toLocaleTimeString("de-de").slice(0,-3)

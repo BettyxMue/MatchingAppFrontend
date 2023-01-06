@@ -43,7 +43,6 @@ const SignUpScreen = ({navigation}) => {
 
   async function onContinueButtonMail(){
     SignUp(userName, email, city, plz, street, houseNumber).then(result => {
-      console.log(result)
       if (typeof result !== 'object'){
         showErrorMessage(result);
         return;
@@ -68,7 +67,6 @@ const SignUpScreen = ({navigation}) => {
 
   async function onContinueButtonPassword(){
     createHash(password).then(hash => {
-      console.log(hash);
       onChangePassword(null);
       onPasswordRepeatChange(null);
       getUser().then(user => {

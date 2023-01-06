@@ -1,8 +1,9 @@
 // @ts-nocheck
+import React from "react"
 import { getToken, getUser } from "../resources/InternalStorage"
 import '../resources/globals'
 import { useContext } from "react"
-import { ChatRoomContext } from "../resources/page-context"
+import { ChatContext, ChatRoomContext } from "../resources/page-context"
 
 // @ts-nocheck
 function OpenWSConnection(){
@@ -27,7 +28,7 @@ function OpenWSConnection(){
         if (e != null) {
             try {
                 let message = JSON.parse(e.data)
-                global.appendMessageToChat(message.chatID, message.message, message.sendTo, message.writtenBy)
+                global.appendMessageToChat(message.chatID, message.message, message.sendTo, message.writtenBy, websocket)
                 console.log(message)
             } catch (err){
                 console.log(err)

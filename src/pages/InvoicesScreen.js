@@ -33,7 +33,6 @@ const InvoicesScreen = ({navigation, route}) => {
     }
 
     useEffect(() => {
-        console.log("Use Effect is triggered")
         if(firstUpdate.current){
             getInvoices().then((invoicesServer) => {
                 getUserForInvoice(invoicesServer).then(() => {

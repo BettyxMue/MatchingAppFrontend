@@ -21,7 +21,6 @@ const InvoicesListElement = (props) => {
     function formatDateInput(date){
         if(typeof date == "string"){
             let date = Date.parse(date)
-            console.log(date)
         }
         let localDate = new Date(date)
         return localDate.toLocaleDateString("de-de")

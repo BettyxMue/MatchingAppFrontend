@@ -4,10 +4,13 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { appendChatMessageToChat } from "../../resources/ChatStore";
 import { styles } from "../../resources/Styles";
 import '../../resources/globals'
+import { ChatContext, WebSocketContext } from "../../resources/page-context";
 
 const ChatWrite = (props) => {
     const chatArray = props.chatArray
     const currentUser = props.currentUser
+    const websocket = React.useContext(WebSocketContext)
+    const chat = React.useContext(ChatContext)
 
     const [message, setMessage] = React.useState("")
     const sendSymbol = "\u27A4"
@@ -18,9 +21,9 @@ const ChatWrite = (props) => {
         }
         setMessage("")
         if(chatArray.messages.length > 0){
-            global.appendMessageToChat(chatArray.chatID, message, chatArray.chatPartner.id, currentUser.id, chatArray)
+            global.appendMessageToChat(chatArray.chatID, message, chatArray.chatPartner.id, currentUser.id, chatArray,websocket,chat)
         }else{
-            global.appendMessageToChat(chatArray.chatID, message, chatArray.chatPartner.id, currentUser.id, chatArray)
+            global.appendMessageToChat(chatArray.chatID, message, chatArray.chatPartner.id, currentUser.id, chatArray,websocket,chat)
         }
         
     }
