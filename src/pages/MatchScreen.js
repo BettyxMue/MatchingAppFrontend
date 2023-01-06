@@ -1,25 +1,33 @@
-import React, {useEffect,} from 'react';
+import React, {useEffect, useRef,} from 'react';
 import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from "@react-navigation/native";
 import {getUserFromId} from "../connectors/ProfileServiceConnector";
 import {Ionicons} from "@expo/vector-icons";
 import {styles} from "../resources/Styles";
 import {LinearGradient} from "expo-linear-gradient";
+import { createChat } from '../connectors/ChatServiceConnector';
 
 const MatchScreen = ({navigation, route}) => {
 
     const {userId, userSwipedId} = route.params
+    const firstUpdate = useRef(true)
 
     const [userData, setUserData] = React.useState("")
     const [userSwipedData, setSwipedData] = React.useState("")
-
+ 
     let temp
     let temp2
 
     useEffect(() => {
 
+        if(firstUpdate.current){
+            createChatFromScreen(userSwipedId)
+            firstUpdate.current = false;
+        }
+
         GetUserData()
         GetUserSwipedData()
+
     }, [userId, userSwipedId])
 
     function GetUserData() {
@@ -43,6 +51,10 @@ const MatchScreen = ({navigation, route}) => {
             }
             setSwipedData(temp2)
         })
+    }
+
+    function createChatFromScreen(matchedId){
+        createChat(matchedId)
     }
 
     const GetImageSource = (source) => {

@@ -198,7 +198,7 @@ const ChatsWrapper = (chats) => {
                 SetUsersToChats(user, setLoading).then(() => {
                     GetAllChatRoomsForUser().then(rooms => {
                         sortChatRooms(rooms).then((rooms) => {
-                            setUserNamesToEmptyChats(rooms)
+                            setUserNamesToEmptyChats(rooms, user)
                         })
                     })
                 })

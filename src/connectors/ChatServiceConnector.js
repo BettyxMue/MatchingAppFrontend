@@ -81,7 +81,7 @@ async function GetAllChatsForUser(){
         console.log("No token found!")
         return
     }
-    let query = "http://192.168.2.120:8081/getAllMessagesForUser"
+    const query = "http://192.168.2.120:8081/getAllMessagesForUser"
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -105,7 +105,7 @@ async function getChatsWithToken(user,token){
         console.log("No token found!")
         return
     }
-    let query = "http://192.168.2.120:8081/getAllMessagesForUser"
+    const query = "http://192.168.2.120:8081/getAllMessagesForUser"
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -124,5 +124,38 @@ async function getChatsWithToken(user,token){
     return responseData
 }
 
+async function createChat(matchedId){
+    let user = await getUser()
+    if (user == null){
+        console.log("No user found!")
+        return
+    }
+    let token = await getToken();
 
-export {OpenWSConnection, GetAllChatsForUser, GetAllChatRoomsForUser}
+    if(token == null){
+        console.log("No token found!")
+        return
+    }
+
+    const query = "http://192.168.2.120:8081/createChatRoom"
+    const response = await fetch(query, {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': token,
+            'user1': user.id,
+            'user2': matchedId
+        }
+    })
+
+    const responseData = await response.json()
+
+    if (response.status != 200){
+        console.log("Error: " + response.statusText)
+        return response.statusText
+    }
+    return responseData
+}
+
+
+export {OpenWSConnection, GetAllChatsForUser, GetAllChatRoomsForUser, createChat}

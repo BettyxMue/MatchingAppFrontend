@@ -14,7 +14,7 @@ import {Dislike, GetSearchesByUser, Like, Searching} from "../connectors/Matchin
 import {SelectList} from "react-native-dropdown-select-list/index";
 import {LinearGradient} from "expo-linear-gradient";
 import {getUser} from "../resources/InternalStorage";
-import BottomBar from "../components/layout/BottomBar";
+import BottomBar from "../components/Layout/BottomBar";
 
 const HomeScreen = ({navigation}) => {
 

@@ -4,7 +4,7 @@ import {AntDesign, Entypo, Ionicons} from "@expo/vector-icons";
 import {LinearGradient} from "expo-linear-gradient";
 import {SelectList} from "react-native-dropdown-select-list/index";
 import Swiper from "react-native-deck-swiper";
-import BottomBar from "../components/layout/BottomBar";
+import BottomBar from "../components/Layout/BottomBar";
 import {Dislike, Exploring, Like, Searching} from "../connectors/MatchingServiceConnector";
 import Toast from "react-native-root-toast";
 import {getUser} from "../resources/InternalStorage";
