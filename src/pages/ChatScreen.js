@@ -5,6 +5,7 @@ import { GetAllChatsForUser } from '../connectors/ChatServiceConnector';
 import ChatsWrapper from '../components/chatComponents/chatsWrapper';
 import { styles } from '../resources/Styles';
 import Topbar from '../components/Layout/Topbar';
+import BottomBar from '../components/Layout/BottomBar';
 
 
 
@@ -26,6 +27,7 @@ const ChatScreen = ({navigation}) => {
       <ScrollView>
         <ChatsWrapper/>
       </ScrollView>
+      <BottomBar/>
     </KeyboardAvoidingView>
       
     )

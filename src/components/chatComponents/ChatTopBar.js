@@ -14,6 +14,12 @@ const ChatTopBar = (user) => {
         navigation.goBack();
     }
 
+    function navigateToOtherProfile(){
+        navigation.navigate("OtherProfile", {
+            otherUserId: user.user.id
+        })
+    }
+
     function navigateToBilling(){
         navigation.navigate("CreateBill", {
             user: user
@@ -30,7 +36,9 @@ const ChatTopBar = (user) => {
             <View style={{width: "60%", alignContent: "center", justifyContent: "center", marginTop: "7%"}}>
                 <View style={{marginLeft: "35%", marginTop: "5%", alignContent: "center"}}>
                     <View style={{marginLeft: "10%"}}>
-                        <Image style={styles.chatTopBarPicture} source={{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}/>
+                        <TouchableOpacity onPress={navigateToOtherProfile}>
+                            <Image style={styles.chatTopBarPicture} source={{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}/>
+                        </TouchableOpacity>         
                     </View>
                     <View>
                         <Text style={styles.ChatTopBarText}>{user.user.username}</Text>
