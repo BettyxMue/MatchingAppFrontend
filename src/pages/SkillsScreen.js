@@ -11,6 +11,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import {Entypo, Ionicons} from "@expo/vector-icons";
 import {getToken, getUser, storeUser} from "../resources/InternalStorage";
 import BottomBar from "../components/layout/BottomBar";
+import Toast from "react-native-root-toast";
 
 const SkillsScreen = ({navigation}) => {
 
@@ -100,6 +101,11 @@ const SkillsScreen = ({navigation}) => {
 
     async function UpdateUserSkills(skillName, newSkillLevel) {
 
+        if (skillLevel == undefined){
+            showErrorMessage("Bitte wähle ein Level aus!")
+            return
+        }
+
         let newSkillLevelId
         switch (newSkillLevel) {
             case "Anfänger":
@@ -140,7 +146,26 @@ const SkillsScreen = ({navigation}) => {
         storeUser(userData)
     }
 
+    async function showErrorMessage(message) {
+        let toast = Toast.show(message, {
+            duration: Toast.durations.LONG,
+            backgroundColor: "#f5543b",
+            textColor: "white",
+        });
+        setTimeout(function hideToast() {
+            Toast.hide(toast)
+        }, 5000);
+    }
+
     async function AddUserSkills(skillName, skillLevel) {
+
+        if (skillLevel == undefined){
+            showErrorMessage("Bitte wähle ein Level aus!")
+            return
+        } else if (skillName == ""){
+            showErrorMessage("Bitte wähle einen Skill aus!")
+            return
+        }
 
         let newSkillLevelId
         switch (skillLevel) {

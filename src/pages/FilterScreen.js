@@ -130,7 +130,21 @@ const FilterScreen = ({navigation}) => {
         })
     }
 
-    async function CreateFilter(name, level, gender, radius, userId) {
+    async function CreateFilter(name, level, gender, radius) {
+        if (level == undefined){
+            showErrorMessage("Bitte wähle ein Level aus!")
+            return
+        } else if (gender == undefined) {
+            showErrorMessage("Bitte wähle ein Geschlecht aus!")
+            return
+        } else if (radius == "") {
+            showErrorMessage("Bitte fülle den gewünschten Radius aus!")
+            return
+        } else if (name == ""){
+            showErrorMessage("Bitte wähle einen Skill aus!")
+            return
+        }
+
         let genderNr
         switch (gender) {
             case "Männlich":
@@ -167,7 +181,7 @@ const FilterScreen = ({navigation}) => {
             }
         })
 
-        CreateSearch(name, newSkillId, level, genderNr, radius, userId).then(r => {
+        CreateSearch(name, newSkillId, level, genderNr, radius).then(r => {
             console.log(r)
         })
 
@@ -227,6 +241,17 @@ const FilterScreen = ({navigation}) => {
     }
 
     async function UpdateFilter(searchId, name, level, gender, radius) {
+        if (level == undefined){
+            showErrorMessage("Bitte wähle ein Level aus!")
+            return
+        } else if (gender == undefined) {
+            showErrorMessage("Bitte wähle ein Geschlecht aus!")
+            return
+        } else if (radius == "") {
+            showErrorMessage("Bitte fülle den gewünschten Radius aus!")
+            return
+        }
+
         let genderNr
         switch (gender) {
             case "Männlich":
@@ -471,7 +496,7 @@ const FilterScreen = ({navigation}) => {
                                 textContentType="nickname"
                             />
                             <TouchableOpacity style={styles.editProfileButton}
-                                              onPress={() => CreateFilter(newName, newLevel, newGender, newRadius, userId)}>
+                                              onPress={() => CreateFilter(newName, newLevel, newGender, newRadius)}>
                                 <Text style={styles.continueButtonText}>Speichern</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.editProfileButton} onPress={() => setAddToggle(false)}>

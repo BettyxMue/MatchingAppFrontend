@@ -8,6 +8,7 @@ import Toast from "react-native-root-toast";
 import {getToken, getUser, storeUser} from "../resources/InternalStorage";
 import BottomBar from "../components/layout/BottomBar";
 import {Ionicons} from "@expo/vector-icons";
+import {telephone} from "yarn/lib/cli";
 
 const ProfileScreen = ({navigation}) => {
 
@@ -82,7 +83,26 @@ const ProfileScreen = ({navigation}) => {
         )
     }
 
+    async function showErrorMessage(message) {
+        let toast = Toast.show(message, {
+            duration: Toast.durations.LONG,
+            backgroundColor: "#f5543b",
+            textColor: "white",
+        });
+        setTimeout(function hideToast() {
+            Toast.hide(toast)
+        }, 5000);
+    }
+
     async function onContinueButton() {
+        if (gender == undefined){
+            showErrorMessage("Bitte wähle ein Geschlecht aus!")
+            return
+        } else if (price == "" || price == 0) {
+            showErrorMessage("Bitte trage deinen Preis pro Stunde ein!")
+            return
+        }
+
         let genderNr
         switch (gender) {
             case "Männlich":
