@@ -126,7 +126,7 @@ const ProfileScreen = ({navigation}) => {
         navigation.navigate("Start")
         storeUser(null)
     }
-    function Logout() {
+    function Delete() {
         DeleteUser().then(r => {
             navigation.navigate("Start")
             storeUser(null)
@@ -199,7 +199,7 @@ const ProfileScreen = ({navigation}) => {
                                             <Text style={styles.continueButtonText}>Filter bearbeiten</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.editProfileButton}
-                                                          onPress={() => Logout}>
+                                                          onPress={Logout}>
                                             <Text style={styles.continueButtonText}>Logout</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={{
@@ -213,7 +213,7 @@ const ProfileScreen = ({navigation}) => {
                                             padding: 10,
                                             marginTop: 10,
                                         }}
-                                                          onPress={() => DeleteProfil}>
+                                                          onPress={Delete}>
                                             <Text style={styles.continueButtonText}>Profil löschen</Text>
                                         </TouchableOpacity>
                                     </View>
