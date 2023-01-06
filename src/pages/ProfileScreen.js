@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import React, {Component, useEffect} from 'react'
 import {styles} from "../resources/Styles";
@@ -6,9 +7,9 @@ import ProfileItem from "../components/profileComponents/ProfileItem";
 import {UpdateUserProfile, getUserFromId, DeleteUser} from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
 import {getToken, getUser, storeUser} from "../resources/InternalStorage";
-import BottomBar from "../components/layout/BottomBar";
+import BottomBar from "../components/Layout/BottomBar";
 import {Ionicons} from "@expo/vector-icons";
-import {telephone} from "yarn/lib/cli";
+
 
 const ProfileScreen = ({navigation}) => {
 
@@ -189,9 +190,7 @@ const ProfileScreen = ({navigation}) => {
                                             <Text style={styles.continueButtonText}>Profil bearbeiten</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.editProfileButton}
-                                                          onPress={() => navigation.navigate("OtherProfile", {
-                                                              otherId: 17
-                                                          })}>
+                                                          onPress={() => navigation.navigate("Skills")}>
                                             <Text style={styles.continueButtonText}>Skills bearbeiten</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.editProfileButton}

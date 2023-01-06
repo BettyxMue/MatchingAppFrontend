@@ -1,6 +1,7 @@
+// @ts-nocheck
 import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native'
 import React from 'react'
-import BottomBar from "../components/layout/BottomBar";
+import BottomBar from "../components/Layout/BottomBar";
 
 const DetailsScreen = ({navigation}) => {
 

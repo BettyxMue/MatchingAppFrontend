@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useEffect} from "react";
 import {Image, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {styles} from "../../resources/Styles";
@@ -50,23 +51,23 @@ const ProfileItem = ({
     }
 
     function EvaluateData(){
-        if (searchedSkills != undefined){
+        if (searchedSkills != undefined && searchedSkills != ""){
             setSearchedSkillsToggle(true)
-            searchedSkills.map((skill, index) => {
+           /* searchedSkills.map((skill, index) => {
                 userAchievedSkills[index] = {
                     name: skill.name,
                     levelId: skill.SkillIdentifier
                 }
-            })
+            })*/
         }
-        if (achievedSkills != undefined){
+        if (achievedSkills != undefined && achievedSkills != ""){
             setAchievedSkillsToggle(true)
-            achievedSkills.map((skill, index) => {
+           /* achievedSkills.map((skill, index) => {
                 userAchievedSkills[index] = {
                     name: skill.name,
                     levelId: skill.SkillIdentifier
                 }
-            })
+            })*/
         }
     }
 
@@ -304,7 +305,7 @@ const ProfileItem = ({
                 <View style={styles.profileDescription}>
                     <Text style={styles.titleProfileItem}>Wohnort:</Text>
                     <Text style={styles.descriptionProfileItem}>
-                        {plz} {city}
+                        {plz} 
                     </Text>
                 </View>
                 <View style={styles.profileDescription}>
@@ -322,9 +323,9 @@ const ProfileItem = ({
                 <View style={styles.profileDescription}>
                     <Text style={styles.titleProfileItem}>Gesuchte Skills:</Text>
                     {searchedSkillsToggle ? (
-                        userSearchedSkills.forEach(skill =>
+                        searchedSkills.map(skill =>
                                 <Text style={styles.descriptionProfileItem}>
-                                    {skill.name} - Level: {renderSwitch(skill.levelId)}
+                                    {skill.name} - Level: {renderSwitch(skill.SkillIdentifier)}
                                 </Text>
                             )
                         )
@@ -338,9 +339,9 @@ const ProfileItem = ({
                 <View style={styles.profileDescription}>
                     <Text style={styles.titleProfileItem}>Erlernte Skills:</Text>
                     {achievedSkillsToggle ?
-                        userAchievedSkills.forEach(skill =>
+                        achievedSkills.map(skill =>
                             <Text style={styles.descriptionProfileItem}>
-                                {skill.name} - Level: {renderSwitch(skill.levelId)}
+                                {skill.name} - Level: {renderSwitch(skill.SkillIdentifier)}
                             </Text>
                         )
                         :

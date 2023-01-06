@@ -388,10 +388,11 @@ const styles = StyleSheet.create({
         margin: 20,
         marginBottom: 5,
         borderRadius: 8,
+        width: "90%"
     },
     descriptionProfileItem: {
         color: "#000000",
-        fontSize: 18
+        fontSize: 18,
     },
     name: {
         color: "#000000",
@@ -412,7 +413,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
         marginLeft: 25,
-        marginRight: 125
+        marginRight: 25
     },
     filterDescription: {
         marginTop: 10,

@@ -53,6 +53,9 @@ const ChatsWrapper = (chats) => {
     }
 
     function GetChatsArray(chatData){
+        /*if(global.chatLoaded){
+            return
+        }*/
         let chatArrayCache = chatArray
         chatData.forEach(chat => {
             let position = chatArrayCache.findIndex(c => c.chatID === chat.chatID)
@@ -64,6 +67,7 @@ const ChatsWrapper = (chats) => {
                     "chatPartner": chatPartner,
                     "messages": [
                         {
+                            "messageID": chat.messageID,
                             "writtenBy": chat.writtenBy,
                             "sendTo": chat.sendTo,
                             "read": chat.read,
@@ -75,13 +79,18 @@ const ChatsWrapper = (chats) => {
                 
                 chatArrayCache.push(newChat)
             }else{
-                chatArray[position].messages.push({
+                let newMessage = {
+                    "messageID": chat.messageID,
                     "writtenBy": chat.writtenBy,
                     "sendTo": chat.sendTo,
                     "read": chat.read,
                     "message": chat.message,
                     "createdAt": chat.createdAt
-                })
+                }
+                let positionMessage = chatArray[position].messages.findIndex(c => c.messageID == newMessage.messageID)
+                if(positionMessage == -1){
+                    chatArray[position].messages.push(newMessage)
+                }
             }
         });
         setChatArray(chatArrayCache)
@@ -147,7 +156,7 @@ const ChatsWrapper = (chats) => {
         return roomArray
     }
 
-    async function setUserNamesToEmptyChats(rooms){
+    async function setUserNamesToEmptyChats(rooms, user){
         let promises = []
         rooms.forEach(room => {
             if (room.userID1 != user.id){

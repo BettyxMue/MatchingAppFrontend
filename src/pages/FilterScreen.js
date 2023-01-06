@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {KeyboardAvoidingView, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import React, {useEffect} from 'react'
 import {CreateSearch, DeleteSearch, GetSearchesByUser, UpdateSearch} from "../connectors/MatchingServiceConnector";
@@ -8,7 +9,7 @@ import {styles} from "../resources/Styles";
 import {GetAllSkills, getUserFromId, UpdateUserProfile} from "../connectors/ProfileServiceConnector";
 import SelectDropdown from "react-native-select-dropdown";
 import {getUser, storeUser} from "../resources/InternalStorage";
-import BottomBar from "../components/layout/BottomBar";
+import BottomBar from "../components/Layout/BottomBar";
 
 const FilterScreen = ({navigation}) => {
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import React, {Component, useEffect} from 'react'
 import {styles} from "../resources/Styles";
@@ -6,7 +7,7 @@ import ProfileItem from "../components/profileComponents/ProfileItem";
 import {UpdateUserProfile, getUserFromId} from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
 import {getToken, getUser} from "../resources/InternalStorage";
-import BottomBar from "../components/layout/BottomBar";
+import BottomBar from "../components/Layout/BottomBar";
 
 const ProfileScreen = ({navigation, route}) => {
 
@@ -62,14 +63,14 @@ const ProfileScreen = ({navigation, route}) => {
                 onChangeUserName(r.username)
                 onChangeFirstName(r.firstName)
                 onChangeName(r.name)
-                onChangeCity(r.city.place)
-                onChangePLZ((r.city.plz).toString())
+                //onChangeCity(r.city.place)
+                //onChangePLZ((r.city.plz).toString())
                 onChangeGender(genderString)
                 onChangeEmail(r.email)
                 onChangeHouseNumber(r.houseNumber)
                 onChangePhoneNumber(r.telephoneNumber)
                 onChangeStreet(r.street)
-                onChangePrice((r.price).toString())
+                onChangePrice((r.price))
                 onChangeAchievedSkills(r.achievedSkills)
                 onChangeSearchedSkills(r.searchedSkills)
             }
@@ -118,14 +119,14 @@ const ProfileScreen = ({navigation, route}) => {
                     }}>
                         <ProfileItem
                             name={name}
-                            city={city}
+                            //city={city}
                             toggle={2}
                             username={userName}
                             firstName={firstName}
                             gender={gender}
                             email={email}
-                            street={street}
-                            houseNumber={houseNumber}
+                            //street={street}
+                            //houseNumber={houseNumber}
                             plz={plz.toString()}
                             phoneNumber={phoneNumber}
                             //profilePicture={userId.profilePicture[0]}

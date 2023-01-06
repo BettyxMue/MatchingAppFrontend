@@ -40,7 +40,7 @@ const ChatArrayProvicer = ({children}) => {
             position = chatArrayCache.findIndex(c => c.chatID === chat.chatID)
         }
         chatArrayCache[position].messages.push(newMessage)
-        if(From == user.id){
+        if(From != chatArrayCache[position].chatPartner.id){
             let newMessageString = JSON.stringify(newMessage)
             websocket.send(newMessageString)
         }else{

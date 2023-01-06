@@ -2,4 +2,5 @@
 global.chatArray = []
 global.chatRawData = []
 global.appendMessageToChat = function(){}
+global.chatLoaded = false;
 

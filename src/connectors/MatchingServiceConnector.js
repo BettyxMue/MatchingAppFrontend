@@ -1,7 +1,7 @@
 // @ts-nocheck
 import {getUser} from "../resources/InternalStorage";
 
-let ip4v = "192.168.0.207"
+let ip4v = "192.168.2.120"
 
 async function Like(userId1, userId2){
     if (userId1 == "" || userId2 == "") {

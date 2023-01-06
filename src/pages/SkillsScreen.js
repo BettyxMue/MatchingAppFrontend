@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useEffect} from "react";
 import {KeyboardAvoidingView, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {
@@ -10,7 +11,7 @@ import {styles} from "../resources/Styles";
 import SelectDropdown from "react-native-select-dropdown";
 import {Entypo, Ionicons} from "@expo/vector-icons";
 import {getToken, getUser, storeUser} from "../resources/InternalStorage";
-import BottomBar from "../components/layout/BottomBar";
+import BottomBar from "../components/Layout/BottomBar";
 import Toast from "react-native-root-toast";
 
 const SkillsScreen = ({navigation}) => {
