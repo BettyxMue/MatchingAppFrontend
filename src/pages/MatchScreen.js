@@ -1,74 +1,137 @@
-import React, {useState} from 'react';
-import {Image, ImageBackground, Text, TouchableOpacity, View} from 'react-native';
-import {useRoute} from "@react-navigation/core";
+import React, {useEffect,} from 'react';
+import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from "@react-navigation/native";
+import {getUserFromId} from "../connectors/ProfileServiceConnector";
+import {Ionicons} from "@expo/vector-icons";
+import {styles} from "../resources/Styles";
+import {LinearGradient} from "expo-linear-gradient";
 
-const MatchScreen = () => {
+const MatchScreen = ({navigation, route}) => {
 
-    //const userId = {};    get userId from JWT?
+    const {userId, userSwipedId} = route.params
 
-    const navigation = useNavigation();
-    const { params } = useRoute();
-    const { userData, userSwiped } = params;
+    const [userData, setUserData] = React.useState("")
+    const [userSwipedData, setSwipedData] = React.useState("")
 
-    /*const [matches, setMatches] = useState("");
-    const [matched, setMatched] = useState("");
-    const [search, setSearch] = useState("");
+    let temp
+    let temp2
 
-    let data = Searching(searchId, userId);
-    setMatches(data);
+    useEffect(() => {
 
-    function getMatchedData(matchedId){
-        let result = GetProfileById(matchedId);
-        setMatched(result);
-        useEffect(() => {
-            const fetchData = async () => {
-                const result = await axios(
-                    'http://<localIp>:8080/profile/:' + userId,
-                );
-                setMatched(result.data);
-            };
+        GetUserData()
+        GetUserSwipedData()
+    }, [userId, userSwipedId])
 
-            fetchData();
-        }, []);
-    }*/
+    function GetUserData() {
+        getUserFromId(userId).then(r => {
+            console.log(r)
+            temp = {
+                firstName: r.firstName,
+                name: r.name,
+                //pic: r.profilePictures
+            }
+            setUserData(temp)
+        })
+    }
+
+    function GetUserSwipedData() {
+        getUserFromId(userSwipedId).then(r => {
+            temp2 = {
+                firstName: r.firstName,
+                name: r.name,
+                //pic: r.profilePictures
+            }
+            setSwipedData(temp2)
+        })
+    }
+
+    const GetImageSource = (source) => {
+        return `data:image/jpeg;base64,${source}`
+    }
 
     return (
-        <ImageBackground
-            resizeMode="cover"
-            //source={require("../images/Farbverlauf.png")}
-        >
-            <View>
-                <View>
-                    <Image
-                        //source={require("Match Icon")}
-                    />
+        <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
+            <View style={{
+                height: "100%",
+                width: "80%",
+                paddingVertical: 150
+            }}>
+                <View style={{
+                    alignItems: "center",
+                    paddingBottom: "10%"
+                }}>
+                    <Ionicons name="happy" size={80} color="white"/>
                 </View>
-                <Text>
-                    Du und {userSwiped.username} finden einander toll!
+                <Text style={
+                    {
+                        marginTop: 5,
+                        textAlign: "center",
+                        fontSize: 30,
+                        fontWeight: "bold",
+                        color: "white"
+                    }
+                }>
+                    Du und {userSwipedData.firstName} können einander etwas beibringen!
                 </Text>
-                <View>
+                <View style={{
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    width: "100%",
+                    marginVertical: "10%"
+                }}>
                     <Image
-                        source={{ uri: userData.picture }}
+                        style={{
+                            resizeMode: "cover",
+                            height: 90,
+                            width: 90,
+                            borderRadius: 100,
+                            margin: 10
+                        }}
+                        source={require("./../../assets/defaultPicture.jpg")}
+                        //source={{uri: GetImageSource(userData.pic)}}
                     />
                     <Image
-                        source={{ uri: userSwiped.picture }}
+                        style={{
+                            resizeMode: "cover",
+                            height: 90,
+                            width: 90,
+                            borderRadius: 100,
+                            margin: 10
+                        }}
+                        source={require("./../../assets/defaultPicture.jpg")}
+                        //source={{uri: GetImageSource(userSwipedData.pic)}}
                     />
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingVertical: 12,
+                    paddingHorizontal: 32,
+                    borderRadius: 20,
+                    elevation: 3,
+                    backgroundColor: '#ffffff',
+                    borderColor: '#ffffff',
+                    marginHorizontal: "10%",
+                    borderWidth: 1
+                }}>
                     <Text
                         onPress={() => {
                             navigation.goBack();
                             navigation.navigate("Chat", {
-                                userSwiped
+                                userSwipedId
                             });
+                        }}
+                        style={{
+                            textAlign: "center",
+                            fontSize: 20,
+                            color: "black"
                         }}
                     >
                         Schicke doch gleich eine Nachricht!
                     </Text>
                 </TouchableOpacity>
             </View>
-        </ImageBackground>
+        </LinearGradient>
     )
 }
 export default MatchScreen

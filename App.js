@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {StyleSheet, Button, Keyboard} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { RootSiblingParent } from 'react-native-root-siblings';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import {RootSiblingParent} from 'react-native-root-siblings';
 import HomeScreen from "./src/pages/HomeScreen";
 import SettingsScreen from "./src/pages/SettingsScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
@@ -25,6 +26,9 @@ import {StripeProvider} from '@stripe/stripe-react-native'
 import * as Notifications from 'expo-notifications'
 import SkillsScreen from "./src/pages/SkillsScreen";
 import OtherProfileScreen from "./src/pages/OtherProfileScreen";
+import MatchScreen from "./src/pages/MatchScreen";
+import ExploreScreen from "./src/pages/ExploreScreen";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -35,23 +39,23 @@ export default function App() {
     const [notification, setNotification] = React.useState(false)
     const notificationsListerner = useRef()
 
-      
+
     useEffect(() => {
-      registerForPushNotifcations().then(token => {
-        storeNotificationToken(token)
-      })
-      Notifications.setNotificationHandler({
-        handleNotification: async() => ({
-          shouldPlaySound: false,
-          shouldShowAlert: true,
-          shouldSetBadge: false
+        registerForPushNotifcations().then(token => {
+            storeNotificationToken(token)
         })
-      })
-      notificationsListerner.current = Notifications.addNotificationReceivedListener(notification => {
-        //setNotification(notification)
-      })
+        Notifications.setNotificationHandler({
+            handleNotification: async () => ({
+                shouldPlaySound: false,
+                shouldShowAlert: true,
+                shouldSetBadge: false
+            })
+        })
+        notificationsListerner.current = Notifications.addNotificationReceivedListener(notification => {
+            //setNotification(notification)
+        })
     })
-    
+
     return (
       <ChatArrayProvicer>
         <ChatProvider>
@@ -82,6 +86,8 @@ export default function App() {
                         })}/>
                         <Stack.Screen name="Details" component={DetailsScreen}/>
                         <Stack.Screen name="Home" component={HomeScreen}/>
+                        <Stack.Screen name="Match" component={MatchScreen} options={{headerShown: false}}/>
+                        <Stack.Screen name="Explore" component={ExploreScreen} options={{headerShown: false}}/>
                         <Stack.Screen name="Settings" component={SettingsScreen}/>
                         <Stack.Screen name="Profile" component={ProfileScreen} options={({navitation, route}) => ({
                           headerShown: true,
@@ -120,15 +126,5 @@ export default function App() {
           </WebSocketProvider>
         </ChatProvider>
       </ChatArrayProvicer>
-      
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

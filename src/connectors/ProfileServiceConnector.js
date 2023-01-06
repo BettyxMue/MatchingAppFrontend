@@ -127,7 +127,6 @@ async function loginUser(loginObject){
         return resultData.error;
     }
     return resultData;
-
 }
 export {GetProfileById}*/
 
