@@ -3,7 +3,7 @@ import React, {Component, useEffect} from 'react'
 import {styles} from "../resources/Styles";
 import {LinearGradient} from "expo-linear-gradient";
 import ProfileItem from "../components/profileComponents/ProfileItem";
-import {UpdateUserProfile, getUserFromId} from "../connectors/ProfileServiceConnector";
+import {UpdateUserProfile, getUserFromId, DeleteUser} from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
 import {getToken, getUser, storeUser} from "../resources/InternalStorage";
 import BottomBar from "../components/layout/BottomBar";
@@ -126,6 +126,12 @@ const ProfileScreen = ({navigation}) => {
         navigation.navigate("Start")
         storeUser(null)
     }
+    function Logout() {
+        DeleteUser().then(r => {
+            navigation.navigate("Start")
+            storeUser(null)
+        })
+    }
 
     return (
         <SafeAreaView style={{
@@ -195,6 +201,20 @@ const ProfileScreen = ({navigation}) => {
                                         <TouchableOpacity style={styles.editProfileButton}
                                                           onPress={() => Logout}>
                                             <Text style={styles.continueButtonText}>Logout</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={{
+                                            alignContent: "center",
+                                            alignItems: "center",
+                                            alignSelf: "center",
+                                            justifyContent: "center",
+                                            width: "90%",
+                                            borderRadius: 10,
+                                            backgroundColor: 'red',
+                                            padding: 10,
+                                            marginTop: 10,
+                                        }}
+                                                          onPress={() => DeleteProfil}>
+                                            <Text style={styles.continueButtonText}>Profil löschen</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </ScrollView>

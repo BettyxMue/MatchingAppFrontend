@@ -324,3 +324,27 @@ export {GetAllSkills}
     return resultData;
 }
 export {RemoveSkillFromUser}*/
+
+async function DeleteUser(){
+    const userData = await getUser()
+    const userMail = userData.email
+    const query = "http://" + ip4v +":8084/profile/";
+
+    const user = {
+        email: userMail
+    }
+
+    const response = await fetch(query, {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    });
+    const resultData = await response.json();
+    if (response.status != 200){
+        return resultData.error;
+    }
+    return resultData;
+}
+export {DeleteUser}
