@@ -1,7 +1,7 @@
 // @ts-nocheck
 import {getUser} from "../resources/InternalStorage";
 
-let ip4v = "192.168.2.120"
+const ip4v = "192.168.2.120"
 
 async function Like(userId1, userId2){
     if (userId1 == "" || userId2 == "") {
@@ -56,11 +56,13 @@ async function Dislike(userId1, userId2){
 }
 export {Dislike}
 
-async function Searching(searchId, userId){
-    if (searchId == "" || userId == "") {
+async function Searching(searchId){
+    if (searchId == undefined) {
         return
     }
-    const query = "http://" + ip4v +":8084/searching/" + searchId + "/" + userId;
+    const userStore = await getUser()
+    const userId = userStore.id
+    const query = "http://" + ip4v + ":8084/searching/" + searchId + "/" + userId;
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -220,4 +222,20 @@ async function UpdateSearch(searchId, name, skill, level, gender, radius){
     }
     return resultData;
 }
-export {UpdateSearch}
+async function Exploring(){
+    const userStore = await getUser()
+    const userId = userStore.id
+    const query = "http://" + ip4v + ":8084/exploring/" + userId;
+    const response = await fetch(query, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    });
+    const resultData = await response.json();
+    if (response.status != 200){
+        return resultData.error;
+    }
+    return resultData;
+}
+export {UpdateSearch, Exploring}
