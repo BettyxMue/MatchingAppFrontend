@@ -250,6 +250,91 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 10
     },
+    invoiceOverviewHeader: {
+        backgroundColor: "#c7c7c7",
+        padding: "2%",
+        marginBottom: "2%"
+    },
+    invoiceOverviewBox: {
+        margin: "5%",
+        borderColor: "#c7c7c7",
+        backgroundColor: "white",
+        borderRadius: "5%",
+        borderWidth: 1
+    },
+    invoiceOverviewHeaderText: {
+        fontWeight: "bold",
+    },
+    invoiceOverviewSubheaderText:{
+        marginBottom: "2%"
+    },
+    invoiceOverviewDetailButtonText: {
+        color: "#5e5e5e",
+        marginLeft: "4%"
+    },
+    invoiceOverviewDetailButton:{
+        color: "#4287f5",
+        fontWeight: "bold",
+        fontSize: 16
+    },
+    invoiceOverviewBody: {
+        margin: "2%"
+    },
+    invoiceOverviewInvoiceSection: {
+        borderColor: "black",
+        borderWidth: 0.5
+    },
+    invoiceDetailsSectionHeader: {
+        backgroundColor: "#c7c7c7",
+        padding: "5%",
+        marginBottom: "2%"
+    },
+    invoiceDetailsSectionHeaderText: {
+        fontWeight: "bold",
+        fontSize: 16
+    },
+    invoiceDetailHeaderTitle:{
+        fontWeight: "bold",
+        marginBottom: "2%"
+    },
+    invoiceDetailHeaderText:{
+        marginBottom: "2%"
+    },
+    invoiceDetailPayedText:{
+        fontWeight: "bold",
+        marginLeft: "2%"
+    },
+    invoiceTotalSection: {
+        display: "flex", 
+        flexDirection: "row", 
+        flexWrap: "wrap", 
+        alignContent:"center",
+        borderTopWidth: 1, 
+        borderColor: "#c7c7c7",
+        paddingTop: "5%",
+        paddingBottom: "5%"
+    },
+    invoiceTotalHeader: {
+        fontWeight: "bold",
+        fontSize: 16
+    },
+    paymentHeader: {
+        height: "25%",
+        backgroundColor: "#c7c7c7",
+        justifyContent: "center",
+        alignContent: "center"
+    },
+    paymentHeaderText: {
+        fontWeight: "bold",
+        fontSize: 20,
+        textAlign: "center"
+    },
+    paymentBodyHeader: {
+        fontWeight: "bold"
+    },
+    paymentBodyText: {
+        marginBottom: "2%"
+    }
 }); 
 
 export {styles}
