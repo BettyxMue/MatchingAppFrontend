@@ -46,8 +46,8 @@ const LogInScreen =  ({navigation}) => {
         let webSocket = OpenWSConnection();
         websocket(webSocket);
         showErrorMessage("Logged in!");
-        GetChats().then(() => {
-          navigation.navigate('Chat')
+        navigation.navigate("OtherProfile", {
+          otherUserId: 17
         })
       })
     })

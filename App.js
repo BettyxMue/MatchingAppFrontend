@@ -23,6 +23,8 @@ import {registerForPushNotifcations} from './src/resources/Notificator'
 import { storeNotificationToken } from "./src/resources/InternalStorage";
 import {StripeProvider} from '@stripe/stripe-react-native'
 import * as Notifications from 'expo-notifications'
+import SkillsScreen from "./src/pages/SkillsScreen";
+import OtherProfileScreen from "./src/pages/OtherProfileScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -82,6 +84,7 @@ export default function App() {
                         <Stack.Screen name="Home" component={HomeScreen}/>
                         <Stack.Screen name="Settings" component={SettingsScreen}/>
                         <Stack.Screen name="Profile" component={ProfileScreen}/>
+                        <Stack.Screen name="OtherProfile" component={OtherProfileScreen} options={{headerShown: false}}/>
                         <Stack.Screen name="Filter" component={FilterScreen}/>
                         <Stack.Screen name="Chat" component={ChatScreen}/>
                         <Stack.Screen name="Messages" component={MessagesScreen}/>
