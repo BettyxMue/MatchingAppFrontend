@@ -12,7 +12,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import {Entypo, Ionicons} from "@expo/vector-icons";
 import {getToken, getUser, storeUser} from "../resources/InternalStorage";
 import BottomBar from "../components/Layout/BottomBar";
-import Toast from "react-native-root-toast";
+import Toast from "react-native-root-toast"
 
 const SkillsScreen = ({navigation}) => {
 
@@ -21,6 +21,8 @@ const SkillsScreen = ({navigation}) => {
 
     const [toggle, setToggle] = React.useState(false)
     const [addToggle, setAddToggle] = React.useState(false)
+
+    const [isLoading, setLoading] = React.useState(true)
 
     const [userName, onChangeUserName] = React.useState("")
     const [email, onChangeEmail] = React.useState("")
@@ -77,6 +79,7 @@ const SkillsScreen = ({navigation}) => {
             onChangePrice((r.price).toString())
             onAchievedSkills(r.achievedSkills)
             onSearchedSkills(r.searchedSkills)
+            setLoading(false)
         })
     }
 
@@ -138,13 +141,15 @@ const SkillsScreen = ({navigation}) => {
                 achievedSkills[index] = newSkill
             }
         })
-
+        setLoading(true)
         UpdateUserProfile(gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, searchedSkills, achievedSkills).then(r => {
             console.log(r)
+        }).then(() => {
+            setToggle(false)
+            GetUserData(userId)
+            storeUser(userData)
         })
-        setToggle(false)
-        GetPossibleSkills()
-        storeUser(userData)
+        
     }
 
     async function showErrorMessage(message) {
@@ -191,13 +196,15 @@ const SkillsScreen = ({navigation}) => {
 
         achievedSkills.push({id: newSkillId})
         console.log(achievedSkills)
-
+        setLoading(true)
         UpdateUserProfile(gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, searchedSkills, achievedSkills).then(r => {
             console.log(r)
+        }).then(() => {
+            setAddToggle(false)
+            GetUserData(userId)
+            storeUser(userData)
         })
-        setAddToggle(false)
-        GetPossibleSkills()
-        storeUser(userData)
+        
     }
 
     async function RemoveSkill(skillName, skillLevel) {
@@ -217,13 +224,15 @@ const SkillsScreen = ({navigation}) => {
             }
         })
         onAchievedSkills(achieved)
-
+        setLoading(true)
         UpdateUserProfile(gender, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, searchedSkills, achieved).then(r => {
             console.log(r)
+        }).then(() => {
+            setToggle(false)
+            GetUserData(userId)
+            storeUser(userData)
         })
-        setToggle(false)
-        GetPossibleSkills()
-        storeUser(userData)
+        
     }
 
     function renderSwitch(param) {
@@ -254,6 +263,12 @@ const SkillsScreen = ({navigation}) => {
     }
 
     const backButtonChar = "\u276e"
+
+    if(isLoading){
+        return(
+            <Text>Loading...</Text>
+        )
+    }
 
     return (
         <SafeAreaView style={{
@@ -286,16 +301,16 @@ const SkillsScreen = ({navigation}) => {
                         </TouchableOpacity>
                     </View>
                     {achievedSkills.map((skill, index) => (
-                        <Collapse key={index} style={{borderBottomWidth: 1, borderTopWidth: 1}}>
+                        <Collapse 
+                            key={index} 
+                            style={{borderBottomWidth: 1, borderTopWidth: 1}}
+                            >
                             <CollapseHeader style={{
                                 flexDirection: 'row',
-                                alignItems: 'center',
-                                padding: 10,
-                                backgroundColor: '#E6E6E6'
+                                backgroundColor: '#E6E6E6',
+                                padding: "2%"
                             }}>
-                                <View style={{width: '100%'}}>
-                                    <Text>{skill.name}</Text>
-                                </View>
+                                <Text>{skill.name}</Text>
                             </CollapseHeader>
                             <CollapseBody style={{
                                 alignItems: 'left',

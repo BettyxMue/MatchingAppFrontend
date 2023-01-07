@@ -20,7 +20,7 @@ async function Like(userId1, userId2){
         body: JSON.stringify(like)
     });
     const resultData = await response.json();
-    if (response.status != 200){
+    if (response.status != 201){
         return resultData.error;
     }
     return resultData;
