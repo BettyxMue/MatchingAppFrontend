@@ -39,6 +39,7 @@ const FilterScreen = ({navigation}) => {
     const [price, onChangePrice] = React.useState("")
     const [achievedSkills, onAchievedSkills] = React.useState([])
     const [searchedSkills, onSearchedSkills] = React.useState([])
+    const [isLoading, setLoading] = React.useState(true)
 
     let filters = [];
     const [userFilters, setUserFilters] = React.useState([])
@@ -91,6 +92,7 @@ const FilterScreen = ({navigation}) => {
             onChangePrice((r.price).toString())
             onAchievedSkills(r.achievedSkills)
             onSearchedSkills(r.searchedSkills)
+            setLoading(false)
         })
     }
 
@@ -192,10 +194,13 @@ const FilterScreen = ({navigation}) => {
             userName, email, city, plz, street, houseNumber,
             searchedSkills, achievedSkills).then(r => {
             console.log(r)
+        }).then(() => {
+            setAddToggle(false)
+            GetUserFilters(userId)
+            GetUserData(userId)
+            storeUser(userData)
         })
-        setAddToggle(false)
-        GetUserFilters()
-        storeUser(userData)
+        
     }
 
     async function DeleteFilter(searchId, skillName, skillLevel) {
@@ -230,15 +235,18 @@ const FilterScreen = ({navigation}) => {
             }
         })
         onSearchedSkills(searched)
-
+        setLoading(true)
         UpdateUserProfile(genderOfUser, price, phoneNumber, firstName, nameOfUser,
             userName, email, city, plz, street, houseNumber, searched, achievedSkills).then(r => {
             console.log(r)
+        }).then(() => {
+            showErrorMessage("Filter erfolgreich gelöscht!")
+            GetUserFilters(userId)
+            GetUserData(userId)
+            storeUser(userData)
         })
 
-        showErrorMessage("Filter erfolgreich gelöscht!")
-        GetUserFilters()
-        storeUser(userData)
+        
     }
 
     async function UpdateFilter(searchId, name, level, gender, radius) {
@@ -299,7 +307,7 @@ const FilterScreen = ({navigation}) => {
                 searchedSkills[index] = newSkill
             }
         })
-
+        
         UpdateSearch(searchId, name, newSkillId, level, genderNr, radius).then(r => {
             if (r.status !== '200') {
                 showErrorMessage(r);
@@ -308,15 +316,18 @@ const FilterScreen = ({navigation}) => {
         })
 
         searchedSkills.push(newSkillId)
-
+        setLoading(true)
         UpdateUserProfile(genderOfUser, price, phoneNumber, firstName, nameOfUser,
             userName, email, city, plz, street, houseNumber, searchedSkills, achievedSkills).then(r => {
             console.log(r)
+        }).then(() => {
+            setToggle(false)
+            GetSearchesByUser(userId)
+            GetUserData(userId)
+            storeUser(userData)
         })
 
-        setToggle(false)
-        GetSearchesByUser()
-        storeUser(userData)
+        
     }
 
     function renderSwitch(param) {
@@ -341,6 +352,12 @@ const FilterScreen = ({navigation}) => {
     }
 
     const backButtonChar = "\u276e"
+
+    if(isLoading){
+        return(
+            <Text>Loading...</Text>
+        )
+    }
 
     return (
         <SafeAreaView style={{

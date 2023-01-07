@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useEffect, useRef,} from 'react';
 import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from "@react-navigation/native";

@@ -25,6 +25,7 @@ const HomeScreen = ({navigation}) => {
     const [selectedFilter, setSelectedFilter] = React.useState("");
     const [filterCreated, setFilterCreated] = React.useState(false);
     const [filtersData, setFiltersData] = React.useState([]);
+    const [cardsAvailable, setCardsAvailable] = React.useState(false)
     let filterOptionData = [];
     let frontLoadedData = []
 
@@ -65,7 +66,7 @@ const HomeScreen = ({navigation}) => {
         setFilterCreated(true);
     }
 
-    function StartSearch() {
+    function StartSearch(selectedFilter) {
         let tempId
         filtersData.forEach(i => {
             if (i === selectedFilter) {
@@ -94,6 +95,7 @@ const HomeScreen = ({navigation}) => {
             setProfiles(tempArray)
             if (r !== undefined) {
                 setPeopleVorhanden(true)
+                setCardsAvailable(true)
             }
         })
     }
@@ -121,24 +123,30 @@ const HomeScreen = ({navigation}) => {
         if (!profiles[cardIndex]) return;
         const userSwipedId = profiles[cardIndex].id;
         Dislike(userId, userSwipedId).then(r => {
-            console.log(r)
             if (typeof r !== 'object') {
                 showErrorMessage("Something went wrong with the Dislike!");
                 return;
             }
         })
+        if(cardIndex == (profiles.length -1)){
+            setPeopleVorhanden(false)
+        }
     };
 
     const swipeRight = async (cardIndex) => {
         if (!profiles[cardIndex]) return;
         const userSwipedId = profiles[cardIndex].id;
         Like(userId, userSwipedId).then(r => {
-            console.log(r)
-            navigation.navigate("Match", {
-                userId: userId,
-                userSwipedId: userSwipedId
-            });
+            if(r.match){
+                navigation.navigate("Match", {
+                    userId: userId,
+                    userSwipedId: userSwipedId
+                });
+            }
         })
+        if(cardIndex == (profiles.length -1)){
+            setPeopleVorhanden(false)
+        }
     };
 
     const GetImageSource = (source) => {
@@ -187,7 +195,7 @@ const HomeScreen = ({navigation}) => {
                                     setSelected={(val) => {
                                         setSelectedFilter(val)
                                         setFilterChosen(true)
-                                        StartSearch()
+                                        StartSearch(val)
                                     }}
                                     data={filtersData}
                                     save="value"
