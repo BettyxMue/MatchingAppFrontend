@@ -3,6 +3,8 @@ import React, {useEffect} from "react";
 import {Image, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {styles} from "../../resources/Styles";
 import SelectDropdown from 'react-native-select-dropdown'
+import * as MediaLibrary from 'expo-media-library';
+import * as ImagePicker from 'expo-image-picker';
 
 const ProfileItem = ({
                          toggle,
@@ -31,7 +33,8 @@ const ProfileItem = ({
                          onContinueButton,
                          onChangePrice,
                          onChangeEmail,
-                         onChangeGender
+                         onChangeGender,
+                         setProfilePicture
                      }) => {
 
     const genders = ["Weiblich", "Männlich", "Divers"]
@@ -39,12 +42,32 @@ const ProfileItem = ({
     const [searchedSkillsToggle, setSearchedSkillsToggle] = React.useState(false)
     const [achievedSkillsToggle, setAchievedSkillsToggle] = React.useState(false)
 
+    const[pPicture, setPPicture] = React.useState("")
+
     let userSearchedSkills = []
     let userAchievedSkills = []
 
     useEffect(() => {
         EvaluateData()
     })
+
+    async function uploadPicture(){
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1,1],
+            base64: true,
+            quality: 0.3
+        })
+        if(!result.canceled){
+            setProfilePictureBase64(result.assets[0].base64)
+        }
+    }
+
+    function setProfilePictureBase64(data){
+        let profilePictureString = data.slice()
+        setProfilePicture(profilePictureString)
+    }
 
     const GetImageSource = (source) => {
         return `data:image/jpeg;base64,${source}`
@@ -84,13 +107,12 @@ const ProfileItem = ({
                 break
         }
     }
-
+    // Toggle 0: Edit Profile, Toggle 1: Show Profile, Toggle 2: Show profile of other user
     if (toggle === 1) {
         return (
             <View style={styles.containerProfileItem}>
                 <View>
-                    {/*<Image source={require("./../../assests/defaultPicture.jpg")} /> {/*how to change pb?*/}
-                    {/*<Image source={{uri: GetImageSource(card.profilePictures)}}*/}
+                    <Image style={{width:100,height:100}} source={{uri: GetImageSource(profilePicture)}}/>
                 </View>
                 <View style={styles.profileDescription}>
                     <Text style={styles.descriptionProfileItem}>Willkommen,</Text>
@@ -141,6 +163,9 @@ const ProfileItem = ({
     if (toggle === 0) {
         return (
             <View style={styles.containerProfileItem}>
+                <TouchableOpacity onPress={uploadPicture}>
+                    <Text>Upload Picture</Text>
+                </TouchableOpacity>
                 {/*TODO: Upload new Picture?
                     <View>
                             <Image source={require("./../../assests/defaultPicture.jpg")} /> {/*how to change pb?
@@ -283,7 +308,7 @@ const ProfileItem = ({
     if (toggle === 2) {
         return (
             <View style={styles.containerProfileItem}>
-                <View>
+                <View> 
                     {/*<Image source={require("./../../assests/defaultPicture.jpg")} /> {/*how to change pb?*/}
                     {/*<Image source={{uri: GetImageSource(card.profilePictures)}}*/}
                 </View>

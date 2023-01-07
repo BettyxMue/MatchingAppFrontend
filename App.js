@@ -28,6 +28,7 @@ import SkillsScreen from "./src/pages/SkillsScreen";
 import OtherProfileScreen from "./src/pages/OtherProfileScreen";
 import MatchScreen from "./src/pages/MatchScreen";
 import ExploreScreen from "./src/pages/ExploreScreen";
+import * as MediaLibrary from 'expo-media-library';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +39,7 @@ export default function App() {
     const [chat, setChat] = React.useState([]);
     const [notification, setNotification] = React.useState(false)
     const notificationsListerner = useRef()
+    const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
 
 
     useEffect(() => {

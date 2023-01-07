@@ -16,10 +16,14 @@ const ChatStart = (chat) => {
         }
     }
 
+    const GetImageSource = (source) => {
+        return `data:image/jpeg;base64,${source}`
+    }
+
     return (
         <View style={styles.chatOverviewElement}>
             <View style={{width: "20%"}}>
-                <Image style={styles.chatPicture} source={{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}/>
+                <Image style={styles.chatPicture} source={(chat.chat.chatPartner.profilePicture != null) ? {uri: GetImageSource(chat.chat.chatPartner.profilePicture)}:{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}/>
             </View>
             <View style={{width: "70%"}}>
                 <View>

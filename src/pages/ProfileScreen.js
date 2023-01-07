@@ -38,6 +38,8 @@ const ProfileScreen = ({navigation}) => {
     const [name, onChangeName] = React.useState("")
     const [gender, onChangeGender] = React.useState("")
     const [price, onChangePrice] = React.useState("")
+    const [profilePicture, setProfilePicture] = React.useState("")
+    const [isLoading, setLoading] = React.useState(true)
 
     let genderString;
 
@@ -80,6 +82,8 @@ const ProfileScreen = ({navigation}) => {
                 onChangePhoneNumber(r.telephoneNumber)
                 onChangeStreet(r.street)
                 onChangePrice((r.price).toString())
+                setProfilePicture(r.profilePicture)
+                setLoading(false)
             }
         )
     }
@@ -116,9 +120,10 @@ const ProfileScreen = ({navigation}) => {
                 genderNr = 3
                 break
         }
-
-        UpdateUserProfile(genderNr, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber).then(r => {
+        setLoading(true)
+        UpdateUserProfile(genderNr, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber,profilePicture).then(r => {
             showMessage("User erfolgreich geupdated!")
+            setLoading(false)
         });
         setToggleEdit(true)
     }
@@ -132,6 +137,12 @@ const ProfileScreen = ({navigation}) => {
             navigation.navigate("Start")
             storeUser(null)
         })
+    }
+
+    if(isLoading){
+        return(
+            <Text>Loading...</Text>
+        )
     }
 
     return (
@@ -180,7 +191,7 @@ const ProfileScreen = ({navigation}) => {
                                         houseNumber={houseNumber}
                                         plz={plz.toString()}
                                         phoneNumber={phoneNumber}
-                                        //profilePicture={userId.profilePicture[0]}
+                                        profilePicture={profilePicture}
                                         price={price}
                                     />
 
@@ -233,7 +244,7 @@ const ProfileScreen = ({navigation}) => {
                                         houseNumber={houseNumber}
                                         plz={plz}
                                         phoneNumber={phoneNumber}
-                                        //profilePicture={userId.profilePicture[0]}
+                                        profilePicture={profilePicture}
                                         price={price}
                                         onContinueButton={onContinueButton}
                                         onChangeCity={onChangeCity}
@@ -247,6 +258,7 @@ const ProfileScreen = ({navigation}) => {
                                         onChangeHouseNumber={onChangeHouseNumber}
                                         onChangeUsername={onChangeUserName}
                                         onChangeTelephoneNumber={onChangePhoneNumber}
+                                        setProfilePicture={setProfilePicture}
                                     />
                                 </ScrollView>
                             </View>

@@ -177,7 +177,7 @@ async function sendActivationQuery(user, token){
 export {SignUp,ActivateAccount,UpdateUser,loginUser,getUserFromId}
 
 
-async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, username, email, city, plz, street, houseNumber, searchedSkills, achievedSkills){
+async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, username, email, city, plz, street, houseNumber, profilePicture, searchedSkills, achievedSkills ){
 
     let priceNumber
     let plzNumber
@@ -194,43 +194,53 @@ async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, us
         }
     }
 
-    /*let genderNr
-    switch (gender){
-        case "Weiblich":
-            genderNr = 2
-            break
-        case "Männlich":
-            genderNr = 1
-            break
-        case "Divers":
-            genderNr = 3
-            break
-    }*/
-
     const userStore = await getUser()
     const userId = userStore.id
     const token = await getToken()
     let user
 
     const query = "http://"+ ip4v +":8080/profile/" + userId
-    if (searchedSkills.length == 0 & achievedSkills.length == 0){
-        user = {
-            "firstName": firstName,
-            "name": name,
-            "gender": gender,
-            "username": username,
-            "email": email,
-            "street": street,
-            "houseNumber": houseNumber,
-            "telephoneNumber": phoneNumber,
-            "price": priceNumber,
-            "CityIdentifier": plzNumber,
-            "city": {
-                "plz": plzNumber,
-                "place": city
+    if(searchedSkills != undefined && achievedSkills != undefined){
+        if (searchedSkills.length == 0 & achievedSkills.length == 0){
+            user = {
+                "firstName": firstName,
+                "name": name,
+                "gender": gender,
+                "username": username,
+                "email": email,
+                "street": street,
+                "houseNumber": houseNumber,
+                "telephoneNumber": phoneNumber,
+                "price": priceNumber,
+                "profilePicture": profilePicture,
+                "CityIdentifier": plzNumber,
+                "city": {
+                    "plz": plzNumber,
+                    "place": city
+                }
+            }
+        } else {
+            user = {
+                "firstName": firstName,
+                "name": name,
+                "gender": gender,
+                "username": username,
+                "email": email,
+                "street": street,
+                "houseNumber": houseNumber,
+                "telephoneNumber": phoneNumber,
+                "price": priceNumber,
+                "profilePicture": profilePicture,
+                "CityIdentifier": plzNumber,
+                "city": {
+                    "plz": plzNumber,
+                    "place": city
+                },
+                "achievedSkills": achievedSkills,
+                "searchedSkills": searchedSkills
             }
         }
-    } else {
+    }else {
         user = {
             "firstName": firstName,
             "name": name,
@@ -241,6 +251,7 @@ async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, us
             "houseNumber": houseNumber,
             "telephoneNumber": phoneNumber,
             "price": priceNumber,
+            "profilePicture": profilePicture,
             "CityIdentifier": plzNumber,
             "city": {
                 "plz": plzNumber,
@@ -250,6 +261,7 @@ async function UpdateUserProfile(gender, price, phoneNumber, firstName, name, us
             "searchedSkills": searchedSkills
         }
     }
+    
     const response = await fetch(query, {
         method: 'PUT',
         headers: {
@@ -285,43 +297,6 @@ async function GetAllSkills(){
     return resultData;
 }
 export {GetAllSkills}
-
-/*async function RemoveSkillFromUser(userId, skillId){
-    if (userId == "" || skillId == "") {
-        return
-    }
-
-    let skillIdNr = parseInt(skillId)
-    if (isNaN(skillIdNr)){
-        return "Skill ID is not valid!"
-    }
-    let userIdNr = parseInt(userId)
-    if (isNaN(userIdNr)){
-        return "User ID is not valid!"
-    }
-
-    const query = "http://"+ ip4v +":8080/profile/" + userId
-    const token = await getToken()
-    const data = {
-        userid: userIdNr,
-        skill_ids: [skillIdNr]
-    }
-    const response = await fetch(query, {
-        method: 'PUT',
-        headers: {
-            'Content-type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        },
-        body: JSON.stringify(data)
-    });
-    const resultData = await response.json();
-
-    if (response.status != 200){
-        return resultData.error;
-    }
-    return resultData;
-}
-export {RemoveSkillFromUser}*/
 
 async function DeleteUser(){
     const userData = await getUser()

@@ -89,7 +89,7 @@ const HomeScreen = ({navigation}) => {
                     firstName: possibleUser.firstName,
                     //city: possibleUser.city.place,
                     gender: switchGender(possibleUser.gender),
-                    //picture: i.profilePictures
+                    picture: possibleUser.profilePicture
                 }
             })
             setProfiles(tempArray)
@@ -274,9 +274,10 @@ const HomeScreen = ({navigation}) => {
                                                             borderRadius: 20,
                                                             margin: 10
                                                         }}
-                                                        source={require("./../../assets/defaultPicture.jpg")}
+                                                        source={(card.picture != null) ? {uri: GetImageSource(card.picture)}: require("./../../assets/defaultPicture.jpg") }
+                                                        //source={require("./../../assets/defaultPicture.jpg")}
                                                         //source={{uri: GetImageSource(card.profilePictures)}}
-                                                        onClick={() => navigation.navigate("UserProfile", {
+                                                        onClick={() => navigation.navigate("OtherProfile", {
                                                             otherUserId: card.id
                                                         })}
                                                     />

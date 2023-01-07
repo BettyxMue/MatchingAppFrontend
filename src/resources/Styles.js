@@ -108,7 +108,8 @@ const styles = StyleSheet.create({
     chatPicture: {
         borderRadius: "100%",
         width: 50,
-        height: 50
+        height: 50,
+        objectFit: "contain"
     },
     chatOverviewElement: {
         width: "90%",

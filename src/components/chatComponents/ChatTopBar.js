@@ -26,6 +26,10 @@ const ChatTopBar = (user) => {
         })
     }
 
+    const GetImageSource = (source) => {
+        return `data:image/jpeg;base64,${source}`
+    }
+
     return (
         <View style={styles.ChatTopBar}>
             <View style={{width: "20%", alignContent: "center", justifyContent: "center", paddingLeft: "5%", marginTop: "10%"}}>
@@ -37,7 +41,7 @@ const ChatTopBar = (user) => {
                 <View style={{marginLeft: "35%", marginTop: "5%", alignContent: "center"}}>
                     <View style={{marginLeft: "10%"}}>
                         <TouchableOpacity onPress={navigateToOtherProfile}>
-                            <Image style={styles.chatTopBarPicture} source={{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}/>
+                            <Image style={styles.chatTopBarPicture} source={(user.user.profilePicture != null) ? {uri: GetImageSource(user.user.profilePicture)}:{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}/>
                         </TouchableOpacity>         
                     </View>
                     <View>
