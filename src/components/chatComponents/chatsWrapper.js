@@ -29,6 +29,7 @@ const ChatsWrapper = (chats) => {
     const [isRoomLoading, setRoomLoading] = React.useState(true)
     const [userCache, setUserCache] = React.useState({})
     const [chatArrayCache, setChatArrayCache] = React.useState([])
+    const [chatsAvailable, setChatsAvailable] = React.useState(false)
 
 
     function onChatClick(data,userCache2, navigation){
@@ -57,6 +58,12 @@ const ChatsWrapper = (chats) => {
             return
         }*/
         let chatArrayCache = chatArray
+        if(chatData == undefined){
+            setLoading(false)
+            setRoomLoading(false)
+            setChatsAvailable(false)
+            return
+        }
         chatData.forEach(chat => {
             let position = chatArrayCache.findIndex(c => c.chatID === chat.chatID)
             if (position === -1 ){
@@ -94,6 +101,7 @@ const ChatsWrapper = (chats) => {
             }
         });
         setChatArray(chatArrayCache)
+        setChatsAvailable(true)
     }
     
     async function SetUsersToChats(user, setLoading){
@@ -114,6 +122,7 @@ const ChatsWrapper = (chats) => {
                 counter++;
             })
             setLoading(false)
+            setChatsAvailable(true)
         })
     }
 
@@ -176,6 +185,7 @@ const ChatsWrapper = (chats) => {
             })
             setChatRooms(rooms)
             setRoomLoading(false)
+            setChatsAvailable(true)
         })
     }
     
@@ -212,6 +222,13 @@ const ChatsWrapper = (chats) => {
 
     while(isLoading || isRoomLoading) {
         return <Text>Loading...</Text>
+    }
+    while(!chatsAvailable){
+        return (
+            <View style={{height: "100%", justifyContent: "center", alignContent: "center", backgroundColor: "white"}}>
+                <Text style={{fontWeight: "bold", fontSize: 24}}>No Chats available...</Text>
+            </View>
+        ) 
     }
 
     return (
