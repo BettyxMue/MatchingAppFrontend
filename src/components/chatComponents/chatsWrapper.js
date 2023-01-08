@@ -194,7 +194,12 @@ const ChatsWrapper = (chats) => {
     useEffect(() => {
         if(chat.chatID != null && !(firstUpdate.current)){
             let position = chatArray.findIndex(c => c.chatID == chat.chatID)
-            setChat(chatArray[position])
+            if (position == -1){
+                let position = chatRooms.findIndex(c => c.chatID == chat.chatID)
+                setChat(chatRooms[position])
+            } else {
+                setChat(chatArray[position])
+            }
         }
         if(firstUpdate.current){
             firstUpdate.current = false
