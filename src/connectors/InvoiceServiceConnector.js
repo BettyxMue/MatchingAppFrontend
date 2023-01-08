@@ -36,9 +36,10 @@ async function createInvoice(serviceName,date,hours,billedUser){
         body: JSON.stringify(body)
     })
 
-    const resultData = await response.json();
+    const resultData = await request.json();
 
     if (response.status != 200){
+        console.log(resultData.error)
         return resultData.error;
     }
     return true;
