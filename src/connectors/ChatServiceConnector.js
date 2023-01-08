@@ -5,9 +5,11 @@ import '../resources/globals'
 import { useContext } from "react"
 import { ChatContext, ChatRoomContext } from "../resources/page-context"
 
+const ip4v = "192.168.0.98"
+
 // @ts-nocheck
 function OpenWSConnection(){
-    let websocket = new WebSocket("ws://192.168.2.120:8081/sendMessage")
+    let websocket = new WebSocket("ws://" + ip4v + ":8081/sendMessage")
     websocket.onopen = () => {
         let openMessage = {
             "writtenBy": 1
@@ -51,12 +53,12 @@ async function GetAllChatRoomsForUser(){
         console.log("No token found!")
         return
     }
-    let query = "http://192.168.2.120:8081/Rooms"
+    let query = "http://" + ip4v + ":8081/Rooms"
     const response = await fetch(query, {
         method: 'GET',
         headers: {
             'Content-type': 'application/json',
-            'Authorization': token,
+            'Authorization': 'Bearer ' + token,
             'user': user.id
         }
     })
@@ -81,12 +83,12 @@ async function GetAllChatsForUser(){
         console.log("No token found!")
         return
     }
-    const query = "http://192.168.2.120:8081/getAllMessagesForUser"
+    const query = "http://" + ip4v + ":8081/getAllMessagesForUser"
     const response = await fetch(query, {
         method: 'GET',
         headers: {
             'Content-type': 'application/json',
-            'Authorization': token,
+            'Authorization': 'Bearer ' + token,
             'User': user.id
         }
     })
@@ -105,7 +107,7 @@ async function getChatsWithToken(user,token){
         console.log("No token found!")
         return
     }
-    const query = "http://192.168.2.120:8081/getAllMessagesForUser"
+    const query = "http://" + ip4v + ":8081/getAllMessagesForUser"
     const response = await fetch(query, {
         method: 'GET',
         headers: {
@@ -137,7 +139,7 @@ async function createChat(matchedId){
         return
     }
 
-    const query = "http://192.168.2.120:8081/createChatRoom"
+    const query = "http://" + ip4v + ":8081/createChatRoom"
     const response = await fetch(query, {
         method: 'PUT',
         headers: {

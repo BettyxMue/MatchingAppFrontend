@@ -1,48 +1,49 @@
 // @ts-nocheck
-import React, {useEffect} from "react";
-import {Image, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {styles} from "../../resources/Styles";
+import React, { useEffect } from "react";
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { styles } from "../../resources/Styles";
 import SelectDropdown from 'react-native-select-dropdown'
 import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
 
 const ProfileItem = ({
-                         toggle,
-                         username,
-                         firstName,
-                         name,
-                         city,
-                         gender,
-                         email,
-                         street,
-                         houseNumber,
-                         plz,
-                         phoneNumber,
-                         profilePicture,
-                         price,
-                         searchedSkills,
-                         achievedSkills,
-                         onChangeFirstName,
-                         onChangeUsername,
-                         onChangeName,
-                         onChangePLZ,
-                         onChangeCity,
-                         onChangeHouseNumber,
-                         onChangeTelephoneNumber,
-                         onChangeStreet,
-                         onContinueButton,
-                         onChangePrice,
-                         onChangeEmail,
-                         onChangeGender,
-                         setProfilePicture
-                     }) => {
+    toggle,
+    username,
+    firstName,
+    name,
+    city,
+    gender,
+    email,
+    street,
+    houseNumber,
+    plz,
+    phoneNumber,
+    profilePicture,
+    price,
+    searchedSkills,
+    achievedSkills,
+    onChangeFirstName,
+    onChangeUsername,
+    onChangeName,
+    onChangePLZ,
+    onChangeCity,
+    onChangeHouseNumber,
+    onChangeTelephoneNumber,
+    onChangeStreet,
+    onContinueButton,
+    onChangePrice,
+    onChangeEmail,
+    onChangeGender,
+    setProfilePicture
+}) => {
 
     const genders = ["Weiblich", "Männlich", "Divers"]
 
     const [searchedSkillsToggle, setSearchedSkillsToggle] = React.useState(false)
     const [achievedSkillsToggle, setAchievedSkillsToggle] = React.useState(false)
+    const [nameToggle, setNameToggle] = React.useState(true)
 
-    const[pPicture, setPPicture] = React.useState("")
+    const [pPicture, setPPicture] = React.useState("")
 
     let userSearchedSkills = []
     let userAchievedSkills = []
@@ -51,20 +52,20 @@ const ProfileItem = ({
         EvaluateData()
     })
 
-    async function uploadPicture(){
+    async function uploadPicture() {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [1,1],
+            aspect: [1, 1],
             base64: true,
             quality: 0.3
         })
-        if(!result.canceled){
+        if (!result.canceled) {
             setProfilePictureBase64(result.assets[0].base64)
         }
     }
 
-    function setProfilePictureBase64(data){
+    function setProfilePictureBase64(data) {
         let profilePictureString = data.slice()
         setProfilePicture(profilePictureString)
     }
@@ -73,29 +74,32 @@ const ProfileItem = ({
         return `data:image/jpeg;base64,${source}`
     }
 
-    function EvaluateData(){
-        if (searchedSkills != undefined && searchedSkills != ""){
+    function EvaluateData() {
+        if (searchedSkills != undefined && searchedSkills != "") {
             setSearchedSkillsToggle(true)
-           /* searchedSkills.map((skill, index) => {
-                userAchievedSkills[index] = {
-                    name: skill.name,
-                    levelId: skill.SkillIdentifier
-                }
-            })*/
+            /* searchedSkills.map((skill, index) => {
+                 userAchievedSkills[index] = {
+                     name: skill.name,
+                     levelId: skill.SkillIdentifier
+                 }
+             })*/
         }
-        if (achievedSkills != undefined && achievedSkills != ""){
+        if (achievedSkills != undefined && achievedSkills != "") {
             setAchievedSkillsToggle(true)
-           /* achievedSkills.map((skill, index) => {
-                userAchievedSkills[index] = {
-                    name: skill.name,
-                    levelId: skill.SkillIdentifier
-                }
-            })*/
+            /* achievedSkills.map((skill, index) => {
+                 userAchievedSkills[index] = {
+                     name: skill.name,
+                     levelId: skill.SkillIdentifier
+                 }
+             })*/
+        }
+        if (firstName == "" && name == "") {
+            setNameToggle(false)
         }
     }
 
-    function renderSwitch(id){
-        switch (id){
+    function renderSwitch(id) {
+        switch (id) {
             case 1:
                 return "Anfänger"
                 break
@@ -105,19 +109,31 @@ const ProfileItem = ({
             case 3:
                 return "Experte"
                 break
+            default:
+                return "Keine Angabe"
+                break
         }
     }
     // Toggle 0: Edit Profile, Toggle 1: Show Profile, Toggle 2: Show profile of other user
     if (toggle === 1) {
         return (
             <View style={styles.containerProfileItem}>
-                <View>
-                    <Image style={{width:100,height:100}} source={{uri: GetImageSource(profilePicture)}}/>
-                </View>
-                <View style={styles.profileDescription}>
-                    <Text style={styles.descriptionProfileItem}>Willkommen,</Text>
-                    <Text style={styles.name}>{firstName} {name}</Text>
-                </View>
+                <Image style={{
+                        width: "85%",
+                        height: "40%",
+                        resizeMode: "cover",
+                        borderRadius: 20,
+                        alignSelf: "center"
+                    }}
+                source={(profilePicture != null && profilePicture != "") ? { uri: GetImageSource(profilePicture) } : { uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png" }} />
+                {nameToggle ?
+                    <View style={styles.profileDescription}>
+                        <Text style={styles.descriptionProfileItem}>Willkommen,</Text>
+                        <Text style={styles.name}>{firstName} {name}</Text>
+                    </View>
+                    :
+                    <></>
+                }
                 <View style={styles.profileDescription}>
                     <Text style={styles.titleProfileItem}>Username:</Text>
                     <Text style={styles.descriptionProfileItem}>
@@ -163,45 +179,37 @@ const ProfileItem = ({
     if (toggle === 0) {
         return (
             <View style={styles.containerProfileItem}>
-                <TouchableOpacity onPress={uploadPicture}>
-                    <Text>Upload Picture</Text>
+                <TouchableOpacity style={{
+
+                }}
+                    onPress={uploadPicture}>
+                    <Text style={{
+                        color: "blue",
+                        textAlign: "center",
+                        fontSize: 15,
+                        marginBottom: "2%"
+                    }}
+                    >Lade dein Profilbild hoch</Text>
                 </TouchableOpacity>
-                {/*TODO: Upload new Picture?
-                    <View>
-                            <Image source={require("./../../assests/defaultPicture.jpg")} /> {/*how to change pb?
-                    </View>*/}
-                {/*<Image source={{uri: GetImageSource(card.profilePictures)}}*/}
-                <View style={{width: "127%"}}>
+                <View style={{ width: "100%" }}>
                     <View style={{
-                        marginTop: 10,
-                        marginBottom: 10,
-                        marginLeft: 25,
-                        marginRight: 125
+                        marginVertical: "2.5%",
+                        marginHorizontal: "7%"
                     }}>
-                        <Text style={styles.titleProfileItem}>Name:</Text>
+                        <Text style={styles.titleProfileItem}>Vor- und Zuname:</Text>
                         <TextInput
                             onChangeText={onChangeFirstName}
                             value={firstName}
-                            style={{
-                                height: 40,
-                                padding: 10,
-                                backgroundColor: "#edebeb",
-                                marginTop: 10,
-                                marginBottom: 10,
-                                alignContent: "center",
-                                alignItems: "center",
-                                alignSelf: "center",
-                                justifyContent: "center",
-                                width: "100%",
-                                borderRadius: 10
-                            }}
-                            textContentType="nickname"
+                            style={styles.registerInputTextInput2}
+                            textContentType="givenName"
+                            placeholder="Vorname"
                         />
                         <TextInput
                             onChangeText={onChangeName}
                             value={name}
                             style={styles.registerInputTextInput2}
-                            textContentType="nickname"
+                            textContentType="familyName"
+                            placeholder="Nachname"
                         />
                     </View>
                     <View style={styles.profileDescription}>
@@ -211,6 +219,7 @@ const ProfileItem = ({
                             value={username}
                             style={styles.registerInputTextInput2}
                             textContentType="username"
+                            placeholder="Username"
                         />
                     </View>
                     <View style={styles.profileDescription}>
@@ -228,33 +237,71 @@ const ProfileItem = ({
                     </View>
                     <View style={styles.profileDescription}>
                         <Text style={styles.titleProfileItem}>Adresse:</Text>
-                        <View style={{width: "100%"}}>
-                            <View style={{flexDirection: "row"}}>
+                        <View style={{ width: "100%" }}>
+                            <View style={{ flexDirection: "row" }}>
                                 <TextInput
                                     onChangeText={onChangeStreet}
                                     value={street}
-                                    style={styles.registerInputTextInput3}
+                                    style={{
+                                        flexWrap: "wrap-reverse",
+                                        width: "75%",
+                                        height: "68%",
+                                        padding: "3%",
+                                        backgroundColor: "#edebeb",
+                                        marginVertical: "3.5%",
+                                        borderRadius: 10,
+                                        marginRight: "3%"
+                                    }}
                                     textContentType="streetAddressLine1"
+                                    placeholder="Straße"
                                 />
                                 <TextInput
                                     onChangeText={onChangeHouseNumber}
                                     value={houseNumber}
-                                    style={styles.registerInputTextInput3}
-                                    textContentType="streetAddressLine2"
+                                    style={{
+                                        flexWrap: "wrap-reverse",
+                                        width: "22%",
+                                        height: "68%",
+                                        padding: "3%",
+                                        backgroundColor: "#edebeb",
+                                        marginVertical: "3.5%",
+                                        borderRadius: 10
+                                    }}
+                                    textContentType="streetAddressLine1"
+                                    placeholder="Nr."
                                 />
                             </View>
-                            <View style={{flexDirection: "row"}}>
+                            <View style={{ flexDirection: "row" }}>
                                 <TextInput
                                     onChangeText={onChangePLZ}
                                     value={plz}
-                                    style={styles.registerInputTextInput3}
+                                    style={{
+                                        flexWrap: "wrap-reverse",
+                                        width: "30%",
+                                        height: "68%",
+                                        padding: "3%",
+                                        backgroundColor: "#edebeb",
+                                        marginVertical: "3.5%",
+                                        borderRadius: 10,
+                                        marginRight: "3%"
+                                    }}
                                     textContentType="postalCode"
+                                    placeholder="PLZ"
                                 />
                                 <TextInput
                                     onChangeText={onChangeCity}
                                     value={city}
-                                    style={styles.registerInputTextInput3}
+                                    style={{
+                                        flexWrap: "wrap-reverse",
+                                        width: "67%",
+                                        height: "67%",
+                                        padding: "2.5%",
+                                        backgroundColor: "#edebeb",
+                                        marginVertical: "3.5%",
+                                        borderRadius: 10
+                                    }}
                                     textContentType="addressCity"
+                                    placeholder="Ort"
                                 />
                             </View>
                         </View>
@@ -266,6 +313,7 @@ const ProfileItem = ({
                             value={phoneNumber}
                             style={styles.registerInputTextInput2}
                             textContentType="telephoneNumber"
+                            placeholder="Handynummer"
                         />
                     </View>
                     <View style={styles.profileDescription}>
@@ -275,30 +323,31 @@ const ProfileItem = ({
                             value={email}
                             style={styles.registerInputTextInput2}
                             textContentType="emailAddress"
+                            placeholder="E-Mail-Adresse"
                         />
                     </View>
                     <View style={styles.profileDescription}>
-                        <Text style={styles.titleProfileItem}>Preis pro Stunde:</Text>
+                        <Text style={styles.titleProfileItem}>Preis pro Stunde: (in €)</Text>
                         <TextInput
                             onChangeText={onChangePrice}
                             value={price}
                             style={styles.registerInputTextInput2}
-                            textContentType="nickname"
+                            textContentType="none"
+                            placeholder="€/h"
                         />
                     </View>
                     <TouchableOpacity style={{
                         alignContent: "center",
                         alignItems: "center",
-                        alignSelf: "left",
+                        alignSelf: "center",
                         justifyContent: "center",
-                        width: "67%",
+                        width: "86%",
                         borderRadius: 10,
                         backgroundColor: 'blue',
-                        padding: 10,
-                        marginLeft: 22,
-                        marginTop: 10
+                        padding: "3%",
+                        marginTop: "3%"
                     }}
-                                      onPress={onContinueButton}>
+                        onPress={onContinueButton}>
                         <Text style={styles.continueButtonText}>Speichern</Text>
                     </TouchableOpacity>
                 </View>
@@ -308,7 +357,7 @@ const ProfileItem = ({
     if (toggle === 2) {
         return (
             <View style={styles.containerProfileItem}>
-                <View> 
+                <View>
                     {/*<Image source={require("./../../assests/defaultPicture.jpg")} /> {/*how to change pb?*/}
                     {/*<Image source={{uri: GetImageSource(card.profilePictures)}}*/}
                 </View>
@@ -330,7 +379,7 @@ const ProfileItem = ({
                 <View style={styles.profileDescription}>
                     <Text style={styles.titleProfileItem}>Wohnort:</Text>
                     <Text style={styles.descriptionProfileItem}>
-                        {plz} 
+                        {plz}
                     </Text>
                 </View>
                 <View style={styles.profileDescription}>
@@ -349,15 +398,15 @@ const ProfileItem = ({
                     <Text style={styles.titleProfileItem}>Gesuchte Skills:</Text>
                     {searchedSkillsToggle ? (
                         searchedSkills.map(skill =>
-                                <Text style={styles.descriptionProfileItem}>
-                                    {skill.name} - Level: {renderSwitch(skill.SkillIdentifier)}
-                                </Text>
-                            )
+                            <Text style={styles.descriptionProfileItem}>
+                                {skill.name} - Level: {renderSwitch(skill.SkillIdentifier)}
+                            </Text>
                         )
+                    )
                         : (
-                        <Text style={styles.descriptionProfileItem}>
-                            noch keine Skills vorhanden
-                        </Text>
+                            <Text style={styles.descriptionProfileItem}>
+                                noch keine Skills vorhanden
+                            </Text>
                         )
                     }
                 </View>

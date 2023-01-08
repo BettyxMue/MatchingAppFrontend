@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useEffect, useRef} from "react";
 import {Image, SafeAreaView, Text, TouchableOpacity, View} from "react-native";
 import {AntDesign, Entypo, Ionicons} from "@expo/vector-icons";
@@ -121,7 +122,7 @@ const ExploreScreen = ({navigation}) => {
             alignContent: "center"
         }}>
             <View style={{
-                marginBottom: "1%",
+                marginBottom: "1.5%",
                 width: "100%"
             }}>
                 <TouchableOpacity style={{
@@ -131,7 +132,7 @@ const ExploreScreen = ({navigation}) => {
                     alignContent: "center",
                     justifyContent: "center"
                 }} onPress={() => {
-                    navigation.navigate("Details")
+                    navigation.navigate("AGBs")
                 }}>
                     <Ionicons name="search-circle" size={35} color="#3860ff"/>
                 </TouchableOpacity>
@@ -202,19 +203,18 @@ const ExploreScreen = ({navigation}) => {
                                             }}
                                         >
                                             <Image
-                                                style={{
-                                                    resizeMode: "cover",
-                                                    height: "75%",
-                                                    width: "95%",
-                                                    borderRadius: 20,
-                                                    margin: 10
-                                                }}
-                                                source={require("./../../assets/defaultPicture.jpg")}
-                                                //source={{uri: GetImageSource(card.profilePictures)}}
-                                                onClick={() => navigation.navigate("UserProfile", {
-                                                    otherId: card.id
-                                                })}
-                                            />
+                                                        style={{
+                                                            resizeMode: "cover",
+                                                            height: "75%",
+                                                            width: "95%",
+                                                            borderRadius: 20,
+                                                            margin: 10
+                                                        }}
+                                                        source={(card.profilePicture != null) ? {uri: GetImageSource(card.profilePicture)}:{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}
+                                                        onClick={() => navigation.navigate("OtherProfile", {
+                                                            otherUserId: card.id
+                                                        })}
+                                                    />
                                             <View>
                                                 <View style={{
                                                     marginLeft: 15
@@ -294,7 +294,7 @@ const ExploreScreen = ({navigation}) => {
                         </View>
                     }
                 </View>
-                <BottomBar navigation={navigation}/>
+                <BottomBar />
             </LinearGradient>
         </SafeAreaView>
     )

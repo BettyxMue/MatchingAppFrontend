@@ -165,7 +165,7 @@ const HomeScreen = ({navigation}) => {
             alignContent: "center"
         }}>
             <View style={{
-                marginBottom: "1%",
+                marginBottom: "1.5%",
                 width: "100%"
             }}>
                 <TouchableOpacity style={{
@@ -274,9 +274,7 @@ const HomeScreen = ({navigation}) => {
                                                             borderRadius: 20,
                                                             margin: 10
                                                         }}
-                                                        source={(card.picture != null) ? {uri: GetImageSource(card.picture)}: require("./../../assets/defaultPicture.jpg") }
-                                                        //source={require("./../../assets/defaultPicture.jpg")}
-                                                        //source={{uri: GetImageSource(card.profilePictures)}}
+                                                        source={(card.profilePicture != null) ? {uri: GetImageSource(card.profilePicture)}:{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}
                                                         onClick={() => navigation.navigate("OtherProfile", {
                                                             otherUserId: card.id
                                                         })}
@@ -370,6 +368,7 @@ const HomeScreen = ({navigation}) => {
                                     <SelectList
                                         setSelected={(val) => {
                                             StartSearch(val)
+                                            setSelectedFilter(val)
                                             setFilterChosen(true)
                                         }}
                                         data={filtersData}

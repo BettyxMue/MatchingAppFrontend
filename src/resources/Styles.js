@@ -1,5 +1,5 @@
 // @ts-nocheck
-import {StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     FinderHeader: {
         color: '#ffffff',
         fontSize: 36,
-        marginBottom: "45%",
+        marginBottom: "35%",
         alignSelf: "center"
     },
     FinderDisclaimer: {
@@ -39,6 +39,13 @@ const styles = StyleSheet.create({
         borderWidth: 1
     },
     buttonText: {
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: 'white',
+    },
+    buttonText2: {
         fontSize: 16,
         lineHeight: 21,
         fontWeight: 'bold',
@@ -102,8 +109,8 @@ const styles = StyleSheet.create({
     },
     continueButtonText: {
         fontWeight: "bold",
-        color: "white"
-
+        color: "white",
+        textAlign: "center"
     },
     chatPicture: {
         borderRadius: "100%",
@@ -263,14 +270,14 @@ const styles = StyleSheet.create({
     invoiceOverviewHeaderText: {
         fontWeight: "bold",
     },
-    invoiceOverviewSubheaderText:{
+    invoiceOverviewSubheaderText: {
         marginBottom: "2%"
     },
     invoiceOverviewDetailButtonText: {
         color: "#5e5e5e",
         marginLeft: "4%"
     },
-    invoiceOverviewDetailButton:{
+    invoiceOverviewDetailButton: {
         color: "#4287f5",
         fontWeight: "bold",
         fontSize: 16
@@ -291,23 +298,23 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 16
     },
-    invoiceDetailHeaderTitle:{
+    invoiceDetailHeaderTitle: {
         fontWeight: "bold",
         marginBottom: "2%"
     },
-    invoiceDetailHeaderText:{
+    invoiceDetailHeaderText: {
         marginBottom: "2%"
     },
-    invoiceDetailPayedText:{
+    invoiceDetailPayedText: {
         fontWeight: "bold",
         marginLeft: "2%"
     },
     invoiceTotalSection: {
-        display: "flex", 
-        flexDirection: "row", 
-        flexWrap: "wrap", 
-        alignContent:"center",
-        borderTopWidth: 1, 
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignContent: "center",
+        borderTopWidth: 1,
         borderColor: "#c7c7c7",
         paddingTop: "5%",
         paddingBottom: "5%"
@@ -335,49 +342,13 @@ const styles = StyleSheet.create({
     },
     registerInputTextInput2: {
         height: 40,
-        padding: 10,
+        paddingVertical: "1%",
+        paddingHorizontal: "2.5%",
         backgroundColor: "#edebeb",
-        marginTop: 10,
-        marginBottom: 10,
+        marginVertical: "3%",
         alignContent: "center",
         alignItems: "center",
-        alignSelf: "center",
-        justifyContent: "center",
-        width: "100%",
-        borderRadius: 10,
-    },
-    registerInputTextInput3: {
-        flexWrap: "wrap-reverse",
-        width: "50%",
-        height: 40,
-        padding: 10,
-        backgroundColor: "#edebeb",
-        marginTop: 10,
-        marginBottom: 10,
-        borderRadius: 10,
-    },
-    registerInputTextInput4: {
-        height: 40,
-        padding: 10,
-        backgroundColor: "#edebeb",
-        marginTop: 10,
-        marginBottom: 10,
-        alignContent: "center",
-        alignItems: "center",
-        alignSelf: "center",
-        justifyContent: "center",
-        width: "100%",
-        borderRadius: 10,
-    },
-    registerInputTextInput5: {
-        height: 40,
-        padding: 10,
-        backgroundColor: "#edebeb",
-        marginTop: 10,
-        marginBottom: 10,
-        alignContent: "center",
-        alignItems: "center",
-        alignSelf: "center",
+        alignSelf: "left",
         justifyContent: "center",
         width: "100%",
         borderRadius: 10,
@@ -422,7 +393,7 @@ const styles = StyleSheet.create({
         marginLeft: 25,
         marginRight: 125
     },
-    editProfileButton: {
+    editProfileButton2: {
         alignContent: "center",
         alignItems: "center",
         alignSelf: "center",
@@ -430,8 +401,8 @@ const styles = StyleSheet.create({
         width: "90%",
         borderRadius: 10,
         backgroundColor: 'blue',
-        padding: 10,
-        marginTop: 10
+        padding: "2.5%",
+        marginTop: "2.5%",
     },
     saveProfileButton: {
         alignContent: "center",
@@ -474,4 +445,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export {styles}
+export { styles }

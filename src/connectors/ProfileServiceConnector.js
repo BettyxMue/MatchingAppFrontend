@@ -2,7 +2,7 @@
 
 import {getToken, getUser, storeToken, storeUser} from "../resources/InternalStorage"
 
-let ip4v = "192.168.2.120"
+const ip4v = "192.168.0.98"
 
 async function SignUp(username, email, city, plz, street, houseNumber){
     if (username == "" || email == "" || city == "" || plz == "" || street == "" || houseNumber == "") {
