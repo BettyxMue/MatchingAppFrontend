@@ -76,7 +76,7 @@ const SignUpScreen = ({navigation}) => {
           showErrorMessage(queryResult)
         }
       })
-
+      navigation.navigate("Profile")
       })
     });
 

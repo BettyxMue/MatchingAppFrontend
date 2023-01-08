@@ -15,7 +15,7 @@ const StartScreen = ({navigation}) => {
         <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
             <View style={styles.innerView}>
                 <Text style={styles.FinderHeader}>Finder</Text>
-                <Text style={styles.FinderDisclaimer}>Mit der Erstellung eines Accountes oder dem Login, bestätigen sie, dass sie mit unseren AGBs einverstanden sind!</Text>
+                <Text style={styles.FinderDisclaimer} onPress={() => navigation.navigate("Details")} >Mit der Erstellung eines Accountes oder dem Login, bestätigen sie, dass sie mit unseren AGBs einverstanden sind!</Text>
                 <View style={{alignContent: "flex-end"}}>
                     <TouchableOpacity style={styles.button} onPress={() => 
                       navigation.navigate('Registierung')}>

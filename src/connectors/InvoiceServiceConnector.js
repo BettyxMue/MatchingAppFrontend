@@ -2,6 +2,7 @@
 import React from "react"
 import { getToken, getUser } from "../resources/InternalStorage"
 
+const ip4v = "192.168.0.98"
 
 async function createInvoice(serviceName,date,hours,billedUser){
     if(serviceName == "" || date == null || hours == "" || billedUser == null){
@@ -25,7 +26,7 @@ async function createInvoice(serviceName,date,hours,billedUser){
         "service": serviceName + " am " + date.toLocaleDateString()
     }
 
-    const query = "http://192.168.2.120:8085/invoice"
+    const query = "http://" + ip4v + ":8085/invoice"
     const request = await fetch(query, {
         method: 'PUT',
         headers: {
@@ -56,7 +57,7 @@ async function getAllInvoicesByUser(){
         console.log(e)
         return
     }
-    query = "http://192.168.2.120:8085/invoice/user/" + userid
+    query = "http://" + ip4v + ":8085/invoice/user/" + userid
     const request = await fetch(query, {
         method: 'GET',
         headers: {
@@ -85,7 +86,7 @@ async function payInvoice(amount, service){
         console.log(e)
         return
     }
-    query = "http://192.168.2.120:8085/create-checkout-session"
+    query = "http://" + ip4v + ":8085/create-checkout-session"
     const request = await fetch(query, {
         method: 'GET',
         headers: {
@@ -114,7 +115,7 @@ async function getPaymentIntent(amount){
         console.log(e)
         return
     }
-    query = "http://192.168.2.120:8085/create-payment-intent"
+    query = "http://" + ip4v + ":8085/create-payment-intent"
     const request = await fetch(query, {
         method: 'GET',
         headers: {
@@ -136,7 +137,7 @@ async function setInvoiceToPayed(invoiceId){
         return
     }
 
-    query = "http://192.168.2.120:8085/invoice/pay/" + invoiceId
+    query = "http://" + ip4v + ":8085/invoice/pay/" + invoiceId
     const request = await fetch(query, {
         method: 'PUT'
     })

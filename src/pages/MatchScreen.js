@@ -37,7 +37,7 @@ const MatchScreen = ({navigation, route}) => {
             temp = {
                 firstName: r.firstName,
                 name: r.name,
-                //pic: r.profilePictures
+                pic: r.profilePicture
             }
             setUserData(temp)
         })
@@ -48,7 +48,7 @@ const MatchScreen = ({navigation, route}) => {
             temp2 = {
                 firstName: r.firstName,
                 name: r.name,
-                //pic: r.profilePictures
+                pic: r.profilePicture
             }
             setSwipedData(temp2)
         })
@@ -100,8 +100,7 @@ const MatchScreen = ({navigation, route}) => {
                             borderRadius: 100,
                             margin: 10
                         }}
-                        source={require("./../../assets/defaultPicture.jpg")}
-                        //source={{uri: GetImageSource(userData.pic)}}
+                        source={(userData.pic != null) ? {uri: GetImageSource(userData.pic)}:{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}
                     />
                     <Image
                         style={{
@@ -111,8 +110,7 @@ const MatchScreen = ({navigation, route}) => {
                             borderRadius: 100,
                             margin: 10
                         }}
-                        source={require("./../../assets/defaultPicture.jpg")}
-                        //source={{uri: GetImageSource(userSwipedData.pic)}}
+                        source={(userSwipedData.pic != null) ? {uri: GetImageSource(userSwipedData.pic)}:{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}
                     />
                 </View>
                 <TouchableOpacity style={{

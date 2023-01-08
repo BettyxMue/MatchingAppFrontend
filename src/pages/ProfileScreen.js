@@ -1,17 +1,17 @@
 // @ts-nocheck
-import {KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TouchableOpacity, View} from 'react-native'
-import React, {Component, useEffect} from 'react'
-import {styles} from "../resources/Styles";
-import {LinearGradient} from "expo-linear-gradient";
+import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import React, { Component, useEffect, useRef } from "react";
+import { styles } from "../resources/Styles";
+import { LinearGradient } from "expo-linear-gradient";
 import ProfileItem from "../components/profileComponents/ProfileItem";
-import {UpdateUserProfile, getUserFromId, DeleteUser} from "../connectors/ProfileServiceConnector";
+import { UpdateUserProfile, getUserFromId, DeleteUser } from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
-import {getToken, getUser, storeUser} from "../resources/InternalStorage";
+import { getToken, getUser, storeUser } from "../resources/InternalStorage";
 import BottomBar from "../components/Layout/BottomBar";
-import {Ionicons} from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 
-const ProfileScreen = ({navigation}) => {
+const ProfileScreen = ({ navigation }) => {
 
     async function showMessage(message) {
         let toast = Toast.show(message, {
@@ -57,34 +57,39 @@ const ProfileScreen = ({navigation}) => {
 
     async function setUserData(userId) {
         getUserFromId(userId).then(r => {
-                switch (r.gender) {
-                    case 1:
-                        genderString = "Männlich"
-                        break
-                    case 2:
-                        genderString = "Weiblich"
-                        break
-                    case 3:
-                        genderString = "Divers"
-                        break
-                    default:
-                        genderString = "Keine Angabe"
-                        break
-                }
-                onChangeUserName(r.username)
-                onChangeFirstName(r.firstName)
-                onChangeName(r.name)
-                onChangeCity(r.city.place)
-                onChangePLZ((r.city.plz).toString())
-                onChangeGender(genderString)
-                onChangeEmail(r.email)
-                onChangeHouseNumber(r.houseNumber)
-                onChangePhoneNumber(r.telephoneNumber)
-                onChangeStreet(r.street)
-                onChangePrice((r.price).toString())
-                setProfilePicture(r.profilePicture)
-                setLoading(false)
+            switch (r.gender) {
+                case 1:
+                    genderString = "Männlich"
+                    break
+                case 2:
+                    genderString = "Weiblich"
+                    break
+                case 3:
+                    genderString = "Divers"
+                    break
+                default:
+                    genderString = "Keine Angabe"
+                    break
             }
+            onChangeUserName(r.username)
+            onChangeFirstName(r.firstName)
+            onChangeName(r.name)
+            onChangeCity(r.city.place)
+            onChangePLZ((r.city.plz).toString())
+            onChangeGender(genderString)
+            onChangeEmail(r.email)
+            onChangeHouseNumber(r.houseNumber)
+            onChangePhoneNumber(r.telephoneNumber)
+            onChangeStreet(r.street)
+            onChangePrice((r.price).toString())
+            setProfilePicture(r.profilePicture)
+            setLoading(false)
+            if (!isLoading) {
+                if (r.name == "" || r.firstName == "") {
+                    showErrorMessage("Bitte fülle die fehlenden Profildaten noch aus!")
+                }
+            }
+        }
         )
     }
 
@@ -100,7 +105,7 @@ const ProfileScreen = ({navigation}) => {
     }
 
     async function onContinueButton() {
-        if (gender == undefined){
+        if (gender == undefined) {
             showErrorMessage("Bitte wähle ein Geschlecht aus!")
             return
         } else if (price == "" || price == 0) {
@@ -119,9 +124,12 @@ const ProfileScreen = ({navigation}) => {
             case "Divers":
                 genderNr = 3
                 break
+            default:
+                genderNr = 0
+                break
         }
         setLoading(true)
-        UpdateUserProfile(genderNr, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber,profilePicture).then(r => {
+        UpdateUserProfile(genderNr, price, phoneNumber, firstName, name, userName, email, city, plz, street, houseNumber, profilePicture).then(r => {
             showMessage("User erfolgreich geupdated!")
             setLoading(false)
         });
@@ -139,8 +147,8 @@ const ProfileScreen = ({navigation}) => {
         })
     }
 
-    if(isLoading){
-        return(
+    if (isLoading) {
+        return (
             <Text>Loading...</Text>
         )
     }
@@ -151,122 +159,137 @@ const ProfileScreen = ({navigation}) => {
             width: '100%',
             alignContent: "center"
         }}>
-            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{
-                alignContent: "center",
-                flex: 1
+            <View style={{
+                height: "95%",
+                width: "100%"
             }}>
-                <View style={{
-                    marginBottom: "1%",
-                    width: "100%"
+                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{
+                    alignContent: "center",
+                    flex: 1
                 }}>
-                    <TouchableOpacity style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        flexWrap: "wrap",
-                        alignContent: "center",
-                        justifyContent: "center"
-                    }} onPress={() => {
-                        navigation.navigate("Details")
-                    }}>
-                        <Ionicons name="search-circle" size={35} color="#3860ff"/>
-                    </TouchableOpacity>
-                </View>
-                <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
                     <View style={{
-                        width: "100%",
-                        height: "90%"
+                        height: "100%",
+                        width: "100%"
                     }}>
-                        {toggleEdit ?
-                            <View>
-                                <ScrollView>
-                                    <ProfileItem
-                                        name={name}
-                                        city={city}
-                                        toggle={1}
-                                        username={userName}
-                                        firstName={firstName}
-                                        gender={gender}
-                                        email={email}
-                                        street={street}
-                                        houseNumber={houseNumber}
-                                        plz={plz.toString()}
-                                        phoneNumber={phoneNumber}
-                                        profilePicture={profilePicture}
-                                        price={price}
-                                    />
-
+                        <View style={{
+                            marginBottom: "1%",
+                            width: "100%"
+                        }}>
+                            <TouchableOpacity style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                flexWrap: "wrap",
+                                alignContent: "center",
+                                justifyContent: "center"
+                            }} onPress={() => {
+                                navigation.navigate("Details")
+                            }}>
+                                <Ionicons name="search-circle" size={35} color="#3860ff" />
+                            </TouchableOpacity>
+                        </View>
+                        <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
+                            <View style={{
+                                width: "100%",
+                                height: "100%",
+                                paddingVertical: "1%",
+                            }}>
+                                {toggleEdit ?
                                     <View>
-                                        <TouchableOpacity style={styles.editProfileButton}
-                                                          onPress={() => setToggleEdit(false)}>
-                                            <Text style={styles.continueButtonText}>Profil bearbeiten</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.editProfileButton}
-                                                          onPress={() => navigation.navigate("Skills")}>
-                                            <Text style={styles.continueButtonText}>Skills bearbeiten</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.editProfileButton}
-                                                          onPress={() => navigation.navigate("Filter")}>
-                                            <Text style={styles.continueButtonText}>Filter bearbeiten</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.editProfileButton}
-                                                          onPress={Logout}>
-                                            <Text style={styles.continueButtonText}>Logout</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={{
-                                            alignContent: "center",
-                                            alignItems: "center",
-                                            alignSelf: "center",
-                                            justifyContent: "center",
-                                            width: "90%",
-                                            borderRadius: 10,
-                                            backgroundColor: 'red',
-                                            padding: 10,
-                                            marginTop: 10,
-                                        }}
-                                                          onPress={Delete}>
-                                            <Text style={styles.continueButtonText}>Profil löschen</Text>
-                                        </TouchableOpacity>
+                                        <ScrollView>
+                                            <ProfileIstem
+                                                name={name}
+                                                city={city}
+                                                toggle={1}
+                                                username={userName}
+                                                firstName={firstName}
+                                                gender={gender}
+                                                email={email}
+                                                street={street}
+                                                houseNumber={houseNumber}
+                                                plz={plz.toString()}
+                                                phoneNumber={phoneNumber}
+                                                profilePicture={profilePicture}
+                                                price={price}
+                                            />
+
+                                            <View>
+                                                <TouchableOpacity style={styles.editProfileButton2}
+                                                    onPress={() => setToggleEdit(false)}>
+                                                    <Text style={styles.continueButtonText}>Profil bearbeiten</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.editProfileButton2}
+                                                    onPress={() => navigation.navigate("Skills")}>
+                                                    <Text style={styles.continueButtonText}>Skills bearbeiten</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.editProfileButton2}
+                                                    onPress={() => navigation.navigate("Filter")}>
+                                                    <Text style={styles.continueButtonText}>Filter bearbeiten</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.editProfileButton2}
+                                                    onPress={() => navigation.navigate("Invoices")}>
+                                                    <Text style={styles.continueButtonText}>Rechnungen ansehen</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.editProfileButton2}
+                                                    onPress={Logout}>
+                                                    <Text style={styles.continueButtonText}>Logout</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={{
+                                                    alignContent: "center",
+                                                    alignItems: "center",
+                                                    alignSelf: "center",
+                                                    justifyContent: "center",
+                                                    width: "90%",
+                                                    borderRadius: 10,
+                                                    backgroundColor: 'red',
+                                                    padding: "2.5%",
+                                                    marginTop: "2.5%",
+                                                }}
+                                                    onPress={Delete}>
+                                                    <Text style={styles.continueButtonText}>Profil löschen</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </ScrollView>
                                     </View>
-                                </ScrollView>
+                                    :
+                                    <View>
+                                        <ScrollView>
+                                            <ProfileItem
+                                                name={name}
+                                                city={city}
+                                                toggle={0}
+                                                username={userName}
+                                                firstName={firstName}
+                                                gender={gender}
+                                                email={email}
+                                                street={street}
+                                                houseNumber={houseNumber}
+                                                plz={plz}
+                                                phoneNumber={phoneNumber}
+                                                profilePicture={profilePicture}
+                                                price={price}
+                                                onContinueButton={onContinueButton}
+                                                onChangeCity={onChangeCity}
+                                                onChangeGender={onChangeGender}
+                                                onChangeEmail={onChangeEmail}
+                                                onChangeFirstName={onChangeFirstName}
+                                                onChangeName={onChangeName}
+                                                onChangePLZ={onChangePLZ}
+                                                onChangePrice={onChangePrice}
+                                                onChangeStreet={onChangeStreet}
+                                                onChangeHouseNumber={onChangeHouseNumber}
+                                                onChangeUsername={onChangeUserName}
+                                                onChangeTelephoneNumber={onChangePhoneNumber}
+                                                setProfilePicture={setProfilePicture}
+                                            />
+                                        </ScrollView>
+                                    </View>
+                                }
                             </View>
-                            :
-                            <View>
-                                <ScrollView>
-                                    <ProfileItem
-                                        name={name}
-                                        city={city}
-                                        toggle={0}
-                                        username={userName}
-                                        firstName={firstName}
-                                        gender={gender}
-                                        email={email}
-                                        street={street}
-                                        houseNumber={houseNumber}
-                                        plz={plz}
-                                        phoneNumber={phoneNumber}
-                                        profilePicture={profilePicture}
-                                        price={price}
-                                        onContinueButton={onContinueButton}
-                                        onChangeCity={onChangeCity}
-                                        onChangeGender={onChangeGender}
-                                        onChangeEmail={onChangeEmail}
-                                        onChangeFirstName={onChangeFirstName}
-                                        onChangeName={onChangeName}
-                                        onChangePLZ={onChangePLZ}
-                                        onChangePrice={onChangePrice}
-                                        onChangeStreet={onChangeStreet}
-                                        onChangeHouseNumber={onChangeHouseNumber}
-                                        onChangeUsername={onChangeUserName}
-                                        onChangeTelephoneNumber={onChangePhoneNumber}
-                                        setProfilePicture={setProfilePicture}
-                                    />
-                                </ScrollView>
-                            </View>
-                        }
+                        </LinearGradient>
                     </View>
-                </LinearGradient>
-                <BottomBar/>
-            </KeyboardAvoidingView>
+                </KeyboardAvoidingView>
+            </View>
+            <BottomBar />
         </SafeAreaView>
     )
 }
