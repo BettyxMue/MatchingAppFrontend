@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useEffect, useRef} from "react";
 import {Image, SafeAreaView, Text, TouchableOpacity, View} from "react-native";
 import {AntDesign, Entypo, Ionicons} from "@expo/vector-icons";
@@ -121,7 +122,7 @@ const ExploreScreen = ({navigation}) => {
             alignContent: "center"
         }}>
             <View style={{
-                marginBottom: "1%",
+                marginBottom: "1.5%",
                 width: "100%"
             }}>
                 <TouchableOpacity style={{
@@ -131,7 +132,7 @@ const ExploreScreen = ({navigation}) => {
                     alignContent: "center",
                     justifyContent: "center"
                 }} onPress={() => {
-                    navigation.navigate("Details")
+                    navigation.navigate("AGBs")
                 }}>
                     <Ionicons name="search-circle" size={35} color="#3860ff"/>
                 </TouchableOpacity>
@@ -294,7 +295,7 @@ const ExploreScreen = ({navigation}) => {
                         </View>
                     }
                 </View>
-                <BottomBar navigation={navigation}/>
+                <BottomBar />
             </LinearGradient>
         </SafeAreaView>
     )

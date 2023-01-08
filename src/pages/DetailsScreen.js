@@ -17,7 +17,7 @@ const DetailsScreen = ({ navigation }) => {
             width: '100%',
             alignContent: "center"
         }}>
-            <View style={{
+            {/*<View style={{
                 marginBottom: "1%",
                 width: "100%"
             }}>
@@ -35,7 +35,7 @@ const DetailsScreen = ({ navigation }) => {
                         paddingLeft: "5%"
                     }}>{backButtonChar}</Text>
                 </TouchableOpacity>
-            </View>
+            </View>*/}
             <ScrollView>
                 <View style={{
                     paddingHorizontal: "5%",
@@ -236,8 +236,8 @@ const DetailsScreen = ({ navigation }) => {
                         <Text>Verantwortliche/r für den Inhalt dieser App:</Text>
                         <Text> </Text>
                         <Text>Jost Tomke Müller</Text>
-                        <Text>Jost Tomke Müller</Text>
-                        <Text>Jost Tomke Müller</Text>
+                        <Text>Carl-Zuckmayer-Straße 16</Text>
+                        <Text>68169 Mannheim</Text>
                         <Text>E-Mail: jost-tomke-mueller@t-online.de</Text>
                         <Text> </Text>
                         <Text>Babett Müller</Text>

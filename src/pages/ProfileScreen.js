@@ -149,7 +149,12 @@ const ProfileScreen = ({ navigation }) => {
 
     if (isLoading) {
         return (
-            <Text>Loading...</Text>
+            <Text style={{
+                textAlign: "center",
+                fontStyle: "italic",
+                fontSize: 30,
+                marginVertical: "100%"
+            }}>Loading...</Text>
         )
     }
 
@@ -172,8 +177,8 @@ const ProfileScreen = ({ navigation }) => {
                         width: "100%"
                     }}>
                         <View style={{
-                            marginBottom: "1%",
-                            width: "100%"
+                            marginBottom: "1.5%",
+                            width: "100%",
                         }}>
                             <TouchableOpacity style={{
                                 display: "flex",
@@ -192,11 +197,14 @@ const ProfileScreen = ({ navigation }) => {
                                 width: "100%",
                                 height: "100%",
                                 paddingVertical: "1%",
+                                flex: 1,
                             }}>
                                 {toggleEdit ?
-                                    <View>
-                                        <ScrollView>
-                                            <ProfileIstem
+                                    <View >
+                                        <ScrollView contentContainerStyle={{
+                                            paddingBottom: "80%"
+                                        }}>
+                                            <ProfileItem
                                                 name={name}
                                                 city={city}
                                                 toggle={1}

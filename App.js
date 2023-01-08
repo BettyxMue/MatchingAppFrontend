@@ -84,7 +84,7 @@ export default function App() {
                           headerTransparent: true,
                           headerShown: false
                         })}/>
-                        <Stack.Screen name="Details" component={DetailsScreen} options={{headerShown: false}}/>
+                        <Stack.Screen name="AGBs" component={DetailsScreen}/>
                         <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
                         <Stack.Screen name="Match" component={MatchScreen} options={{headerShown: false}}/>
                         <Stack.Screen name="Explore" component={ExploreScreen} options={{headerShown: false}}/>

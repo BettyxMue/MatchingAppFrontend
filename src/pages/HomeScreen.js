@@ -165,7 +165,7 @@ const HomeScreen = ({navigation}) => {
             alignContent: "center"
         }}>
             <View style={{
-                marginBottom: "1%",
+                marginBottom: "1.5%",
                 width: "100%"
             }}>
                 <TouchableOpacity style={{

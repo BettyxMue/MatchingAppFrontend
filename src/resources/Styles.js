@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     FinderHeader: {
         color: '#ffffff',
         fontSize: 36,
-        marginBottom: "45%",
+        marginBottom: "35%",
         alignSelf: "center"
     },
     FinderDisclaimer: {

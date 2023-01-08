@@ -340,7 +340,7 @@ const SkillsScreen = ({ navigation }) => {
                                                 buttonTextAfterSelection={(selectedItem, index) => {
                                                     return selectedItem
                                                 }}
-                                                defaultButtonText={level}
+                                                defaultButtonText={renderSwitch(level)}
                                             />
                                             <TouchableOpacity style={{ marginLeft: 150 }}
                                                 onPress={() => UpdateUserSkills(skill.name, skill.level)}>
@@ -349,17 +349,17 @@ const SkillsScreen = ({ navigation }) => {
                                         </View>
                                     </View>
                                     :
-                                    <View>
-                                        <View style={{
-                                            flexDirection: "row",
-                                            margin: 10
-                                        }}>
+                                    <View style={{
+                                        flexDirection: "row",
+                                        marginHorizontal: "4%",
+                                        marginVertical: "3%"
+                                    }}>
+                                        <View>
                                             <Text>Level: {renderSwitch(skill.SkillIdentifier)}</Text>
                                         </View>
                                         <TouchableOpacity style={{
-                                            alignSelf: "left",
-                                            marginLeft: "35%",
-                                            marginTop: "2%"
+                                            alignSelf: "right",
+                                            marginLeft: "56%"
                                         }} onPress={() => setToggle(true)}>
                                             <Entypo name="pencil" size={30} color="grey" />
                                         </TouchableOpacity>

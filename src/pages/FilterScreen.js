@@ -448,23 +448,29 @@ const FilterScreen = ({ navigation }) => {
                                                 textContentType="none"
                                             />
                                         </View>
-                                        <TouchableOpacity style={{ 
+                                        <TouchableOpacity style={{
                                             alignSelf: "left",
-                                            marginLeft: "35%", 
-                                            marginTop: "2%" }}
+                                            marginLeft: "35%",
+                                            marginTop: "2%"
+                                        }}
                                             onPress={() => UpdateFilter(filter.searchid, newName, newLevel, newGender, newRadius)}>
                                             <Entypo name="check" size={30} color="green" />
                                         </TouchableOpacity>
                                     </View>
                                     :
-                                    <View style={{ flexDirection: "row" }}>
-                                        <View style={{ paddingLeft: 10, paddingTop: 5, paddingBottom: 5 }}>
+                                    <View style={{
+                                        flexDirection: "row",
+                                        marginHorizontal: "4%",
+                                        marginVertical: "3%"
+                                    }}>
+                                        <View>
                                             <Text>Level: {filter.level}</Text>
                                             <Text>Gesuchtes Geschlecht: {renderSwitch(filter.gender)}</Text>
                                             <Text>Radius: {filter.radius} km</Text>
                                         </View>
-                                        <View style={{ paddingLeft: 55, paddingTop: 17, flexDirection: "row" }}>
-                                            <TouchableOpacity onPress={() => setToggle(true)}>
+                                        <View>
+                                            <TouchableOpacity
+                                                onPress={() => setToggle(true)}>
                                                 <Entypo name="pencil" size={30} color="grey" />
                                             </TouchableOpacity>
                                             <TouchableOpacity

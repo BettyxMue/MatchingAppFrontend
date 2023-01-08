@@ -118,14 +118,14 @@ const ProfileItem = ({
     if (toggle === 1) {
         return (
             <View style={styles.containerProfileItem}>
-                {/*<Image style={{
-                        width: "70%",
+                <Image style={{
+                        width: "85%",
                         height: "40%",
                         resizeMode: "cover",
                         borderRadius: 20,
                         alignSelf: "center"
                     }}
-                source={(profilePicture != null) ? { uri: GetImageSource(profilePicture) } : { uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png" }} />*/}
+                source={(profilePicture != null && profilePicture != "") ? { uri: GetImageSource(profilePicture) } : { uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png" }} />
                 {nameToggle ?
                     <View style={styles.profileDescription}>
                         <Text style={styles.descriptionProfileItem}>Willkommen,</Text>
