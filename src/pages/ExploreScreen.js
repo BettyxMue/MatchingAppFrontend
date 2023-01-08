@@ -203,19 +203,18 @@ const ExploreScreen = ({navigation}) => {
                                             }}
                                         >
                                             <Image
-                                                style={{
-                                                    resizeMode: "cover",
-                                                    height: "75%",
-                                                    width: "95%",
-                                                    borderRadius: 20,
-                                                    margin: 10
-                                                }}
-                                                source={require("./../../assets/defaultPicture.jpg")}
-                                                //source={{uri: GetImageSource(card.profilePictures)}}
-                                                onClick={() => navigation.navigate("UserProfile", {
-                                                    otherId: card.id
-                                                })}
-                                            />
+                                                        style={{
+                                                            resizeMode: "cover",
+                                                            height: "75%",
+                                                            width: "95%",
+                                                            borderRadius: 20,
+                                                            margin: 10
+                                                        }}
+                                                        source={(card.profilePicture != null) ? {uri: GetImageSource(card.profilePicture)}:{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}
+                                                        onClick={() => navigation.navigate("OtherProfile", {
+                                                            otherUserId: card.id
+                                                        })}
+                                                    />
                                             <View>
                                                 <View style={{
                                                     marginLeft: 15

@@ -58,7 +58,7 @@ async function GetAllChatRoomsForUser(){
         method: 'GET',
         headers: {
             'Content-type': 'application/json',
-            'Authorization': token,
+            'Authorization': 'Bearer ' + token,
             'user': user.id
         }
     })
@@ -88,7 +88,7 @@ async function GetAllChatsForUser(){
         method: 'GET',
         headers: {
             'Content-type': 'application/json',
-            'Authorization': token,
+            'Authorization': 'Bearer ' + token,
             'User': user.id
         }
     })
