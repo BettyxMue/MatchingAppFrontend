@@ -1,21 +1,21 @@
 // @ts-nocheck
 import { getAllInvoicesByUser } from "../connectors/InvoiceServiceConnector";
-import React, { useEffect,useRef } from "react";
-import { Text, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { Text, View, ScrollView } from "react-native";
 import InvoicesListElement from "../components/billing/invoicesListElement";
 import { getUserFromId } from "../connectors/ProfileServiceConnector";
 
-const InvoicesScreen = ({navigation, route}) => {
+const InvoicesScreen = ({ navigation, route }) => {
 
     const [invoices, setInvoices] = React.useState([])
     const [isLoading, setLoading] = React.useState(true)
     const firstUpdate = useRef(true)
 
-    async function getInvoices(){
-        return await getAllInvoicesByUser()   
+    async function getInvoices() {
+        return await getAllInvoicesByUser()
     }
 
-    async function getUserForInvoice(invoicesServer){
+    async function getUserForInvoice(invoicesServer) {
         let promises = []
         invoicesServer.forEach(invoice => {
             promises.push(getUserFromId(invoice.biller))
@@ -33,30 +33,34 @@ const InvoicesScreen = ({navigation, route}) => {
     }
 
     useEffect(() => {
-        if(firstUpdate.current){
+        if (firstUpdate.current) {
             getInvoices().then((invoicesServer) => {
                 getUserForInvoice(invoicesServer).then(() => {
                     firstUpdate.current = false
-                })  
+                })
             })
         }
-        
 
-    },[invoices])
 
-    while(isLoading){
-        return(
+    }, [invoices])
+
+    while (isLoading) {
+        return (
             <Text>Loading...</Text>
         )
     }
 
-    return(
+    return (
         <View>
-            {invoices.map((data) => {
-                return(
-                    <InvoicesListElement key={data.id} invoice={data} />
-                )
-            })}
+            <ScrollView>
+                <View>
+                    {invoices.map((data) => {
+                        return (
+                            <InvoicesListElement key={data.id} invoice={data} />
+                        )
+                    })}
+                </View>
+            </ScrollView>
         </View>
     )
 }

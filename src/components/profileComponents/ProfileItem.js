@@ -119,13 +119,13 @@ const ProfileItem = ({
         return (
             <View style={styles.containerProfileItem}>
                 <Image style={{
-                        width: "85%",
-                        height: "40%",
-                        resizeMode: "cover",
-                        borderRadius: 20,
-                        alignSelf: "center"
-                    }}
-                source={(profilePicture != null && profilePicture != "") ? { uri: GetImageSource(profilePicture) } : { uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png" }} />
+                    width: "85%",
+                    height: "40%",
+                    resizeMode: "cover",
+                    borderRadius: 20,
+                    alignSelf: "center"
+                }}
+                    source={(profilePicture != null && profilePicture != "") ? { uri: GetImageSource(profilePicture) } : { uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png" }} />
                 {nameToggle ?
                     <View style={styles.profileDescription}>
                         <Text style={styles.descriptionProfileItem}>Willkommen,</Text>
@@ -356,14 +356,31 @@ const ProfileItem = ({
     }
     if (toggle === 2) {
         return (
-            <View style={styles.containerProfileItem}>
-                <View>
-                    {/*<Image source={require("./../../assests/defaultPicture.jpg")} /> {/*how to change pb?*/}
-                    {/*<Image source={{uri: GetImageSource(card.profilePictures)}}*/}
-                </View>
-                <View style={styles.profileDescription}>
-                    <Text style={styles.name}>{firstName} {name}</Text>
-                </View>
+            <View style={{
+                backgroundColor: "#FFFFFF",
+                paddingTop: 20,
+                paddingBottom: "50%",
+                margin: 20,
+                marginBottom: 5,
+                borderRadius: 8,
+                width: "90%"
+            }}>
+                <Image style={{
+                    width: "86%",
+                    height: "50%",
+                    resizeMode: "cover",
+                    borderRadius: 20,
+                    alignSelf: "center"
+                }}
+                    source={(profilePicture != null && profilePicture != "") ? { uri: GetImageSource(profilePicture) } : { uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png" }} />
+                {nameToggle ?
+                    <View style={styles.profileDescription}>
+                        <Text style={styles.descriptionProfileItem}>Willkommen,</Text>
+                        <Text style={styles.name}>{firstName} {name}</Text>
+                    </View>
+                    :
+                    <></>
+                }
                 <View style={styles.profileDescription}>
                     <Text style={styles.titleProfileItem}>Username:</Text>
                     <Text style={styles.descriptionProfileItem}>
@@ -380,12 +397,6 @@ const ProfileItem = ({
                     <Text style={styles.titleProfileItem}>Wohnort:</Text>
                     <Text style={styles.descriptionProfileItem}>
                         {plz}
-                    </Text>
-                </View>
-                <View style={styles.profileDescription}>
-                    <Text style={styles.titleProfileItem}>Telefonnummer:</Text>
-                    <Text style={styles.descriptionProfileItem}>
-                        {phoneNumber}
                     </Text>
                 </View>
                 <View style={styles.profileDescription}>
