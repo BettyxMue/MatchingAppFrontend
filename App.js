@@ -89,7 +89,7 @@ export default function App() {
                         <Stack.Screen name="Match" component={MatchScreen} options={{headerShown: false}}/>
                         <Stack.Screen name="Explore" component={ExploreScreen} options={{headerShown: false}}/>
                         <Stack.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
-                        <Stack.Screen name="OtherProfile" component={OtherProfileScreen} options={{headerShown: false}}/>
+                        <Stack.Screen name="OtherProfile" component={OtherProfileScreen}/>
                         <Stack.Screen name="Skills" component={SkillsScreen} options={{headerShown: true}} />
                         <Stack.Screen name="Filter" component={FilterScreen} options={{headerShown: true}}/>
                         <Stack.Screen name="Chat" component={ChatScreen} options={({navitation, route}) => ({

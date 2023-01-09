@@ -87,7 +87,7 @@ const HomeScreen = ({navigation}) => {
                     id: possibleUser.id,
                     name: possibleUser.name,
                     firstName: possibleUser.firstName,
-                    //city: possibleUser.city.place,
+                    CityIdentifier: possibleUser.CityIdentifier,
                     gender: switchGender(possibleUser.gender),
                     picture: possibleUser.profilePicture
                 }
@@ -175,7 +175,7 @@ const HomeScreen = ({navigation}) => {
                     alignContent: "center",
                     justifyContent: "center"
                 }} onPress={() => {
-                    navigation.navigate("Details")
+                    navigation.navigate("AGBs")
                 }}>
                     <Ionicons name="search-circle" size={35} color="#3860ff"/>
                 </TouchableOpacity>
@@ -274,7 +274,7 @@ const HomeScreen = ({navigation}) => {
                                                             borderRadius: 20,
                                                             margin: 10
                                                         }}
-                                                        source={(card.profilePicture != null) ? {uri: GetImageSource(card.profilePicture)}:{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}
+                                                        source={(card.picture != null) ? {uri: GetImageSource(card.picture)}:{uri: "https://cdn-icons-png.flaticon.com/512/3106/3106921.png"}}
                                                         onClick={() => navigation.navigate("OtherProfile", {
                                                             otherUserId: card.id
                                                         })}
@@ -293,7 +293,7 @@ const HomeScreen = ({navigation}) => {
                                                                 fontSize: 20,
                                                                 paddingTop: 8
                                                             }}>
-                                                                {card.gender} {/*+ ", " + {card.city}*/}
+                                                                {card.gender}, {card.CityIdentifier}
                                                             </Text>
                                                         </View>
                                                     </View>

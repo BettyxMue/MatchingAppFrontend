@@ -20,7 +20,7 @@ const ChatsWrapper = (chats) => {
     const setChatRooms = useContext(ChatRoomDispatcher)
     const chatRooms = useContext(ChatRoomContext)
     const chatArray = useContext(ChatArrayContext)
-    const {setChatArray, appendChatMessageToChat} = useContext(ChatArrayDispatcher)
+    const { setChatArray, appendChatMessageToChat } = useContext(ChatArrayDispatcher)
 
     const firstUpdate = useRef(true)
     const navigation = useNavigation();
@@ -32,16 +32,16 @@ const ChatsWrapper = (chats) => {
     const [chatsAvailable, setChatsAvailable] = React.useState(false)
 
 
-    function onChatClick(data,userCache2, navigation){
+    function onChatClick(data, userCache2, navigation) {
         let position = chatArray.findIndex(c => c.chatID === data.chatID)
-        if (position != -1){
-            setChatIndex(position) 
+        if (position != -1) {
+            setChatIndex(position)
             setChat(chatArray[position]);
             navigation.navigate('ChatDetail', {
                 chat: chatArray[position],
                 user: userCache2,
             });
-        }else{
+        } else {
             position = chatRooms.findIndex(c => c.chatID === data.chatID)
             setChatIndex(-1)
             setChat(chatRooms[position])
@@ -49,16 +49,16 @@ const ChatsWrapper = (chats) => {
                 chat: chatRooms[position],
                 user: userCache2,
             })
-        } 
-        
+        }
+
     }
 
-    function GetChatsArray(chatData){
+    function GetChatsArray(chatData) {
         /*if(global.chatLoaded){
             return
         }*/
         let chatArrayCache = chatArray
-        if(chatData == undefined){
+        if (chatData == undefined) {
             setLoading(false)
             setRoomLoading(false)
             setChatsAvailable(false)
@@ -66,9 +66,9 @@ const ChatsWrapper = (chats) => {
         }
         chatData.forEach(chat => {
             let position = chatArrayCache.findIndex(c => c.chatID === chat.chatID)
-            if (position === -1 ){
+            if (position === -1) {
                 let chatPartner = {}
-                
+
                 let newChat = {
                     "chatID": chat.chatID,
                     "chatPartner": chatPartner,
@@ -83,9 +83,9 @@ const ChatsWrapper = (chats) => {
                         }
                     ]
                 }
-                
+
                 chatArrayCache.push(newChat)
-            }else{
+            } else {
                 let newMessage = {
                     "messageID": chat.messageID,
                     "writtenBy": chat.writtenBy,
@@ -95,7 +95,7 @@ const ChatsWrapper = (chats) => {
                     "createdAt": chat.createdAt
                 }
                 let positionMessage = chatArray[position].messages.findIndex(c => c.messageID == newMessage.messageID)
-                if(positionMessage == -1){
+                if (positionMessage == -1) {
                     chatArray[position].messages.push(newMessage)
                 }
             }
@@ -103,20 +103,20 @@ const ChatsWrapper = (chats) => {
         setChatArray(chatArrayCache)
         setChatsAvailable(true)
     }
-    
-    async function SetUsersToChats(user, setLoading){
+
+    async function SetUsersToChats(user, setLoading) {
         let promises = []
         chatArray.forEach(chat => {
-            if (chat.messages[0].writtenBy != user.id){
+            if (chat.messages[0].writtenBy != user.id) {
                 const promise = getUserFromId(chat.messages[0].writtenBy)
-                promises.push(promise)       
-            }else{
+                promises.push(promise)
+            } else {
                 const promise = getUserFromId(chat.messages[0].sendTo)
                 promises.push(promise)
             }
         })
         Promise.all(promises).then((values) => {
-            let counter = 0; 
+            let counter = 0;
             values.forEach(value => {
                 chatArray[counter].chatPartner = value
                 counter++;
@@ -126,10 +126,10 @@ const ChatsWrapper = (chats) => {
         })
     }
 
-    function getChatRoomById(chatId){
+    function getChatRoomById(chatId) {
         let chatRoomsCache2 = chatRooms
         let position = chatRoomsCache2.findIndex(c => c.chatID == chatId)
-        if (position == -1){
+        if (position == -1) {
             return
         }
         let chatRoomsCache = [...chatRoomsCache2]
@@ -137,26 +137,26 @@ const ChatsWrapper = (chats) => {
         //setChatRooms(chatRoomsCache)
         return chatRooms[position]
     }
-    
-    async function GetChats(){
+
+    async function GetChats() {
         let chatsServer = await GetAllChatsForUser();
         global.chatRawData = chatsServer
     }
-    
-    function GetRawChatData(){
+
+    function GetRawChatData() {
         return global.chatRawData
     }
-    
-    function GetChatArray(){
+
+    function GetChatArray() {
         return chatArray
     }
 
 
-    async function sortChatRooms(rooms){
+    async function sortChatRooms(rooms) {
         let roomArray = []
         rooms.forEach(room => {
             let position = chatArray.findIndex(c => c.chatID === room.chatId)
-            if (position == -1){
+            if (position == -1) {
                 room.chatID = room.chatId
                 delete room.chatId
                 roomArray.push(room)
@@ -165,19 +165,19 @@ const ChatsWrapper = (chats) => {
         return roomArray
     }
 
-    async function setUserNamesToEmptyChats(rooms, user){
+    async function setUserNamesToEmptyChats(rooms, user) {
         let promises = []
         rooms.forEach(room => {
-            if (room.userID1 != user.id){
+            if (room.userID1 != user.id) {
                 const promise = getUserFromId(room.userID1)
-                promises.push(promise)       
-            }else{
+                promises.push(promise)
+            } else {
                 const promise = getUserFromId(room.userID2)
                 promises.push(promise)
             }
         })
         Promise.all(promises).then((values) => {
-            let counter = 0; 
+            let counter = 0;
             values.forEach(value => {
                 rooms[counter].chatPartner = value
                 rooms[counter].messages = []
@@ -188,25 +188,25 @@ const ChatsWrapper = (chats) => {
             setChatsAvailable(true)
         })
     }
-    
+
     // END CHAT FUNCTIONALITY
-    
+
     useEffect(() => {
-        if(chat.chatID != null && !(firstUpdate.current)){
+        if (chat.chatID != null && !(firstUpdate.current)) {
             let position = chatArray.findIndex(c => c.chatID == chat.chatID)
-            if (position == -1){
+            if (position == -1) {
                 let position = chatRooms.findIndex(c => c.chatID == chat.chatID)
                 setChat(chatRooms[position])
             } else {
                 setChat(chatArray[position])
             }
         }
-        if(firstUpdate.current){
+        if (firstUpdate.current) {
             firstUpdate.current = false
         }
         let chatArrayRawCache = GetRawChatData()
         setChatArrayCache(GetChatArray())
-        if (chatArrayCache.length <= 0){
+        if (chatArrayCache.length <= 0) {
             getUser().then(user => {
                 setUserCache(user)
                 GetChatsArray(chatArrayRawCache);
@@ -218,44 +218,51 @@ const ChatsWrapper = (chats) => {
                     })
                 })
                 global.appendMessageToChat = appendChatMessageToChat
-                
+
             })
-        }else{
+        } else {
             setLoading(false);
         }
     }, [chat.messages.length, chatRooms]);
 
-    while(isLoading || isRoomLoading) {
-        return <Text>Loading...</Text>
-    }
-    while(!chatsAvailable){
+    while (isLoading || isRoomLoading) {
         return (
-            <View style={{height: "100%", justifyContent: "center", alignContent: "center", backgroundColor: "white"}}>
-                <Text style={{fontWeight: "bold", fontSize: 24}}>No Chats available...</Text>
+            <Text style={{
+                textAlign: "center",
+                fontStyle: "italic",
+                fontSize: 30,
+                marginVertical: "100%"
+            }}>Loading...</Text>
+        )
+    }
+    while (!chatsAvailable) {
+        return (
+            <View style={{ height: "100%", justifyContent: "center", alignContent: "center", backgroundColor: "white" }}>
+                <Text style={{ fontWeight: "bold", fontSize: 24 }}>No Chats available...</Text>
             </View>
-        ) 
+        )
     }
 
     return (
         <View style={styles.chatOverview}>
             {(chatRooms.length > 0) ? <Text style={styles.chatMessagesTitle}>Matches</Text> : null}
             {chatRooms.map((data => {
-                if(data != null){
-                    return(
-                        <TouchableOpacity style={{width: "100%"}} key={data.chatID} onPress={() => onChatClick(data,userCache, navigation)}>
-                            <ChatStart chat={data}/>
+                if (data != null) {
+                    return (
+                        <TouchableOpacity style={{ width: "100%" }} key={data.chatID} onPress={() => onChatClick(data, userCache, navigation)}>
+                            <ChatStart chat={data} />
                         </TouchableOpacity>
                     )
-                }      
+                }
             }))}
             <Text style={styles.chatMessagesTitle}>Nachrichten</Text>
             {chatArray.map((data => {
-                return(
-                    <TouchableOpacity style={{width: "100%"}} key={data.chatID} onPress={() => onChatClick(data,userCache, navigation)}>
-                        <ChatStart chat={data}/>
+                return (
+                    <TouchableOpacity style={{ width: "100%" }} key={data.chatID} onPress={() => onChatClick(data, userCache, navigation)}>
+                        <ChatStart chat={data} />
                     </TouchableOpacity>
                 )
-            }))}       
+            }))}
         </View>
     )
 }

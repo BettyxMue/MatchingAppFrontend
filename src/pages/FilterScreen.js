@@ -347,15 +347,14 @@ const FilterScreen = ({ navigation }) => {
         }
     }
 
-    function goBack() {
-        navigation.goBack()
-    }
-
-    const backButtonChar = "\u276e"
-
     if (isLoading) {
         return (
-            <Text>Loading...</Text>
+            <Text style={{
+                textAlign: "center",
+                fontStyle: "italic",
+                fontSize: 30,
+                marginVertical: "100%"
+            }}>Loading...</Text>
         )
     }
 

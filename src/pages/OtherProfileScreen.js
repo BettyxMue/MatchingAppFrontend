@@ -1,15 +1,15 @@
 // @ts-nocheck
-import {KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TouchableOpacity, View} from 'react-native'
-import React, {Component, useEffect} from 'react'
-import {styles} from "../resources/Styles";
-import {LinearGradient} from "expo-linear-gradient";
+import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import React, { Component, useEffect } from 'react'
+import { styles } from "../resources/Styles";
+import { LinearGradient } from "expo-linear-gradient";
 import ProfileItem from "../components/profileComponents/ProfileItem";
-import {UpdateUserProfile, getUserFromId} from "../connectors/ProfileServiceConnector";
+import { UpdateUserProfile, getUserFromId } from "../connectors/ProfileServiceConnector";
 import Toast from "react-native-root-toast";
-import {getToken, getUser} from "../resources/InternalStorage";
+import { getToken, getUser } from "../resources/InternalStorage";
 import BottomBar from "../components/Layout/BottomBar";
 
-const ProfileScreen = ({navigation, route}) => {
+const ProfileScreen = ({ navigation, route }) => {
 
     async function showMessage(message) {
         let toast = Toast.show(message, {
@@ -35,6 +35,7 @@ const ProfileScreen = ({navigation, route}) => {
     const [name, onChangeName] = React.useState("")
     const [gender, onChangeGender] = React.useState("")
     const [price, onChangePrice] = React.useState("")
+    const [pic, onChangePic] = React.useState("")
     const [achievedSkills, onChangeAchievedSkills] = React.useState("")
     const [searchedSkills, onChangeSearchedSkills] = React.useState("")
 
@@ -46,38 +47,39 @@ const ProfileScreen = ({navigation, route}) => {
 
     async function setUserData(otherUserId) {
         getUserFromId(otherUserId).then(r => {
-                switch (r.gender) {
-                    case 1:
-                        genderString = "Männlich"
-                        break
-                    case 2:
-                        genderString = "Weiblich"
-                        break
-                    case 3:
-                        genderString = "Divers"
-                        break
-                    default:
-                        genderString = "Keine Angabe"
-                        break
-                }
-                onChangeUserName(r.username)
-                onChangeFirstName(r.firstName)
-                onChangeName(r.name)
-                //onChangeCity(r.city.place)
-                //onChangePLZ((r.city.plz).toString())
-                onChangeGender(genderString)
-                onChangeEmail(r.email)
-                onChangeHouseNumber(r.houseNumber)
-                onChangePhoneNumber(r.telephoneNumber)
-                onChangeStreet(r.street)
-                onChangePrice((r.price))
-                onChangeAchievedSkills(r.achievedSkills)
-                onChangeSearchedSkills(r.searchedSkills)
+            switch (r.gender) {
+                case 1:
+                    genderString = "Männlich"
+                    break
+                case 2:
+                    genderString = "Weiblich"
+                    break
+                case 3:
+                    genderString = "Divers"
+                    break
+                default:
+                    genderString = "Keine Angabe"
+                    break
             }
+            onChangeUserName(r.username)
+            onChangeFirstName(r.firstName)
+            onChangeName(r.name)
+            //onChangeCity(r.city.place)
+            onChangePLZ((r.CityIdentifier).toString())
+            onChangeGender(genderString)
+            onChangeEmail(r.email)
+            onChangeHouseNumber(r.houseNumber)
+            onChangePhoneNumber(r.telephoneNumber)
+            onChangeStreet(r.street)
+            onChangePrice((r.price))
+            onChangePic(r.profilePicture)
+            onChangeAchievedSkills(r.achievedSkills)
+            onChangeSearchedSkills(r.searchedSkills)
+        }
         )
     }
 
-    function goBack(){
+    function goBack() {
         navigation.goBack()
     }
 
@@ -89,11 +91,15 @@ const ProfileScreen = ({navigation, route}) => {
             width: '100%',
             alignContent: "center"
         }}>
-            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{
-                alignContent: "center",
-                flex: 1
+            <View style={{
+                height: "95%",
+                width: "100%"
             }}>
-                <View style={{
+                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{
+                    alignContent: "center",
+                    flex: 1
+                }}>
+                    {/*<View style={{
                     marginBottom: "1%",
                     width: "100%"
                 }}>
@@ -111,33 +117,40 @@ const ProfileScreen = ({navigation, route}) => {
                             color: "#4287f5"
                         }}>{backButtonChar}</Text>
                     </TouchableOpacity>
-                </View>
-                <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
-                    <ScrollView style={{
-                        width: "100%",
-                        height: "90%"
-                    }}>
-                        <ProfileItem
-                            name={name}
-                            //city={city}
-                            toggle={2}
-                            username={userName}
-                            firstName={firstName}
-                            gender={gender}
-                            email={email}
-                            //street={street}
-                            //houseNumber={houseNumber}
-                            plz={plz.toString()}
-                            phoneNumber={phoneNumber}
-                            //profilePicture={userId.profilePicture[0]}
-                            price={price}
-                            achievedSkills={achievedSkills}
-                            searchedSkills={searchedSkills}
-                        />
-                    </ScrollView>
-                </LinearGradient>
-                <BottomBar />
-            </KeyboardAvoidingView>
+                </View>*/}
+                    <LinearGradient colors={['#3860ff', '#389bff']} style={styles.container}>
+                        <View style={{
+                            width: "100%",
+                            height: "100%",
+                            paddingVertical: "1%",
+                            flex: 1,
+                        }}>
+                            <ScrollView contentContainerStyle={{
+                                paddingBottom: "60%"
+                            }}>
+                                <ProfileItem
+                                    name={name}
+                                    //city={city}
+                                    toggle={2}
+                                    username={userName}
+                                    firstName={firstName}
+                                    gender={gender}
+                                    email={email}
+                                    //street={street}
+                                    //houseNumber={houseNumber}
+                                    plz={plz.toString()}
+                                    phoneNumber={phoneNumber}
+                                    profilePicture={pic}
+                                    price={price}
+                                    achievedSkills={achievedSkills}
+                                    searchedSkills={searchedSkills}
+                                />
+                            </ScrollView>
+                        </View>
+                    </LinearGradient>
+                </KeyboardAvoidingView>
+            </View>
+            <BottomBar />
         </SafeAreaView>
     )
 }
